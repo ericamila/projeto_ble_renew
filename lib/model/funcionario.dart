@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/pessoa_fisica.dart';
 
 import '../util/banco.dart';
