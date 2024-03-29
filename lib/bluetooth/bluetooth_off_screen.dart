@@ -4,7 +4,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'snackbar.dart';
 
 class BluetoothOffScreen extends StatelessWidget {
-  const BluetoothOffScreen({Key? key, this.adapterState}) : super(key: key);
+  const BluetoothOffScreen({super.key, this.adapterState});
 
   final BluetoothAdapterState? adapterState;
 
@@ -19,7 +19,7 @@ class BluetoothOffScreen extends StatelessWidget {
   Widget buildTitle(BuildContext context) {
     String? state = adapterState?.toString().split(".").last;
     return Text(
-      'O adaptador Bluetooth está ${state != null ? state : 'indisponível'}',
+      'O adaptador Bluetooth está ${state ?? 'indisponível'}',
       style: Theme.of(context).primaryTextTheme.titleSmall?.copyWith(color: Colors.white),
     );
   }

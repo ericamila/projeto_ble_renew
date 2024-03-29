@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
+
+import '../model/cargo.dart';
+import '../util/constants.dart';
 
 class FormCadastro extends StatefulWidget {
   final BuildContext funcionarioContext;
@@ -15,12 +17,10 @@ class FormCadastro extends StatefulWidget {
 
 class _FormCadastroState extends State<FormCadastro> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController nomeController = TextEditingController();
-  TextEditingController cpfController = TextEditingController();
-  TextEditingController imagemController = TextEditingController();
-
-  //radiobutton para tipo
-  //dropbutton para cargo
+  final nomeController = TextEditingController();
+  final cpfController = TextEditingController();
+  final imagemController = TextEditingController();
+  final dropCargoValue = ValueNotifier('');
 
   bool valueValidator(String? value) {
     if (value != null && value.isEmpty) {
@@ -38,6 +38,7 @@ class _FormCadastroState extends State<FormCadastro> {
     if (seEditar()) {
       nomeController.text = widget.funcionarioEdit!.nome;
       cpfController.text = widget.funcionarioEdit!.cpf;
+      dropCargoValue.value = widget.funcionarioEdit!.cargo.toString();
     }
     return Form(
       key: _formKey,
@@ -60,7 +61,7 @@ class _FormCadastroState extends State<FormCadastro> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: paddingPadraoFormulario,
                     child: TextFormField(
                       validator: (String? value) {
                         if (valueValidator(value)) {
@@ -70,16 +71,11 @@ class _FormCadastroState extends State<FormCadastro> {
                       },
                       controller: nomeController,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Nome',
-                        fillColor: Colors.white70,
-                        filled: true,
-                      ),
+                      decoration: myDecoration('Nome Completo'),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: paddingPadraoFormulario,
                     child: TextFormField(
                       validator: (String? value) {
                         if (valueValidator(value)) {
@@ -90,14 +86,40 @@ class _FormCadastroState extends State<FormCadastro> {
                       keyboardType: TextInputType.number,
                       controller: cpfController,
                       textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'CPF',
-                        fillColor: Colors.white70,
-                        filled: true,
-                      ),
+                      decoration: myDecoration('CPF'),
                     ),
                   ),
+                  Padding(
+                    padding: paddingPadraoFormulario,
+                    child: ValueListenableBuilder(
+                      valueListenable: dropCargoValue,
+                      builder: (BuildContext context, String value, _) {
+                        return DropdownButtonFormField<String>(
+                            validator: (value) {
+                              return (value == null)
+                                  ? 'Campo obrigatório!'
+                                  : null;
+                            },
+                            isExpanded: true,
+                            hint: const Text('Selecione'),
+                            decoration: myDecoration('*Cargo'),
+                            value: (value.isEmpty) ? null : value,
+                            items: Cargo.getAll()
+                                .map(
+                                  (op) => DropdownMenuItem(
+                                    value: op.codigo.toString(),
+                                    child: Text(op.descricao),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (escolha) {
+                              dropCargoValue.value = escolha.toString();
+                              print('Selecionado ${dropCargoValue.value}');
+                            });
+                      },
+                    ),
+                  ),
+
                   Container(
                     height: 100,
                     width: 72,
@@ -120,15 +142,17 @@ class _FormCadastroState extends State<FormCadastro> {
                   ),
                   FilledButton(
                     onPressed: () {
+                      setState(() {
+
+                      });
                       if (_formKey.currentState!.validate()) {
+                        print('${nomeController.text} ${cpfController.text} ${int.parse(dropCargoValue.value)} ');
                         FuncionarioDao().save(Funcionario(
-                            nomeController.text,
-                            cpfController.text,
-                            'Funcionário', //apagar
-                            1, //apagar
-                            //imagemController.text
-                            //int.parse(difficultyController.text)
-                            ));
+                          nomeController.text,
+                          cpfController.text,
+                          int.parse(dropCargoValue.value), //
+                          //imagemController.text
+                        ));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Salvando registro!'),

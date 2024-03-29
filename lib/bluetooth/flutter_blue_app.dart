@@ -8,7 +8,7 @@ import 'scan_screen.dart';
 // Exibe BluetoothOffScreen ou
 // ScanScreen dependendo do estado do adaptador
 class FlutterBlueApp extends StatefulWidget {
-  const FlutterBlueApp({Key? key}) : super(key: key);
+  const FlutterBlueApp({super.key});
 
   @override
   State<FlutterBlueApp> createState() => _FlutterBlueAppState();

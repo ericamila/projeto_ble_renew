@@ -5,6 +5,7 @@ const spaceMenor = Padding(padding: EdgeInsets.all(4));
 const nada = Padding(padding: EdgeInsets.all(0));
 final borderRadiusPadrao =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0));
+const paddingPadraoFormulario = EdgeInsets.all(12.0);
 
 const carregando = Center(
   child: Column(
@@ -16,3 +17,14 @@ const carregando = Center(
     ],
   ),
 );
+
+InputDecoration myDecoration(String texto) {
+  return InputDecoration(
+      border: const OutlineInputBorder(),
+      label: Text(texto),
+      contentPadding: const EdgeInsets.all(15),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      enabled: true,
+      filled: true,
+      fillColor: Colors.white70);
+}

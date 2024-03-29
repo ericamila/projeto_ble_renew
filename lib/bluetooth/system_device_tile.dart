@@ -12,8 +12,8 @@ class SystemDeviceTile extends StatefulWidget {
     required this.device,
     required this.onOpen,
     required this.onConnect,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SystemDeviceTile> createState() => _SystemDeviceTileState();

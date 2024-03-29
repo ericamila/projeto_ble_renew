@@ -8,7 +8,7 @@ import 'scan_result_tile.dart';
 import 'extra.dart';
 
 class ScanScreen extends StatefulWidget {
-  const ScanScreen({Key? key}) : super(key: key);
+  const ScanScreen({super.key});
 
   @override
   State<ScanScreen> createState() => _ScanScreenState();

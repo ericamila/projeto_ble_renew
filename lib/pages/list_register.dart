@@ -111,7 +111,7 @@ class _CadastroState extends State<Cadastro> {
                               ));
                         },
                         separatorBuilder: (BuildContext context, int index) {
-                          return Divider();
+                          return const Divider();
                         },
                       );
                     }

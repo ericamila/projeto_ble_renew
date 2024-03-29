@@ -6,7 +6,6 @@ class FuncionarioDao {
   static const String _tablename = 'funcionario';
   static const String _nome = 'nome';
   static const String _cpf = 'cpf';
-  static const String _tipoFuncionario = 'tipo_funcionario';
   static const String _cargo = 'cargo_id';
   static const String _id = 'id';
 
@@ -19,7 +18,6 @@ class FuncionarioDao {
       await supabase.from(_tablename).insert({
         'nome': funcionario.nome,
         'cpf': funcionario.cpf,
-        'tipo_funcionario': funcionario.tipoFuncionario,
         'cargo_id': funcionario.cargo
       });
     } else {
@@ -36,10 +34,9 @@ class FuncionarioDao {
 
   Map<String, dynamic> toMap(Funcionario funcionario) {
     print('Convertendo to Map: ${funcionario.id}');
-    final Map<String, dynamic> mapa = Map();
+    final Map<String, dynamic> mapa = {};
     mapa[_nome] = funcionario.nome;
     mapa[_cpf] = funcionario.cpf;
-    mapa[_tipoFuncionario] = funcionario.tipoFuncionario;
     mapa[_cargo] = funcionario.cargo;
     print('Mapa de Funcionarios: $mapa');
     return mapa;
@@ -59,7 +56,6 @@ class FuncionarioDao {
       final Funcionario funcionario = Funcionario(
         linha[_nome],
         linha[_cpf],
-        linha[_tipoFuncionario],
         linha[_cargo],
         linha[_id],
       );
@@ -74,7 +70,7 @@ class FuncionarioDao {
     print('Procurando funcionario com o cpf: $cpf');
     final List<Map<String, dynamic>> result =
         await supabase.from(_tablename).select().eq('cpf', cpf);
-    print('Funcionario encontrado: ${result}');
+    print('Funcionario encontrado: $result');
 
     return toList(result);
   }
@@ -86,15 +82,14 @@ class FuncionarioDao {
 }
 
 class Funcionario extends  PessoaFisica {
-  String tipoFuncionario;
   int cargo;
 
-  Funcionario(super.nome, super.cpf, this.tipoFuncionario, this.cargo,
+  Funcionario(super.nome, super.cpf, this.cargo,
       [super.id]);
 
   @override
   String toString() {
-    return '$nome $cpf $tipoFuncionario $cargo $id';
+    return '$nome $cpf $cargo $id';
   }
 
 }
