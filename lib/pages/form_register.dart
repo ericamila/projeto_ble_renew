@@ -4,8 +4,10 @@ import 'package:projeto_ble_renew/model/funcionario.dart';
 
 class FormCadastro extends StatefulWidget {
   final BuildContext funcionarioContext;
+  final Funcionario? funcionarioEdit;
 
-  const FormCadastro({super.key, required this.funcionarioContext});
+  const FormCadastro(
+      {super.key, required this.funcionarioContext, this.funcionarioEdit});
 
   @override
   State<FormCadastro> createState() => _FormCadastroState();
@@ -27,8 +29,16 @@ class _FormCadastroState extends State<FormCadastro> {
     return false;
   }
 
+  bool seEditar() {
+    return (widget.funcionarioEdit != null);
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (seEditar()) {
+      nomeController.text = widget.funcionarioEdit!.nome;
+      cpfController.text = widget.funcionarioEdit!.cpf;
+    }
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -108,14 +118,14 @@ class _FormCadastroState extends State<FormCadastro> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
+                  FilledButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         FuncionarioDao().save(Funcionario(
                             nomeController.text,
                             cpfController.text,
                             'Funcionário', //apagar
-                            8//apagar
+                            1, //apagar
                             //imagemController.text
                             //int.parse(difficultyController.text)
                             ));

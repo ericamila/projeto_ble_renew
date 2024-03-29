@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/my_list_tile.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
@@ -53,20 +55,59 @@ class _CadastroState extends State<Cadastro> {
                               leading:
                                   const Icon(Icons.account_circle, size: 56),
                               onTap: () {},
-                              trailing: PopupMenuButton<ListTileTitleAlignment>(
-                                onSelected: (ListTileTitleAlignment? value) {
-                                  setState(() {
-                                    //titleAlignment = value; alterar
-                                  });
+                              trailing: PopupMenuButton<bool>(
+                                onSelected: (value) async {
+                                  if (value) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (contextNew) => FormCadastro(
+                                          funcionarioContext: context, funcionarioEdit: funcionario,
+                                        ),
+                                      ),
+                                    ).then((value) => setState(() {
+                                      print('Recarregando a tela inicial');
+                                    }));
+                                  } else {
+                                    bool deletedConfirmed = await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Deletar'),
+                                          content: Text(
+                                              'Tem certeza que deseja deletar ${funcionario.nome}?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context, false);
+                                              },
+                                              child: const Text('Cancelar'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context, true);
+                                              },
+                                              child: const Text('Deletar'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    if (deletedConfirmed) {
+                                      await FuncionarioDao()
+                                          .delete(funcionario.id!);
+                                      setState(() {});
+                                    }
+                                  }
                                 },
                                 itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<ListTileTitleAlignment>>[
-                                  const PopupMenuItem<ListTileTitleAlignment>(
-                                    value: ListTileTitleAlignment.threeLine,
+                                    <PopupMenuEntry<bool>>[
+                                  const PopupMenuItem<bool>(
+                                    value: true,
                                     child: Text('Editar'),
                                   ),
-                                  const PopupMenuItem<ListTileTitleAlignment>(
-                                    value: ListTileTitleAlignment.titleHeight,
+                                  const PopupMenuItem<bool>(
+                                    value: false,
                                     child: Text('Excluir'),
                                   ),
                                 ],

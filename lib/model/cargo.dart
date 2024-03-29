@@ -28,4 +28,8 @@ enum Cargo {
   static String getNomeById(int codigo) {
     return Cargo.values.firstWhere((cargo) => cargo.codigo == codigo).descricao;
   }
+
+  static List<Cargo> getAll() {
+    return Cargo.values;
+  }
 }
