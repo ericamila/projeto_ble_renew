@@ -17,7 +17,8 @@ class _CadastroState extends State<Cadastro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Funcionários'),
+      appBar: AppBar(
+        title: const Text('Funcionários'),
         actions: [
           IconButton(
             onPressed: () {
@@ -25,7 +26,8 @@ class _CadastroState extends State<Cadastro> {
             },
             icon: const Icon(Icons.refresh),
           ),
-        ],),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
         child: FutureBuilder<List<Funcionario>>(
@@ -40,18 +42,40 @@ class _CadastroState extends State<Cadastro> {
                 case ConnectionState.done:
                   if (snapshot.hasData && items != null) {
                     if (items.isNotEmpty) {
-                      return ListView.builder(
-                          itemCount: items.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final Funcionario funcionario = items[index];
-                            return MyListTile(
-                              text: funcionario.nome,
-                              subText: Cargo.getNomeById(funcionario.cargo),
-                              icon: Icons.account_circle,
+                      return ListView.separated(
+                        itemCount: items.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final Funcionario funcionario = items[index];
+                          return ListTile(
+                              title: Text(funcionario.nome),
+                              subtitle:
+                                  Text(Cargo.getNomeById(funcionario.cargo)),
+                              leading:
+                                  const Icon(Icons.account_circle, size: 56),
                               onTap: () {},
-                            );
-                            Divider;
-                          });
+                              trailing: PopupMenuButton<ListTileTitleAlignment>(
+                                onSelected: (ListTileTitleAlignment? value) {
+                                  setState(() {
+                                    //titleAlignment = value; alterar
+                                  });
+                                },
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<ListTileTitleAlignment>>[
+                                  const PopupMenuItem<ListTileTitleAlignment>(
+                                    value: ListTileTitleAlignment.threeLine,
+                                    child: Text('Editar'),
+                                  ),
+                                  const PopupMenuItem<ListTileTitleAlignment>(
+                                    value: ListTileTitleAlignment.titleHeight,
+                                    child: Text('Excluir'),
+                                  ),
+                                ],
+                              ));
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return Divider();
+                        },
+                      );
                     }
                     return const Center(
                         child: Column(
@@ -87,7 +111,10 @@ class _CadastroState extends State<Cadastro> {
                 print('Recarregando a tela inicial');
               }));
         },
-        label: const Text('ADICIONAR', style: TextStyle(fontWeight: FontWeight.bold),),
+        label: const Text(
+          'ADICIONAR',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         icon: const Icon(Icons.person_add),
       ),
     );

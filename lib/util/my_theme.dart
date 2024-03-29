@@ -31,6 +31,14 @@ FilledButton
     ),
   ),
 /*
+FloatingActionButton
+ */
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: verdeBotao,
+    foregroundColor: claro,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
+  ),
+/*
 Scaffold
  */
   scaffoldBackgroundColor: claro,
