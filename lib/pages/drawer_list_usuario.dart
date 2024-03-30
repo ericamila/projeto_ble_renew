@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
+import 'package:projeto_ble_renew/model/usuario.dart';
 import 'package:projeto_ble_renew/pages/form_register.dart';
+import 'package:projeto_ble_renew/pages/form_usuario.dart';
 
 import '../model/cargo.dart';
 import '../util/constants.dart';
 
-class ListaCadastro extends StatefulWidget {
-  final String tipoCadastro;
-  const ListaCadastro({super.key, required this.tipoCadastro});
+class Usuarios extends StatefulWidget {
+  const Usuarios({super.key});
+
   @override
-  State<ListaCadastro> createState() => _ListaCadastroState();
+  State<Usuarios> createState() => _UsuariosState();
 }
 
-class _ListaCadastroState extends State<ListaCadastro> {
+class _UsuariosState extends State<Usuarios> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.tipoCadastro}s'),
+        title: const Text('Usuários'),
         actions: [
           IconButton(
             onPressed: () {
@@ -29,10 +31,10 @@ class _ListaCadastroState extends State<ListaCadastro> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
-        child: FutureBuilder<List<Funcionario>>(
-            future: FuncionarioDao().findAll(),
+        child: FutureBuilder<List<Usuario>>(
+            future: UsuarioDao().findAll(),
             builder: (context, snapshot) {
-              List<Funcionario>? items = snapshot.data;
+              List<Usuario>? items = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
@@ -44,13 +46,13 @@ class _ListaCadastroState extends State<ListaCadastro> {
                       return ListView.separated(
                         itemCount: items.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final Funcionario funcionario = items[index];
+                          final Usuario usuario = items[index];
                           return ListTile(
-                              title: Text(funcionario.nome),
+                              title: Text(usuario.nome),
                               subtitle:
-                                  Text(Cargo.getNomeById(funcionario.cargo)),
+                              Text(usuario.email),
                               leading:
-                                  const Icon(Icons.account_circle, size: 56),
+                              const Icon(Icons.account_circle, size: 56),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {
@@ -58,13 +60,12 @@ class _ListaCadastroState extends State<ListaCadastro> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) => FormCadastro(
-                                          funcionarioContext: context,
-                                          funcionarioEdit: funcionario,
-                                          tipoCadastro: widget.tipoCadastro,
+                                        builder: (contextNew) => FormUsuario(
+                                          usuarioContext: context, usuarioEdit: usuario,
                                         ),
                                       ),
-                                    ).then((value) => setState(() {}));
+                                    ).then((value) => setState(() {
+                                    }));
                                   } else {
                                     bool deletedConfirmed = await showDialog(
                                       context: context,
@@ -72,7 +73,7 @@ class _ListaCadastroState extends State<ListaCadastro> {
                                         return AlertDialog(
                                           title: const Text('Deletar'),
                                           content: Text(
-                                              'Tem certeza que deseja deletar ${funcionario.nome}?'),
+                                              'Tem certeza que deseja deletar ${usuario.nome}?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -91,26 +92,22 @@ class _ListaCadastroState extends State<ListaCadastro> {
                                       },
                                     );
                                     if (deletedConfirmed) {
-                                      await FuncionarioDao()
-                                          .delete(funcionario.id!);
+                                      await UsuarioDao()
+                                          .delete(usuario.id!);
                                       setState(() {});
                                     }
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<bool>>[
+                                <PopupMenuEntry<bool>>[
                                   const PopupMenuItem<bool>(
                                       value: true,
-                                      child: ListTile(
-                                        leading: Icon(Icons.edit),
-                                        title: Text('Editar'),
-                                      )),
+                                      child: ListTile(leading:Icon(Icons.edit) , title: Text('Editar'),)
+                                  ),
                                   const PopupMenuItem<bool>(
                                       value: false,
-                                      child: ListTile(
-                                        leading: Icon(Icons.delete_forever),
-                                        title: Text('Excluir'),
-                                      )),
+                                      child: ListTile(leading:Icon(Icons.delete_forever) , title: Text('Excluir'),)
+                                  ),
                                 ],
                               ));
                         },
@@ -121,19 +118,19 @@ class _ListaCadastroState extends State<ListaCadastro> {
                     }
                     return const Center(
                         child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 96,
-                        ),
-                        Text(
-                          'Não há nenhum dado.',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ],
-                    ));
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              size: 96,
+                            ),
+                            Text(
+                              'Não há nenhum dado.',
+                              style: TextStyle(fontSize: 32),
+                            ),
+                          ],
+                        ));
                   }
                   return const Text('Erro ao carregar dados');
               }
@@ -145,10 +142,12 @@ class _ListaCadastroState extends State<ListaCadastro> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (contextNew) => FormCadastro(
-                  funcionarioContext: context, tipoCadastro: widget.tipoCadastro),
+              builder: (contextNew) => FormUsuario(
+                usuarioContext: context,
+              ),
             ),
-          ).then((value) => setState(() {}));
+          ).then((value) => setState(() {
+          }));
         },
         label: const Text(
           'ADICIONAR',

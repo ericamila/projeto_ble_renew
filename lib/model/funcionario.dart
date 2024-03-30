@@ -1,5 +1,4 @@
 import 'package:projeto_ble_renew/model/pessoa_fisica.dart';
-
 import '../util/banco.dart';
 
 class FuncionarioDao {
@@ -10,11 +9,9 @@ class FuncionarioDao {
   static const String _id = 'id';
 
   save(Funcionario funcionario) async {
-    print('Iniciando o save: ');
     var itemExists = await find(funcionario.cpf);
     Map<String, dynamic> funcionarioMap = toMap(funcionario);
     if (itemExists.isEmpty) {
-      print('a Funcionario não Existia.');
       await supabase.from(_tablename).insert({
         'nome': funcionario.nome,
         'cpf': funcionario.cpf,
@@ -22,9 +19,6 @@ class FuncionarioDao {
       });
     } else {
       funcionario.id = itemExists.last.id;
-
-      print('a Funcionario existia!');
-      print(funcionarioMap);
       await supabase
           .from(_tablename)
           .update(funcionarioMap)
@@ -33,20 +27,16 @@ class FuncionarioDao {
   }
 
   Map<String, dynamic> toMap(Funcionario funcionario) {
-    print('Convertendo to Map: ${funcionario.id}');
     final Map<String, dynamic> mapa = {};
     mapa[_nome] = funcionario.nome;
     mapa[_cpf] = funcionario.cpf;
     mapa[_cargo] = funcionario.cargo;
-    print('Mapa de Funcionarios: $mapa');
     return mapa;
   }
 
   Future<List<Funcionario>> findAll() async {
-    print('Acessando o findAll: ');
     final List<Map<String, dynamic>> result =
         await supabase.from(_tablename).select().order(_nome, ascending: true);
-    print('Procurando dados no banco de dados... encontrado: $result');
     return toList(result);
   }
 
@@ -61,35 +51,40 @@ class FuncionarioDao {
       );
       funcionarios.add(funcionario);
     }
-    print('Lista de Funcionarios do toList: ${funcionarios.toString()}');
     return funcionarios;
   }
-//
+
   Future<List<Funcionario>> find(String cpf) async {
-    print('Acessando find: ');
-    print('Procurando funcionario com o cpf: $cpf');
     final List<Map<String, dynamic>> result =
         await supabase.from(_tablename).select().eq('cpf', cpf);
-    print('Funcionario encontrado: $result');
-
     return toList(result);
   }
 
+  Future<Funcionario> findID(int id) async {
+    final Map<String, dynamic> result =
+    await supabase.from(_tablename).select().eq('id', id).single();
+    final Funcionario funcionario = Funcionario(
+      result[_nome],
+      result[_cpf],
+      result[_cargo],
+      result[_id],
+    );
+    return funcionario;
+  }
+
   delete(int id) async {
-    print('Deletando funcionario: $id');
     return await supabase.from(_tablename).delete().eq('id', id);
   }
 }
 
-class Funcionario extends  PessoaFisica {
+class Funcionario extends PessoaFisica {
   int cargo;
 
-  Funcionario(super.nome, super.cpf, this.cargo,
-      [super.id]);
+  Funcionario(super.nome, super.cpf, this.cargo, [super.id]);
+
 
   @override
   String toString() {
     return '$nome $cpf $cargo $id';
   }
-
 }

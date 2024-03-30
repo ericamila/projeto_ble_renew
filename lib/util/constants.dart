@@ -6,6 +6,9 @@ const nada = Padding(padding: EdgeInsets.all(0));
 final borderRadiusPadrao =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0));
 const paddingPadraoFormulario = EdgeInsets.all(12.0);
+var currentUserID;
+// Dispositivo? dispositivoSelecionadoX;
+// Pessoa? pessoaSelecionadaX;
 
 const carregando = Center(
   child: Column(

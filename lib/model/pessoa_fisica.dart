@@ -4,4 +4,5 @@ abstract class PessoaFisica extends Pessoa {
   String cpf;
 
   PessoaFisica(super.nome, this.cpf, [super.id]);
+
 }

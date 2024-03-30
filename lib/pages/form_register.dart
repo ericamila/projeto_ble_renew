@@ -7,9 +7,13 @@ import '../util/constants.dart';
 class FormCadastro extends StatefulWidget {
   final BuildContext funcionarioContext;
   final Funcionario? funcionarioEdit;
+  final String tipoCadastro;
 
   const FormCadastro(
-      {super.key, required this.funcionarioContext, this.funcionarioEdit});
+      {super.key,
+      required this.funcionarioContext,
+      this.funcionarioEdit,
+      required this.tipoCadastro});
 
   @override
   State<FormCadastro> createState() => _FormCadastroState();
@@ -44,11 +48,12 @@ class _FormCadastroState extends State<FormCadastro> {
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cadastro'),
+          title: Text('Cadastro de ${widget.tipoCadastro}'),
         ),
         body: Center(
           child: SingleChildScrollView(
             child: Container(
+              //apagar
               height: 650,
               width: 375,
               decoration: BoxDecoration(
@@ -108,45 +113,41 @@ class _FormCadastroState extends State<FormCadastro> {
                                 .map(
                                   (op) => DropdownMenuItem(
                                     value: op.codigo.toString(),
-                                    child: Text(op.descricao),
+                                    child: Text(
+                                      op.descricao,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.normal),
+                                    ),
                                   ),
                                 )
                                 .toList(),
                             onChanged: (escolha) {
                               dropCargoValue.value = escolha.toString();
-                              print('Selecionado ${dropCargoValue.value}');
                             });
                       },
                     ),
                   ),
-
-                  Container(
-                    height: 100,
-                    width: 72,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(width: 2, color: Colors.blue),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Adicionar foto'),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        imagemController.text,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                          return Image.asset('images/nophoto.png');
-                        },
-                        fit: BoxFit.cover,
-                      ),
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    // Defina o raio dos cantos
+                    child: Image.asset(
+                      'images/nophoto.png',
+                      height: 200,
                     ),
                   ),
                   FilledButton(
                     onPressed: () {
-                      setState(() {
-
-                      });
+                      setState(() {});
                       if (_formKey.currentState!.validate()) {
-                        print('${nomeController.text} ${cpfController.text} ${int.parse(dropCargoValue.value)} ');
+                        print(
+                            '${nomeController.text} ${cpfController.text} ${int.parse(dropCargoValue.value)} ');
                         FuncionarioDao().save(Funcionario(
                           nomeController.text,
                           cpfController.text,

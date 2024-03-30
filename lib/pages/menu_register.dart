@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/pages/list_register.dart';
 
 import '../components/my_filled_button.dart';
+import '../util/constants.dart';
+import 'drawer_list_usuario.dart';
 
 class MenuCadastro extends StatefulWidget {
   const MenuCadastro({super.key});
@@ -21,9 +23,16 @@ class _MenuCadastroState extends State<MenuCadastro> {
           MyFlilledButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Cadastro()));
+                    MaterialPageRoute(builder: (context) => const ListaCadastro(tipoCadastro: 'Funcionário',)));
               },
-              text: 'Funcionário')
+              text: 'Funcionário'),
+          space,
+          MyFlilledButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Usuarios()));
+              },
+              text: 'Usuario Temp')
         ],
       )),
     );
