@@ -77,13 +77,15 @@ class _FormUsuarioState extends State<FormUsuario> {
 
   @override
   Widget build(BuildContext context) {
-    if (seEditar()) {
+/*    if (seEditar()) {
       dropNomeFuncionarioValue.value =
           widget.usuarioEdit!.funcionario.toString();
       emailController.text = widget.usuarioEdit!.email;
-/*      senhaController.text = widget.usuarioEdit!.senha;
-      senhaConfController.text = widget.usuarioEdit!.confSenha;*/
-    }
+      senhaController.text = widget.usuarioEdit!.senha;
+      senhaConfController.text = widget.usuarioEdit!.confSenha;
+      https://supabase.com/dashboard/project/cavikcnsdlhepwnlucge/api?page=users
+     api para atualizar
+    }*/
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -185,11 +187,8 @@ class _FormUsuarioState extends State<FormUsuario> {
                       setState(() {});
                       if (_formKey.currentState!.validate()) {
                         Funcionario funcionario = await FuncionarioDao()
-                            .findID(int.parse(dropNomeFuncionarioValue.value));
+                            .findID(dropNomeFuncionarioValue.value);
                         String? uid = await signUp();
-                        print(
-                            '${funcionario.nome} ${emailController.text} ${funcionario.id}, $uid ?');
-                        print(uid);
                         try {
                           UsuarioDao().save(
                             Usuario(
@@ -206,7 +205,7 @@ class _FormUsuarioState extends State<FormUsuario> {
                             ),
                           );
                           Navigator.pop(context);
-                        } on Exception catch (e) {
+                        } on PostgrestException catch (e) {
                           debugPrint(e.toString());
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -216,6 +215,12 @@ class _FormUsuarioState extends State<FormUsuario> {
                           );
                         }
                       }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erro ao salvar registro.\nVerifique os dados!'),
+                            duration: Duration(seconds: 3),
+                          )
+                      );
                     },
                     child: const Text('Salvar!'),
                   ),

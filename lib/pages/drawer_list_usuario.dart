@@ -101,6 +101,7 @@ class _UsuariosState extends State<Usuarios> {
                                 itemBuilder: (BuildContext context) =>
                                 <PopupMenuEntry<bool>>[
                                   const PopupMenuItem<bool>(
+                                    enabled: false,
                                       value: true,
                                       child: ListTile(leading:Icon(Icons.edit) , title: Text('Editar'),)
                                   ),

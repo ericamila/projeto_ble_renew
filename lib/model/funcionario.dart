@@ -6,6 +6,7 @@ class FuncionarioDao {
   static const String _nome = 'nome';
   static const String _cpf = 'cpf';
   static const String _cargo = 'cargo_id';
+  static const String _foto = 'foto';
   static const String _id = 'id';
 
   save(Funcionario funcionario) async {
@@ -15,6 +16,7 @@ class FuncionarioDao {
       await supabase.from(_tablename).insert({
         'nome': funcionario.nome,
         'cpf': funcionario.cpf,
+        'foto': funcionario.foto,
         'cargo_id': funcionario.cargo
       });
     } else {
@@ -31,6 +33,7 @@ class FuncionarioDao {
     mapa[_nome] = funcionario.nome;
     mapa[_cpf] = funcionario.cpf;
     mapa[_cargo] = funcionario.cargo;
+    mapa[_foto] = funcionario.foto;
     return mapa;
   }
 
@@ -47,6 +50,7 @@ class FuncionarioDao {
         linha[_nome],
         linha[_cpf],
         linha[_cargo],
+        linha[_foto],
         linha[_id],
       );
       funcionarios.add(funcionario);
@@ -60,19 +64,20 @@ class FuncionarioDao {
     return toList(result);
   }
 
-  Future<Funcionario> findID(int id) async {
+  Future<Funcionario> findID(String id) async {
     final Map<String, dynamic> result =
     await supabase.from(_tablename).select().eq('id', id).single();
     final Funcionario funcionario = Funcionario(
       result[_nome],
       result[_cpf],
       result[_cargo],
+      result[_foto],
       result[_id],
     );
     return funcionario;
   }
 
-  delete(int id) async {
+  delete(String id) async {
     return await supabase.from(_tablename).delete().eq('id', id);
   }
 }
@@ -80,11 +85,11 @@ class FuncionarioDao {
 class Funcionario extends PessoaFisica {
   int cargo;
 
-  Funcionario(super.nome, super.cpf, this.cargo, [super.id]);
+  Funcionario(super.nome, super.cpf, this.cargo, [super.foto, super.id]);
 
 
   @override
   String toString() {
-    return '$nome $cpf $cargo $id';
+    return '$nome $cpf $cargo $foto $id';
   }
 }

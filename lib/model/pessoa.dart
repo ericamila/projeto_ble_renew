@@ -1,5 +1,5 @@
 class Pessoa {
-  int? id;
+  String? id;
   String nome;
 
   Pessoa(this.nome, [this.id]);

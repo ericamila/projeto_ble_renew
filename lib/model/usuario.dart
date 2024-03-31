@@ -59,13 +59,13 @@ class UsuarioDao {
     return toList(result);
   }
 
-  Future<List<Usuario>> findID(int id) async {
+  Future<List<Usuario>> findID(String id) async {
     final List<Map<String, dynamic>> result =
         await supabase.from(_tablename).select().eq('id', id);
     return toList(result);
   }
 
-  delete(int id) async {
+  delete(String id) async {
     return await supabase.from(_tablename).delete().eq('id', id);
   }
 }
@@ -73,7 +73,7 @@ class UsuarioDao {
 class Usuario extends Pessoa {
   String email;
   String? uid;
-  int funcionario;
+  String funcionario;
 
   Usuario(super.nome, this.email, this.funcionario, [this.uid, super.id]);
 
