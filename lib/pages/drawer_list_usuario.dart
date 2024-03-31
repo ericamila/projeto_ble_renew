@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/model/usuario.dart';
-import 'package:projeto_ble_renew/pages/form_register.dart';
 import 'package:projeto_ble_renew/pages/form_usuario.dart';
 
-import '../model/cargo.dart';
 import '../util/constants.dart';
 
 class Usuarios extends StatefulWidget {

@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:projeto_ble_renew/pages/home_page.dart';
-import 'package:projeto_ble_renew/pages/login_page.dart';
 import 'package:projeto_ble_renew/util/banco.dart';
 import 'package:projeto_ble_renew/util/my_theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

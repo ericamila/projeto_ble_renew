@@ -18,12 +18,10 @@ class Sobre extends StatelessWidget {
           backgroundColor: const Color(0xFF292935),
           floating: true,
           automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            child: Center(
-              child: Image.asset(
-                'images/codelink_alt.png',
-                height: 65,
-              ),
+          flexibleSpace: Center(
+            child: Image.asset(
+              'images/codelink_alt.png',
+              height: 65,
             ),
           ),
           expandedHeight: 100,
