@@ -3,6 +3,7 @@ import 'package:projeto_ble_renew/pages/list_register_funcionario.dart';
 import 'package:projeto_ble_renew/pages/list_register_externo.dart';
 import '../components/foto_imagem.dart';
 import '../components/my_filled_button.dart';
+import 'list_register_equipamento.dart';
 
 class MenuCadastro extends StatefulWidget {
   const MenuCadastro({super.key});
@@ -83,7 +84,7 @@ class _MenuCadastroState extends State<MenuCadastro> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ListaCadastroExterno(
+                          builder: (context) => ListaCadastroEquipamento(
                               tipoCadastro: tiposCadastrosMenu[4])));
                 },
                 text: tiposCadastrosMenu[4]),
@@ -91,13 +92,15 @@ class _MenuCadastroState extends State<MenuCadastro> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: _myPadding),
             child: MyFlilledButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FotoImagem()));
-                },
-                text: 'Foto temp'),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const FotoImagem()));
+              },
+              text: 'Foto temp',
+              cor: Colors.orangeAccent,
+            ),
           )
         ],
       )),

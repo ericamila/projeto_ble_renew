@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/model/externo.dart';
-import 'package:projeto_ble_renew/pages/form_register_externo.dart';
+import 'package:projeto_ble_renew/model/equipamento.dart';
 
 import '../util/constants.dart';
+import 'form_register_equipamento.dart';
 
-class ListaCadastroExterno extends StatefulWidget {
+class ListaCadastroEquipamento extends StatefulWidget {
   final String tipoCadastro;
 
-  const ListaCadastroExterno({super.key, required this.tipoCadastro});
+  const ListaCadastroEquipamento({super.key, required this.tipoCadastro});
 
   @override
-  State<ListaCadastroExterno> createState() => _ListaCadastroExternoState();
+  State<ListaCadastroEquipamento> createState() => _ListaCadastroEquipamentoState();
 }
 
-class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
+class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,12 +30,10 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
-        child: FutureBuilder<List<Externo>>(
-            future: (widget.tipoCadastro == 'Acompanhante/Visitante')
-                ? ExternoDao().findAllTypeAC()
-                : ExternoDao().findAllType(widget.tipoCadastro),
+        child: FutureBuilder<List<Equipamento>>(
+            future: EquipamentoDao().findAll(),
             builder: (context, snapshot) {
-              List<Externo>? items = snapshot.data;
+              List<Equipamento>? items = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
@@ -47,12 +45,13 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                       return ListView.separated(
                         itemCount: items.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final Externo externo = items[index];
+                          final Equipamento equipamento = items[index];
                           return ListTile(
-                              title: Text(externo.nome),
-                              subtitle: Text(externo.tipoExterno),
+                              title: Text(equipamento.descricao),
+                              subtitle:
+                                  Text(equipamento.codigo),
                               leading:
-                                  const Icon(Icons.account_circle, size: 56),
+                                  const Icon(Icons.devices_other_outlined, size: 56),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {
@@ -60,10 +59,9 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) =>
-                                            FormCadastroExterno(
-                                          externoContext: context,
-                                          externoEdit: externo,
+                                        builder: (contextNew) => FormCadastroEquipamento(
+                                          equipamentoContext: context,
+                                          equipamentoEdit: equipamento,
                                           tipoCadastro: widget.tipoCadastro,
                                         ),
                                       ),
@@ -75,7 +73,7 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                                         return AlertDialog(
                                           title: const Text('Deletar'),
                                           content: Text(
-                                              'Tem certeza que deseja deletar ${externo.nome}?'),
+                                              'Tem certeza que deseja deletar ${equipamento.descricao}?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -94,7 +92,8 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                                       },
                                     );
                                     if (deletedConfirmed) {
-                                      await ExternoDao().delete(externo.id!);
+                                      await EquipamentoDao()
+                                          .delete(equipamento.id!);
                                       setState(() {});
                                     }
                                   }
@@ -147,8 +146,9 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (contextNew) => FormCadastroExterno(
-                  externoContext: context, tipoCadastro: widget.tipoCadastro),
+              builder: (contextNew) => FormCadastroEquipamento(
+                  equipamentoContext: context,
+                  tipoCadastro: widget.tipoCadastro),
             ),
           ).then((value) => setState(() {}));
         },

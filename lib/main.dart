@@ -28,7 +28,7 @@ Future<void> main() async {
   FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
   final hasConnection = await InternetConnectionChecker().hasConnection;
 
-  //apagar
+  //apagar um dia
   String os = Platform.operatingSystem;
   print('\nis a $os');
 

@@ -52,6 +52,12 @@ class ExternoDao {
     return toList(result);
   }
 
+  Future<List<Externo>> findAllTypeAC() async {
+    final List<Map<String, dynamic>> result =
+    await supabase.from(_tablename).select().or('tipo_externo.eq.Visitante,tipo_externo.eq.Acompanhante').order(_nome, ascending: true);
+    return toList(result);
+  }
+
   List<Externo> toList(List<Map<String, dynamic>> mapa) {
     final List<Externo> models = [];
     for (Map<String, dynamic> linha in mapa) {

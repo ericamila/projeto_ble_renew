@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
-import 'package:projeto_ble_renew/model/funcionario.dart';
 
-import '../model/cargo.dart';
+import '../model/enum_tipo_equipamento.dart';
+import '../model/equipamento.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
 
-class FormCadastroFuncionario extends StatefulWidget {
-  final BuildContext funcionarioContext;
-  final Funcionario? funcionarioEdit;
+class FormCadastroEquipamento extends StatefulWidget {
+  final BuildContext equipamentoContext;
+  final Equipamento? equipamentoEdit;
   final String tipoCadastro;
 
-  const FormCadastroFuncionario(
+  const FormCadastroEquipamento(
       {super.key,
-      required this.funcionarioContext,
-      this.funcionarioEdit,
+      required this.equipamentoContext,
+      this.equipamentoEdit,
       required this.tipoCadastro});
 
   @override
-  State<FormCadastroFuncionario> createState() => _FormCadastroFuncionarioState();
+  State<FormCadastroEquipamento> createState() => _FormCadastroEquipamentoState();
 }
 
-class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
+class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
   final _formKey = GlobalKey<FormState>();
-  final nomeController = TextEditingController();
-  final cpfController = TextEditingController();
+  final descricaoController = TextEditingController();
+  final codigoController = TextEditingController();
   final imageController = TextEditingController();
-  final dropCargoValue = ValueNotifier('');
+  final dropTipoValue = ValueNotifier('');
   String? _imageUrl;
 
   @override
@@ -37,18 +37,18 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
 
   @override
   void dispose() {
-    nomeController.dispose();
-    cpfController.dispose();
+    descricaoController.dispose();
+    codigoController.dispose();
     super.dispose();
   }
 
   void _seEditar() {
-    if (widget.funcionarioEdit != null) {
+    if (widget.equipamentoEdit != null) {
       setState(() {
-        nomeController.text = widget.funcionarioEdit!.nome;
-        cpfController.text = widget.funcionarioEdit!.cpf;
-        dropCargoValue.value = widget.funcionarioEdit!.cargo.toString();
-        _imageUrl = widget.funcionarioEdit!.foto;
+        descricaoController.text = widget.equipamentoEdit!.descricao;
+        codigoController.text = widget.equipamentoEdit!.codigo;
+        dropTipoValue.value = widget.equipamentoEdit!.tipo;
+        _imageUrl = widget.equipamentoEdit!.foto;
       });
     }
   }
@@ -83,9 +83,9 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                       }
                       return null;
                     },
-                    controller: nomeController,
+                    controller: descricaoController,
                     textAlign: TextAlign.center,
-                    decoration: myDecoration('Nome Completo'),
+                    decoration: myDecoration('Descrição'),
                   ),
                 ),
                 Padding(
@@ -98,15 +98,15 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                       return null;
                     },
                     keyboardType: TextInputType.number,
-                    controller: cpfController,
+                    controller: codigoController,
                     textAlign: TextAlign.center,
-                    decoration: myDecoration('CPF'),
+                    decoration: myDecoration('Código'),
                   ),
                 ),
                 Padding(
                   padding: paddingPadraoFormulario,
                   child: ValueListenableBuilder(
-                    valueListenable: dropCargoValue,
+                    valueListenable: dropTipoValue,
                     builder: (BuildContext context, String value, _) {
                       return DropdownButtonFormField<String>(
                           validator: (value) {
@@ -116,9 +116,9 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                           },
                           isExpanded: true,
                           hint: const Text('Selecione'),
-                          decoration: myDecoration('*Cargo'),
+                          decoration: myDecoration('Tipo'),
                           value: (value.isEmpty) ? null : value,
-                          items: Cargo.getAll()
+                          items: TipoEquipamento.getAll()
                               .map(
                                 (op) => DropdownMenuItem(
                                   value: op.codigo.toString(),
@@ -131,25 +131,25 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                               )
                               .toList(),
                           onChanged: (escolha) {
-                            dropCargoValue.value = escolha.toString();
+                            dropTipoValue.value = escolha.toString();
                           });
                     },
                   ),
                 ),
                 //N O V O
-                (widget.funcionarioEdit?.id != null)
+                (widget.equipamentoEdit?.id != null)
                     ? Foto(
-                        uUID: widget.funcionarioEdit!.id,
+                        uUID: widget.equipamentoEdit!.id,
                         imageUrl: _imageUrl,
                         onUpload: (imageUrl) async {
                           setState(() {
                             _imageUrl = imageUrl;
                             print(_imageUrl);
                           });
-                          final userId = widget.funcionarioEdit!.id;
+                          final userId = widget.equipamentoEdit!.id;
                           print(userId);
                           await supabase
-                              .from('funcionario')
+                              .from('equipamento')
                               .update({'foto': imageUrl}).eq('id', userId!);
                           print(_imageUrl);
                           print(userId);
@@ -167,12 +167,12 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       print(
-                          '${nomeController.text} ${cpfController.text} ${int.parse(dropCargoValue.value)} \n$_imageUrl');
-                      FuncionarioDao().save(Funcionario(
-                        nomeController.text,
-                        cpfController.text,
-                        int.parse(dropCargoValue.value),
-                        //_imageUrl,
+                          '${descricaoController.text}  ${dropTipoValue.value} ${codigoController.text} \n$_imageUrl');
+                      EquipamentoDao().save(Equipamento(
+                        descricaoController.text,
+                        dropTipoValue.value,
+                        codigoController.text,
+                        (_imageUrl != '')? _imageUrl :'',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

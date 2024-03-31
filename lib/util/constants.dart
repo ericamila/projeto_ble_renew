@@ -7,6 +7,7 @@ final borderRadiusPadrao =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0));
 const paddingPadraoFormulario = EdgeInsets.all(12.0);
 var currentUserID;
+const sizeFontToggleButtons = 15.0;
 // Dispositivo? dispositivoSelecionadoX;
 // Pessoa? pessoaSelecionadaX;
 

@@ -3,7 +3,7 @@ enum TipoPaciente {
   crianca(2, 'Criança'),
   adulto(3, 'Adulto'),
   idoso(4, 'Idoso'),
-  dependente(17, 'Dependente');
+  dependente(5, 'Dependente');
 
   const TipoPaciente(this.codigo, this.descricao);
   final int codigo;

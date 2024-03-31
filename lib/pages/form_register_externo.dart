@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
 
+import '../model/area.dart';
 import '../model/enum_tipo_paciente.dart';
 import '../model/externo.dart';
 import '../util/banco.dart';
@@ -29,6 +30,9 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   final dropTipoPacienteValue = ValueNotifier('');
   final dropAreaValue = ValueNotifier('');
   String? _imageUrl;
+  late List<Area> listArea = [];
+  List<bool> isSwitched = [true, false];
+
 
   List<String> tiposCadastrosMenu = [
     'Funcionário',
@@ -40,6 +44,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
 
   @override
   void initState() {
+    _carregaDrop();
     super.initState();
     _seEditar();
   }
@@ -56,11 +61,23 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
       setState(() {
         nomeController.text = widget.externoEdit!.nome;
         cpfController.text = widget.externoEdit!.cpf;
-        //dropAreaValue.value = widget.externoEdit!.area;
+        //dropAreaValue.value = widget.externoEdit!.area; alterar
         dropTipoPacienteValue.value = widget.externoEdit!.tipoPaciente!;
         _imageUrl = widget.externoEdit!.foto;
       });
     }
+  }
+
+  _carregaDrop() async {
+    List listaTemp = [];
+    List data = await supabase.from('area').select();
+    setState(() {
+      listaTemp.addAll(data);
+    });
+    for (var i in listaTemp) {
+      listArea.add(Area.fromMap(i));
+    }
+    setState(() {});
   }
 
   bool valueValidator(String? value) {
@@ -84,6 +101,31 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                (widget.tipoCadastro == tiposCadastrosMenu[1])? nada:
+                Center(
+                  child: ToggleButtons(
+                      constraints: BoxConstraints(
+                          minHeight: 45, //alterar
+                          minWidth:
+                          MediaQuery.of(context).size.width *
+                              0.35),
+                      isSelected: isSwitched,
+                      onPressed: (index) {
+                        setState(() {
+                          isSwitched[0] = !isSwitched[0];
+                          isSwitched[1] = !isSwitched[1];
+                        });
+                      },
+                      children: const [
+                        Text('Visisante',
+                            style: TextStyle(
+                                fontSize: sizeFontToggleButtons)),
+                        Text('Acompanhante',
+                            style: TextStyle(
+                                fontSize: sizeFontToggleButtons)),
+                      ]),
+                ),
+                space,
                 Padding(
                   padding: paddingPadraoFormulario,
                   child: TextFormField(
@@ -147,6 +189,39 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                     },
                   ),
                 ),
+                Padding(
+                  padding: paddingPadraoFormulario,
+                  child: ValueListenableBuilder(
+                    valueListenable: dropAreaValue,
+                    builder: (BuildContext context, String value, _) {
+                      return DropdownButtonFormField<String>(
+                          validator: (value) {
+                            return (value == null)
+                                ? 'Campo obrigatório!'
+                                : null;
+                          },
+                          isExpanded: true,
+                          hint: const Text('Selecione'),
+                          decoration: myDecoration('Setor/Zona/Área'),
+                          value: (value.isEmpty) ? null : value,
+                          items: listArea
+                              .map(
+                                (op) => DropdownMenuItem(
+                              value: op.id.toString(),
+                              child: Text(
+                                op.descricao,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          )
+                              .toList(),
+                          onChanged: (escolha) {
+                            dropAreaValue.value = escolha.toString();
+                          });
+                    },
+                  ),
+                ),
                 //N O V O
                 (widget.externoEdit?.id != null)
                     ? Foto(
@@ -160,7 +235,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           final userId = widget.externoEdit!.id;
                           print(userId);
                           await supabase
-                              .from('funcionario')
+                              .from('externo')
                               .update({'foto': imageUrl}).eq('id', userId!);
                           print(_imageUrl);
                           print(userId);
@@ -182,9 +257,9 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                       ExternoDao().save(Externo(
                         nomeController.text,
                         cpfController.text,
-                        widget.tipoCadastro,
+                        (isSwitched[0] == true)? 'Visitante':'Acompanhante',
                         dropTipoPacienteValue.value,
-                        //_imageUrl,
+                        (_imageUrl != '')? _imageUrl :'',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

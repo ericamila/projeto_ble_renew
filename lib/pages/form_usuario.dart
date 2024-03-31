@@ -43,12 +43,12 @@ class _FormUsuarioState extends State<FormUsuario> {
   }
 
   _carregaDrop() async {
-    List listaFuncionarioTemp = [];
+    List listaTemp = [];
     List data = await supabase.from('funcionario').select();
     setState(() {
-      listaFuncionarioTemp.addAll(data);
+      listaTemp.addAll(data);
     });
-    for (var i in listaFuncionarioTemp) {
+    for (var i in listaTemp) {
       listFuncionario.add(Pessoa.fromMap(i));
       print('from map ${listFuncionario.last.nome}');
     }

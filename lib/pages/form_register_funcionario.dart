@@ -172,7 +172,7 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                         nomeController.text,
                         cpfController.text,
                         int.parse(dropCargoValue.value),
-                        //_imageUrl,
+                        (_imageUrl != '')? _imageUrl :'',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
