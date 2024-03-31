@@ -1,18 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
-import 'package:projeto_ble_renew/pages/form_register.dart';
+import 'package:projeto_ble_renew/pages/form_register_funcionario.dart';
 
 import '../model/cargo.dart';
 import '../util/constants.dart';
 
-class ListaCadastro extends StatefulWidget {
+class ListaCadastroFuncionario extends StatefulWidget {
   final String tipoCadastro;
-  const ListaCadastro({super.key, required this.tipoCadastro});
+
+  const ListaCadastroFuncionario({super.key, required this.tipoCadastro});
+
   @override
-  State<ListaCadastro> createState() => _ListaCadastroState();
+  State<ListaCadastroFuncionario> createState() => _ListaCadastroFuncionarioState();
 }
 
-class _ListaCadastroState extends State<ListaCadastro> {
+class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
+  var bCpf,
+      bcargo,
+      bTipoPaciente,
+      bArea,
+      bPaciente,
+      bTipoEquipamento,
+      bCodigoEquipamento = false;
+
+  @override
+  initState() {
+    super.initState();
+    _verificaTipo();
+  }
+
+  _verificaTipo() {
+    switch (widget.tipoCadastro) {
+      case 'Funcionário':
+        {
+          bCpf = true;
+          bcargo = true;
+        }
+        break;
+      case 'Paciente':
+        {
+          bCpf = true;
+          bTipoPaciente = true;
+          bArea = true;
+        }
+        break;
+      case 'Acompanhante/Visitante':
+        {
+          bCpf = true;
+          bcargo = true;
+          bPaciente = true;
+        }
+        break;
+      case 'Temporário':
+        {
+          bCpf = true;
+          bcargo = true;
+          bArea = true;
+        }
+        break;
+      case 'Equipamento':
+        {
+          bTipoEquipamento = true;
+          bCodigoEquipamento = true;
+        }
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +112,7 @@ class _ListaCadastroState extends State<ListaCadastro> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) => FormCadastro(
+                                        builder: (contextNew) => FormCadastroFuncionario(
                                           funcionarioContext: context,
                                           funcionarioEdit: funcionario,
                                           tipoCadastro: widget.tipoCadastro,
@@ -145,8 +199,9 @@ class _ListaCadastroState extends State<ListaCadastro> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (contextNew) => FormCadastro(
-                  funcionarioContext: context, tipoCadastro: widget.tipoCadastro),
+              builder: (contextNew) => FormCadastroFuncionario(
+                  funcionarioContext: context,
+                  tipoCadastro: widget.tipoCadastro),
             ),
           ).then((value) => setState(() {}));
         },

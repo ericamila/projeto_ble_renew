@@ -6,22 +6,22 @@ import '../model/cargo.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
 
-class FormCadastro extends StatefulWidget {
+class FormCadastroFuncionario extends StatefulWidget {
   final BuildContext funcionarioContext;
   final Funcionario? funcionarioEdit;
   final String tipoCadastro;
 
-  const FormCadastro(
+  const FormCadastroFuncionario(
       {super.key,
       required this.funcionarioContext,
       this.funcionarioEdit,
       required this.tipoCadastro});
 
   @override
-  State<FormCadastro> createState() => _FormCadastroState();
+  State<FormCadastroFuncionario> createState() => _FormCadastroFuncionarioState();
 }
 
-class _FormCadastroState extends State<FormCadastro> {
+class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
   final _formKey = GlobalKey<FormState>();
   final nomeController = TextEditingController();
   final cpfController = TextEditingController();
@@ -137,24 +137,34 @@ class _FormCadastroState extends State<FormCadastro> {
                   ),
                 ),
                 //N O V O
-                Foto(
-                    uUID: widget.funcionarioEdit!.id,
-                    imageUrl: _imageUrl,
-                    onUpload: (imageUrl) async {
-                      setState(() {
-                        _imageUrl = imageUrl;
-                        print(_imageUrl);
-                      });
-                      final userId = widget.funcionarioEdit!.id;
-                      print(userId);
-                      await supabase
-                          .from('funcionario')
-                          .update({'foto': imageUrl}).eq('id', userId!);
-                      print(_imageUrl);
-                      print(userId);
-                    }),
+                (widget.funcionarioEdit?.id != null)
+                    ? Foto(
+                        uUID: widget.funcionarioEdit!.id,
+                        imageUrl: _imageUrl,
+                        onUpload: (imageUrl) async {
+                          setState(() {
+                            _imageUrl = imageUrl;
+                            print(_imageUrl);
+                          });
+                          final userId = widget.funcionarioEdit!.id;
+                          print(userId);
+                          await supabase
+                              .from('funcionario')
+                              .update({'foto': imageUrl}).eq('id', userId!);
+                          print(_imageUrl);
+                          print(userId);
+                        })
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Container(
+                          color: Colors.grey,
+                          child: Image.asset('images/nophoto.png', height: 200),
+                        ),
+                      ),
+                //FotoImagem(),
+                space,
                 FilledButton(
-                  onPressed: () async{
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       print(
                           '${nomeController.text} ${cpfController.text} ${int.parse(dropCargoValue.value)} \n$_imageUrl');
@@ -173,7 +183,7 @@ class _FormCadastroState extends State<FormCadastro> {
                       Navigator.pop(context);
                     }
                   },
-                  child: const Text('Salvar!'),
+                  child: const Text('Salvar'),
                 ),
               ],
             ),
