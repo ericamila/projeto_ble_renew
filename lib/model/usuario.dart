@@ -65,6 +65,20 @@ class UsuarioDao {
     return toList(result);
   }
 
+
+  Future<Usuario> findUUID(String uuid) async {
+    final Map<String, dynamic> result =
+    await supabase.from(_tablename).select().eq('uid', uuid).single();
+    final Usuario model = Usuario(
+      result[_nome],
+      result[_email],
+      result[_funcionario],
+      result[_uid],
+      result[_id],
+    );
+    return model;
+  }
+
   delete(String id) async {
     return await supabase.from(_tablename).delete().eq('id', id);
   }

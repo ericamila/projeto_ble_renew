@@ -23,14 +23,18 @@ class _MenuCadastroState extends State<MenuCadastro> {
 
   @override
   Widget build(BuildContext context) {
-    double _myPadding = 15;
+    double myPadding = 15;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pessoas e Equipamentos'),
+        automaticallyImplyLeading: false,
+      ),
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: _myPadding),
+            padding: EdgeInsets.symmetric(vertical: myPadding),
             child: MyFlilledButton(
                 onPressed: () {
                   Navigator.push(
@@ -42,7 +46,7 @@ class _MenuCadastroState extends State<MenuCadastro> {
                 text: tiposCadastrosMenu[0]),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: _myPadding),
+            padding: EdgeInsets.symmetric(vertical: myPadding),
             child: MyFlilledButton(
                 onPressed: () {
                   Navigator.push(
@@ -54,7 +58,7 @@ class _MenuCadastroState extends State<MenuCadastro> {
                 text: tiposCadastrosMenu[1]),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: _myPadding),
+            padding: EdgeInsets.symmetric(vertical: myPadding),
             child: MyFlilledButton(
                 onPressed: () {
                   Navigator.push(
@@ -66,7 +70,7 @@ class _MenuCadastroState extends State<MenuCadastro> {
                 text: tiposCadastrosMenu[2]),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: _myPadding),
+            padding: EdgeInsets.symmetric(vertical: myPadding),
             child: MyFlilledButton(
                 onPressed: () {
                   Navigator.push(
@@ -78,7 +82,7 @@ class _MenuCadastroState extends State<MenuCadastro> {
                 text: tiposCadastrosMenu[3]),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: _myPadding),
+            padding: EdgeInsets.symmetric(vertical: myPadding),
             child: MyFlilledButton(
                 onPressed: () {
                   Navigator.push(
@@ -90,7 +94,7 @@ class _MenuCadastroState extends State<MenuCadastro> {
                 text: tiposCadastrosMenu[4]),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: _myPadding),
+            padding: EdgeInsets.symmetric(vertical: myPadding),
             child: MyFlilledButton(
               onPressed: () {
                 Navigator.push(

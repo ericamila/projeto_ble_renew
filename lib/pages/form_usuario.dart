@@ -94,138 +94,123 @@ class _FormUsuarioState extends State<FormUsuario> {
         ),
         body: Center(
           child: SingleChildScrollView(
-            child: Container(
-              height: 650,
-              width: 375,
-              decoration: BoxDecoration(
-                color: Colors.blueGrey[100],
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(width: 3, color: Colors.black38),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: paddingPadraoFormulario,
-                    child: ValueListenableBuilder(
-                      valueListenable: dropNomeFuncionarioValue,
-                      builder: (BuildContext context, String value, _) {
-                        return DropdownButtonFormField<String>(
-                            validator: (value) {
-                              return (value == null)
-                                  ? 'Campo obrigatório!'
-                                  : null;
-                            },
-                            isExpanded: true,
-                            hint: const Text('Selecione'),
-                            decoration: myDecoration('*Funcionário'),
-                            value: (value.isEmpty) ? null : value,
-                            items: listFuncionario
-                                .map(
-                                  (op) => DropdownMenuItem(
-                                    value: op.id.toString(),
-                                    child: Text(op.nome),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (escolha) {
-                              dropNomeFuncionarioValue.value =
-                                  escolha.toString();
-                            });
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: paddingPadraoFormulario,
-                    child: TextFormField(
-                      validator: (String? value) {
-                        if (valueValidator(value)) {
-                          return 'Preencha o campo';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      controller: emailController,
-                      textAlign: TextAlign.center,
-                      decoration: myDecoration('Email'),
-                    ),
-                  ),
-                  Padding(
-                    padding: paddingPadraoFormulario,
-                    child: TextFormField(
-                      validator: (String? value) {
-                        if (valueValidator(value)) {
-                          return 'Preencha o campo';
-                        }
-                        return null;
-                      },
-                      controller: senhaController,
-                      textAlign: TextAlign.center,
-                      decoration: myDecoration('Senha'),
-                    ),
-                  ),
-                  Padding(
-                    padding: paddingPadraoFormulario,
-                    child: TextFormField(
-                      validator: (String? value) {
-                        if (valueValidator(value)) {
-                          return 'Preencha o campo';
-                        }
-                        if (value != senhaController.text) {
-                          return 'Senha e Confirmação são diferentes!';
-                        }
-                        return null;
-                      },
-                      controller: senhaConfController,
-                      textAlign: TextAlign.center,
-                      decoration: myDecoration('Confirmar Senha'),
-                    ),
-                  ),
-                  FilledButton(
-                    onPressed: () async {
-                      setState(() {});
-                      if (_formKey.currentState!.validate()) {
-                        Funcionario funcionario = await FuncionarioDao()
-                            .findID(dropNomeFuncionarioValue.value);
-                        String? uid = await signUp();
-                        try {
-                          UsuarioDao().save(
-                            Usuario(
-                              funcionario.nome,
-                              emailController.text,
-                              funcionario.id!,
-                              uid,
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Salvando registro!'),
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        } on PostgrestException catch (e) {
-                          debugPrint(e.toString());
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Erro ao salvar registro!'),
-                              duration: Duration(seconds: 3),
-                            ),
-                          );
-                        }
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Erro ao salvar registro.\nVerifique os dados!'),
-                            duration: Duration(seconds: 3),
-                          )
-                      );
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: paddingPadraoFormulario,
+                  child: ValueListenableBuilder(
+                    valueListenable: dropNomeFuncionarioValue,
+                    builder: (BuildContext context, String value, _) {
+                      return DropdownButtonFormField<String>(
+                          validator: (value) {
+                            return (value == null)
+                                ? 'Campo obrigatório!'
+                                : null;
+                          },
+                          isExpanded: true,
+                          hint: const Text('Selecione'),
+                          decoration: myDecoration('*Funcionário'),
+                          value: (value.isEmpty) ? null : value,
+                          items: listFuncionario
+                              .map(
+                                (op) => DropdownMenuItem(
+                                  value: op.id.toString(),
+                                  child: Text(op.nome),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (escolha) {
+                            dropNomeFuncionarioValue.value =
+                                escolha.toString();
+                          });
                     },
-                    child: const Text('Salvar!'),
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: paddingPadraoFormulario,
+                  child: TextFormField(
+                    validator: (String? value) {
+                      if (valueValidator(value)) {
+                        return 'Preencha o campo';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    controller: emailController,
+                    textAlign: TextAlign.center,
+                    decoration: myDecoration('Email'),
+                  ),
+                ),
+                Padding(
+                  padding: paddingPadraoFormulario,
+                  child: TextFormField(
+                    validator: (String? value) {
+                      if (valueValidator(value)) {
+                        return 'Preencha o campo';
+                      }
+                      return null;
+                    },
+                    controller: senhaController,
+                    textAlign: TextAlign.center,
+                    decoration: myDecoration('Senha'),
+                  ),
+                ),
+                Padding(
+                  padding: paddingPadraoFormulario,
+                  child: TextFormField(
+                    validator: (String? value) {
+                      if (valueValidator(value)) {
+                        return 'Preencha o campo';
+                      }
+                      if (value != senhaController.text) {
+                        return 'Senha e Confirmação são diferentes!';
+                      }
+                      return null;
+                    },
+                    controller: senhaConfController,
+                    textAlign: TextAlign.center,
+                    decoration: myDecoration('Confirmar Senha'),
+                  ),
+                ),
+                FilledButton(
+                  onPressed: () async {
+                    setState(() {});
+                    if (_formKey.currentState!.validate()) {
+                      Funcionario funcionario = await FuncionarioDao()
+                          .findID(dropNomeFuncionarioValue.value);
+                      String? uid = await signUp();
+                      try {
+                        UsuarioDao().save(
+                          Usuario(
+                            funcionario.nome,
+                            emailController.text,
+                            funcionario.id!,
+                            uid,
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Salvando registro!'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } on PostgrestException catch (e) {
+                        debugPrint(e.toString());
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Erro ao salvar registro!'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('Salvar!'),
+                ),
+              ],
             ),
           ),
         ),

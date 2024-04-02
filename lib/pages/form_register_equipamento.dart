@@ -118,7 +118,7 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
                           hint: const Text('Selecione'),
                           decoration: myDecoration('Tipo'),
                           value: (value.isEmpty) ? null : value,
-                          items: TipoEquipamento.getAll()
+                          items: TipoEquipamentoEnum.getAll()
                               .map(
                                 (op) => DropdownMenuItem(
                                   value: op.codigo.toString(),

@@ -171,7 +171,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           hint: const Text('Selecione'),
                           decoration: myDecoration('*Tipo de Paciente'),
                           value: (value.isEmpty) ? null : value,
-                          items: TipoPaciente.getAll()//alterar
+                          items: TipoPacienteEnum.getAll()//alterar
                               .map(
                                 (op) => DropdownMenuItem(
                                   value: op.codigo.toString(),

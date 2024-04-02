@@ -1,4 +1,4 @@
-enum TipoEquipamento {
+enum TipoEquipamentoEnum {
   cama(0, 'Cama'),
   mesa(1, 'Mesa'),
   cadeira(2, 'Cadeira'),
@@ -14,19 +14,19 @@ enum TipoEquipamento {
   balanca(12, 'Balança'),
   aparelhoRaioX(13, 'Aparelho de raio-X');
 
-  const TipoEquipamento(this.codigo, this.descricao);
+  const TipoEquipamentoEnum(this.codigo, this.descricao);
   final int codigo;
   final String descricao;
 
-  static TipoEquipamento fromId(int codigo) {
-    return TipoEquipamento.values.firstWhere((cargo) => cargo.codigo == codigo);
+  static TipoEquipamentoEnum fromId(int codigo) {
+    return TipoEquipamentoEnum.values.firstWhere((cargo) => cargo.codigo == codigo);
   }
 
   static String getNomeById(int codigo) {
-    return TipoEquipamento.values.firstWhere((cargo) => cargo.codigo == codigo).descricao;
+    return TipoEquipamentoEnum.values.firstWhere((cargo) => cargo.codigo == codigo).descricao;
   }
 
-  static List<TipoEquipamento> getAll() {
-    return TipoEquipamento.values;
+  static List<TipoEquipamentoEnum> getAll() {
+    return TipoEquipamentoEnum.values;
   }
 }

@@ -5,6 +5,7 @@
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 // #docregion CameraDelegate
+// ignore: depend_on_referenced_packages
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 // #enddocregion CameraDelegate
 

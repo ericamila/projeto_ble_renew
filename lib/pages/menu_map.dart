@@ -10,9 +10,13 @@ class MenuMapa extends StatefulWidget {
 class _MenuMapaState extends State<MenuMapa> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('M'),
+    return const Scaffold(
+      body: Stack(
+        children: [
+          Image(
+            image: AssetImage('images/planta_baixa_zero.jpg'),
+          ),
+        ],
       ),
     );
   }
