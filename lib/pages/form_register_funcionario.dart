@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
-
 import '../model/cargo.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
+import '../util/formatters.dart';
 
 class FormCadastroFuncionario extends StatefulWidget {
   final BuildContext funcionarioContext;
@@ -18,7 +18,8 @@ class FormCadastroFuncionario extends StatefulWidget {
       required this.tipoCadastro});
 
   @override
-  State<FormCadastroFuncionario> createState() => _FormCadastroFuncionarioState();
+  State<FormCadastroFuncionario> createState() =>
+      _FormCadastroFuncionarioState();
 }
 
 class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
@@ -101,6 +102,7 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                     controller: cpfController,
                     textAlign: TextAlign.center,
                     decoration: myDecoration('CPF'),
+                    inputFormatters: [cpfFormatter],
                   ),
                 ),
                 Padding(
@@ -172,7 +174,7 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                         nomeController.text,
                         cpfController.text,
                         int.parse(dropCargoValue.value),
-                        (_imageUrl != '')? _imageUrl :'',
+                        (_imageUrl != '') ? _imageUrl : '',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

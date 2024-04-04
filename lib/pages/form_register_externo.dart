@@ -6,6 +6,7 @@ import '../model/enum_tipo_paciente.dart';
 import '../model/externo.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
+import '../util/formatters.dart';
 
 class FormCadastroExterno extends StatefulWidget {
   final BuildContext externoContext;
@@ -32,7 +33,6 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   String? _imageUrl;
   late List<Area> listArea = [];
   List<bool> isSwitched = [true, false];
-
 
   List<String> tiposCadastrosMenu = [
     'Funcionário',
@@ -101,30 +101,30 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                (widget.tipoCadastro == tiposCadastrosMenu[1])? nada:
-                Center(
-                  child: ToggleButtons(
-                      constraints: BoxConstraints(
-                          minHeight: 45, //alterar
-                          minWidth:
-                          MediaQuery.of(context).size.width *
-                              0.35),
-                      isSelected: isSwitched,
-                      onPressed: (index) {
-                        setState(() {
-                          isSwitched[0] = !isSwitched[0];
-                          isSwitched[1] = !isSwitched[1];
-                        });
-                      },
-                      children: const [
-                        Text('Visisante',
-                            style: TextStyle(
-                                fontSize: sizeFontToggleButtons)),
-                        Text('Acompanhante',
-                            style: TextStyle(
-                                fontSize: sizeFontToggleButtons)),
-                      ]),
-                ),
+                (widget.tipoCadastro == tiposCadastrosMenu[1])
+                    ? nada
+                    : Center(
+                        child: ToggleButtons(
+                            constraints: BoxConstraints(
+                                minHeight: 45, //alterar
+                                minWidth:
+                                    MediaQuery.of(context).size.width * 0.35),
+                            isSelected: isSwitched,
+                            onPressed: (index) {
+                              setState(() {
+                                isSwitched[0] = !isSwitched[0];
+                                isSwitched[1] = !isSwitched[1];
+                              });
+                            },
+                            children: const [
+                              Text('Visisante',
+                                  style: TextStyle(
+                                      fontSize: sizeFontToggleButtons)),
+                              Text('Acompanhante',
+                                  style: TextStyle(
+                                      fontSize: sizeFontToggleButtons)),
+                            ]),
+                      ),
                 space,
                 Padding(
                   padding: paddingPadraoFormulario,
@@ -153,42 +153,45 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                     controller: cpfController,
                     textAlign: TextAlign.center,
                     decoration: myDecoration('CPF'),
+                    inputFormatters: [cpfFormatter],
                   ),
                 ),
-                (widget.tipoCadastro != tiposCadastrosMenu[1])? nada:
-                Padding(
-                  padding: paddingPadraoFormulario,
-                  child: ValueListenableBuilder(
-                    valueListenable: dropTipoPacienteValue,
-                    builder: (BuildContext context, String value, _) {
-                      return DropdownButtonFormField<String>(
-                          validator: (value) {
-                            return (value == null)
-                                ? 'Campo obrigatório!'
-                                : null;
+                (widget.tipoCadastro != tiposCadastrosMenu[1])
+                    ? nada
+                    : Padding(
+                        padding: paddingPadraoFormulario,
+                        child: ValueListenableBuilder(
+                          valueListenable: dropTipoPacienteValue,
+                          builder: (BuildContext context, String value, _) {
+                            return DropdownButtonFormField<String>(
+                                validator: (value) {
+                                  return (value == null)
+                                      ? 'Campo obrigatório!'
+                                      : null;
+                                },
+                                isExpanded: true,
+                                hint: const Text('Selecione'),
+                                decoration: myDecoration('*Tipo de Paciente'),
+                                value: (value.isEmpty) ? null : value,
+                                items: TipoPacienteEnum.getAll() //alterar
+                                    .map(
+                                      (op) => DropdownMenuItem(
+                                        value: op.codigo.toString(),
+                                        child: Text(
+                                          op.descricao,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (escolha) {
+                                  dropTipoPacienteValue.value =
+                                      escolha.toString();
+                                });
                           },
-                          isExpanded: true,
-                          hint: const Text('Selecione'),
-                          decoration: myDecoration('*Tipo de Paciente'),
-                          value: (value.isEmpty) ? null : value,
-                          items: TipoPacienteEnum.getAll()//alterar
-                              .map(
-                                (op) => DropdownMenuItem(
-                                  value: op.codigo.toString(),
-                                  child: Text(
-                                    op.descricao,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (escolha) {
-                            dropTipoPacienteValue.value = escolha.toString();
-                          });
-                    },
-                  ),
-                ),
+                        ),
+                      ),
                 Padding(
                   padding: paddingPadraoFormulario,
                   child: ValueListenableBuilder(
@@ -207,14 +210,14 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           items: listArea
                               .map(
                                 (op) => DropdownMenuItem(
-                              value: op.id.toString(),
-                              child: Text(
-                                op.descricao,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ),
-                          )
+                                  value: op.id.toString(),
+                                  child: Text(
+                                    op.descricao,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ),
+                              )
                               .toList(),
                           onChanged: (escolha) {
                             dropAreaValue.value = escolha.toString();
@@ -257,9 +260,9 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                       ExternoDao().save(Externo(
                         nomeController.text,
                         cpfController.text,
-                        (isSwitched[0] == true)? 'Visitante':'Acompanhante',
+                        (isSwitched[0] == true) ? 'Visitante' : 'Acompanhante',
                         dropTipoPacienteValue.value,
-                        (_imageUrl != '')? _imageUrl :'',
+                        (_imageUrl != '') ? _imageUrl : '',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
