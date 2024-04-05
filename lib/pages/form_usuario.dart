@@ -64,7 +64,6 @@ class _FormUsuarioState extends State<FormUsuario> {
         email: emailController.text.trim(),
       );
       user = res.user;
-      print('User id ${user!.id}');
 
       if (!mounted) return 'erro';
 

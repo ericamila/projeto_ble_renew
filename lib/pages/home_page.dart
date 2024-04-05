@@ -8,7 +8,6 @@ import 'package:projeto_ble_renew/pages/menu_search.dart';
 import '../components/drawer.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
-import '../util/constants.dart';
 import '../util/my_theme.dart';
 import 'drawer_about.dart';
 import 'drawer_profile.dart';
@@ -39,7 +38,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> signOut() async {
     await supabase.auth.signOut();
     if (!mounted) return;
-    currentUserID = null;
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 

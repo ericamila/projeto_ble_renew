@@ -1,5 +1,8 @@
+import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/model/pessoa.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../util/banco.dart';
+import 'cargo.dart';
 
 class UsuarioDao {
   static const String _tablename = 'usuario';
@@ -96,3 +99,14 @@ class Usuario extends Pessoa {
     return '$nome $uid $email $id $funcionario';
   }
 }
+
+class LoggedUser{
+  static Usuario? usuarioLogado;
+  static AuthResponse? currentUserID;
+
+  static Future<String?> pegaCargo() async {
+    var funcionario = await FuncionarioDao().findID(usuarioLogado!.funcionario);
+    return Cargo.getNomeById(funcionario.cargo);
+  }
+}
+

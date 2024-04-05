@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../model/dispositivo.dart';
 import '../model/pessoa.dart';
-import '../model/usuario.dart';
+import 'app_cores.dart';
 
 const space = Padding(padding: EdgeInsets.all(8));
 const spaceMenor = Padding(padding: EdgeInsets.all(4));
@@ -10,8 +9,9 @@ const nada = Padding(padding: EdgeInsets.all(0));
 final borderRadiusPadrao =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0));
 const paddingPadraoFormulario = EdgeInsets.all(12.0);
-var currentUserID;
-late Usuario usuarioLogado;
+ButtonStyle estiloSearchButton = ElevatedButton.styleFrom(minimumSize: const Size(140, 43),
+    backgroundColor: verde, foregroundColor: claro);
+
 Dispositivo? dispositivoSelecionadoX;
 Pessoa? pessoaSelecionadaX;
 // A P A G A R

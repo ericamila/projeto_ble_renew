@@ -21,28 +21,24 @@ class _LoginPageState extends State<LoginPage> {
   //LOGAR USUÁRIO
   Future<void> signIn() async {
     try {
-      currentUserID = await supabase.auth.signInWithPassword(
+      LoggedUser.currentUserID = await supabase.auth.signInWithPassword(
         password: passwordController.text.trim(),
         email: emailController.text.trim(),
       );
       if (!mounted) return;
 
-      await pegaUsuario();
+      LoggedUser.usuarioLogado = await UsuarioDao().findUUID(
+          LoggedUser.currentUserID!.user!.userMetadata!['sub'].toString());
 
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
+
     } on AuthException catch (e) {
       debugPrint(e.message);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Email e/ou senhas inválidos!')),
       );
     }
-  }
-
-  pegaUsuario() async {
-    Usuario usuarioTemp = await UsuarioDao()
-        .findUUID(currentUserID.user.userMetadata['sub'].toString());
-    usuarioLogado = usuarioTemp;
   }
 
   @override
