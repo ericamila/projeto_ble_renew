@@ -47,14 +47,20 @@ class ExternoDao {
   }
 
   Future<List<Externo>> findAllType(String tipo) async {
-    final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().eq('tipo_externo', tipo).order(_nome, ascending: true);
+    final List<Map<String, dynamic>> result = await supabase
+        .from(_tablename)
+        .select()
+        .eq('tipo_externo', tipo)
+        .order(_nome, ascending: true);
     return toList(result);
   }
 
   Future<List<Externo>> findAllTypeAC() async {
-    final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().or('tipo_externo.eq.Visitante,tipo_externo.eq.Acompanhante').order(_nome, ascending: true);
+    final List<Map<String, dynamic>> result = await supabase
+        .from(_tablename)
+        .select()
+        .or('tipo_externo.eq.Visitante,tipo_externo.eq.Acompanhante')
+        .order(_nome, ascending: true);
     return toList(result);
   }
 
@@ -62,12 +68,12 @@ class ExternoDao {
     final List<Externo> models = [];
     for (Map<String, dynamic> linha in mapa) {
       final Externo model = Externo(
-        linha[_nome],
-        linha[_cpf],
-        linha[_tipoExterno],
-        linha[_tipoPaciente],
-        linha[_foto],
-        linha[_id],
+        nome: linha[_nome],
+        cpf: linha[_cpf],
+        tipoExterno: linha[_tipoExterno],
+        tipoPaciente: linha[_tipoPaciente],
+        foto: linha[_foto],
+        id: linha[_id],
       );
       models.add(model);
     }
@@ -84,12 +90,12 @@ class ExternoDao {
     final Map<String, dynamic> result =
         await supabase.from(_tablename).select().eq('id', id).single();
     final Externo model = Externo(
-      result[_nome],
-      result[_cpf],
-      result[_tipoExterno],
-      result[_tipoPaciente],
-      result[_foto],
-      result[_id],
+      nome: result[_nome],
+      cpf: result[_cpf],
+      tipoExterno: result[_tipoExterno],
+      tipoPaciente: result[_tipoPaciente],
+      foto: result[_foto],
+      id: result[_id],
     );
     return model;
   }
@@ -103,8 +109,13 @@ class Externo extends PessoaFisica {
   String tipoExterno;
   String? tipoPaciente;
 
-  Externo(super.nome, super.cpf, this.tipoExterno,
-      [this.tipoPaciente, super.foto, super.id]);
+  Externo(
+      {required super.nome,
+      required super.cpf,
+      required this.tipoExterno,
+      this.tipoPaciente,
+      super.foto,
+      super.id});
 
   @override
   String toString() {

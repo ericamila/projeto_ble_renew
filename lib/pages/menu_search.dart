@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../util/app_cores.dart';
 import '../util/constants.dart';
 import '../util/formatters.dart';
 
@@ -31,6 +29,16 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
   }
 
   @override
+  void dispose() {
+    userCPFController.dispose();
+    userNameController.dispose();
+    deviceIdController.dispose();
+    deviceTagController.dispose();
+    deviceMacController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
@@ -43,7 +51,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                 padding: const EdgeInsets.all(20),
                 child: ToggleButtons(
                     constraints: BoxConstraints(
-                        minHeight: 45, //alterar
+                        minHeight: 45,
                         minWidth: MediaQuery.of(context).size.width * 0.35),
                     isSelected: isSwitched,
                     onPressed: (index) {

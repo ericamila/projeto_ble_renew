@@ -50,7 +50,6 @@ class _FormUsuarioState extends State<FormUsuario> {
     });
     for (var i in listaTemp) {
       listFuncionario.add(Pessoa.fromMap(i));
-      print('from map ${listFuncionario.last.nome}');
     }
     setState(() {});
   }
@@ -121,8 +120,7 @@ class _FormUsuarioState extends State<FormUsuario> {
                               )
                               .toList(),
                           onChanged: (escolha) {
-                            dropNomeFuncionarioValue.value =
-                                escolha.toString();
+                            dropNomeFuncionarioValue.value = escolha.toString();
                           });
                     },
                   ),
@@ -183,10 +181,10 @@ class _FormUsuarioState extends State<FormUsuario> {
                       try {
                         UsuarioDao().save(
                           Usuario(
-                            funcionario.nome,
-                            emailController.text,
-                            funcionario.id!,
-                            uid,
+                            nome: funcionario.nome,
+                            email: emailController.text,
+                            funcionario: funcionario.id!,
+                            uid: uid,
                           ),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(

@@ -4,6 +4,6 @@ abstract class PessoaFisica extends Pessoa {
   String cpf;
   String? foto;
 
-  PessoaFisica(super.nome, this.cpf, this.foto, [super.id]);
-
+  PessoaFisica(
+      {required super.nome, required this.cpf, required this.foto, super.id});
 }

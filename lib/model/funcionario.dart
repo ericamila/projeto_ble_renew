@@ -47,11 +47,11 @@ class FuncionarioDao {
     final List<Funcionario> funcionarios = [];
     for (Map<String, dynamic> linha in mapa) {
       final Funcionario funcionario = Funcionario(
-        linha[_nome],
-        linha[_cpf],
-        linha[_cargo],
-        linha[_foto],
-        linha[_id],
+        nome: linha[_nome],
+        cpf: linha[_cpf],
+        cargo: linha[_cargo],
+        foto: linha[_foto],
+        id: linha[_id],
       );
       funcionarios.add(funcionario);
     }
@@ -66,13 +66,13 @@ class FuncionarioDao {
 
   Future<Funcionario> findID(String id) async {
     final Map<String, dynamic> result =
-    await supabase.from(_tablename).select().eq('id', id).single();
+        await supabase.from(_tablename).select().eq('id', id).single();
     final Funcionario funcionario = Funcionario(
-      result[_nome],
-      result[_cpf],
-      result[_cargo],
-      result[_foto],
-      result[_id],
+      nome: result[_nome],
+      cpf: result[_cpf],
+      cargo: result[_cargo],
+      foto: result[_foto],
+      id: result[_id],
     );
     return funcionario;
   }
@@ -85,8 +85,12 @@ class FuncionarioDao {
 class Funcionario extends PessoaFisica {
   int cargo;
 
-  Funcionario(super.nome, super.cpf, this.cargo, [super.foto, super.id]);
-
+  Funcionario(
+      {required super.nome,
+      required super.cpf,
+      required this.cargo,
+      super.foto,
+      super.id});
 
   @override
   String toString() {

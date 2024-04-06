@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
 
     <application
-        android:label="projeto_ble_renew"
+        android:label="Codelink v1.2"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

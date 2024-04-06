@@ -45,11 +45,11 @@ class UsuarioDao {
     final List<Usuario> usuarios = [];
     for (Map<String, dynamic> linha in mapa) {
       final Usuario model = Usuario(
-        linha[_nome],
-        linha[_email],
-        linha[_funcionario],
-        linha[_uid],
-        linha[_id],
+        nome: linha[_nome],
+        email: linha[_email],
+        funcionario: linha[_funcionario],
+        uid: linha[_uid],
+        id: linha[_id],
       );
       usuarios.add(model);
     }
@@ -68,16 +68,15 @@ class UsuarioDao {
     return toList(result);
   }
 
-
   Future<Usuario> findUUID(String uuid) async {
     final Map<String, dynamic> result =
-    await supabase.from(_tablename).select().eq('uid', uuid).single();
+        await supabase.from(_tablename).select().eq('uid', uuid).single();
     final Usuario model = Usuario(
-      result[_nome],
-      result[_email],
-      result[_funcionario],
-      result[_uid],
-      result[_id],
+      nome: result[_nome],
+      email: result[_email],
+      funcionario: result[_funcionario],
+      uid: result[_uid],
+      id: result[_id],
     );
     return model;
   }
@@ -92,7 +91,12 @@ class Usuario extends Pessoa {
   String? uid;
   String funcionario;
 
-  Usuario(super.nome, this.email, this.funcionario, [this.uid, super.id]);
+  Usuario(
+      {required super.nome,
+      required this.email,
+      required this.funcionario,
+      this.uid,
+      super.id});
 
   @override
   String toString() {
@@ -100,7 +104,7 @@ class Usuario extends Pessoa {
   }
 }
 
-class LoggedUser{
+class LoggedUser {
   static Usuario? usuarioLogado;
   static AuthResponse? currentUserID;
 
@@ -109,4 +113,3 @@ class LoggedUser{
     return Cargo.getNomeById(funcionario.cargo);
   }
 }
-

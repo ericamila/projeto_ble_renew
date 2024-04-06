@@ -22,8 +22,8 @@ class PessoaDao {
     final List<Pessoa> model = [];
     for (Map<String, dynamic> linha in mapa) {
       final Pessoa pessoa = Pessoa(
-        linha[_nome],
-        linha[_id],
+        nome: linha[_nome],
+        id: linha[_id],
       );
       model.add(pessoa);
     }
@@ -40,8 +40,8 @@ class PessoaDao {
     final Map<String, dynamic> result =
     await supabase.from(_tablename).select().eq('id', id).single();
     final Pessoa model = Pessoa(
-      result[_nome],
-      result[_id],
+      nome: result[_nome],
+      id: result[_id],
     );
     return model;
   }
@@ -52,7 +52,7 @@ class Pessoa {
   String? id;
   String nome;
 
-  Pessoa(this.nome, [this.id]);
+  Pessoa({required this.nome, this.id});
 
   Pessoa.fromMap(Map<String, dynamic> map)
       : id = map["uuid"],

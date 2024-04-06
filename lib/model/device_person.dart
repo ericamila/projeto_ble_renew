@@ -3,7 +3,7 @@ class DispUser {
   String mac;
   String tipo;
 
-  DispUser(this.nome, this.mac, this.tipo);
+  DispUser({required this.nome, required this.mac, required this.tipo});
 
   //receber do banco
   DispUser.fromMap(Map<String, dynamic> map)
@@ -15,7 +15,8 @@ class DispUser {
   List<DispUser> toList(List<Map<String, dynamic>> mapa) {
     final List<DispUser> vinculos = [];
     for (Map<String, dynamic> linha in mapa) {
-      final DispUser vinculo = DispUser(linha[nome], linha[mac], linha[tipo]);
+      final DispUser vinculo =
+          DispUser(nome: linha[nome], mac: linha[mac], tipo: linha[tipo]);
 
       vinculos.add(vinculo);
     }

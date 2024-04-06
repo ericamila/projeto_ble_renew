@@ -233,15 +233,11 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                         onUpload: (imageUrl) async {
                           setState(() {
                             _imageUrl = imageUrl;
-                            print(_imageUrl);
                           });
                           final userId = widget.externoEdit!.id;
-                          print(userId);
                           await supabase
                               .from('externo')
                               .update({'foto': imageUrl}).eq('id', userId!);
-                          print(_imageUrl);
-                          print(userId);
                         })
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
@@ -258,11 +254,13 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                       print(
                           '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} \n$_imageUrl');
                       ExternoDao().save(Externo(
-                        nomeController.text,
-                        cpfController.text,
-                        (isSwitched[0] == true) ? 'Visitante' : 'Acompanhante',
-                        dropTipoPacienteValue.value,
-                        (_imageUrl != '') ? _imageUrl : '',
+                        nome: nomeController.text,
+                        cpf: cpfController.text,
+                        tipoExterno: (isSwitched[0] == true)
+                            ? 'Visitante'
+                            : 'Acompanhante',
+                        tipoPaciente: dropTipoPacienteValue.value,
+                        foto: (_imageUrl != '') ? _imageUrl : '',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

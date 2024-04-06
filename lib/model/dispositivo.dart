@@ -6,7 +6,7 @@ class DispositivoDao {
   static const String _tag = 'tag';
   static const String _tipo = 'tipo';
   static const String _status = 'status';
-  static const String _mac= 'mac';
+  static const String _mac = 'mac';
   static const String _id = 'id';
 
   save(Dispositivo model) async {
@@ -41,7 +41,7 @@ class DispositivoDao {
 
   Future<List<Dispositivo>> findAll() async {
     final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().order(_nome, ascending: true);
+        await supabase.from(_tablename).select().order(_nome, ascending: true);
     return toList(result);
   }
 
@@ -49,12 +49,12 @@ class DispositivoDao {
     final List<Dispositivo> models = [];
     for (Map<String, dynamic> linha in mapa) {
       final Dispositivo model = Dispositivo(
-        linha[_nome],
-        linha[_tag],
-        linha[_tipo],
-        linha[_status],
-        linha[_mac],
-        linha[_id],
+        nome: linha[_nome],
+        tag: linha[_tag],
+        tipo: linha[_tipo],
+        status: linha[_status],
+        mac: linha[_mac],
+        id: linha[_id],
       );
       models.add(model);
     }
@@ -63,20 +63,20 @@ class DispositivoDao {
 
   Future<List<Dispositivo>> find(String mac) async {
     final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().eq(_mac, mac);
+        await supabase.from(_tablename).select().eq(_mac, mac);
     return toList(result);
   }
 
   Future<Dispositivo> findID(String id) async {
     final Map<String, dynamic> result =
-    await supabase.from(_tablename).select().eq(_id, id).single();
+        await supabase.from(_tablename).select().eq(_id, id).single();
     final Dispositivo model = Dispositivo(
-      result[_nome],
-      result[_tag],
-      result[_tipo],
-      result[_status],
-      result[_mac],
-      result[_id],
+      nome: result[_nome],
+      tag: result[_tag],
+      tipo: result[_tipo],
+      status: result[_status],
+      mac: result[_mac],
+      id: result[_id],
     );
     return model;
   }
@@ -86,7 +86,7 @@ class DispositivoDao {
   }
 }
 
-class Dispositivo{
+class Dispositivo {
   String? id;
   String? nome;
   String? tag;
@@ -94,7 +94,13 @@ class Dispositivo{
   bool? status;
   String? mac;
 
-  Dispositivo(this.nome, this.tag, this.tipo, this.status, this.mac,[this.id]);
+  Dispositivo(
+      {required this.nome,
+      required this.tag,
+      required this.tipo,
+      required this.status,
+      required this.mac,
+      this.id});
 
   Dispositivo.fromMap(Map map) {
     id = map["id"];

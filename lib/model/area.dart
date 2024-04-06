@@ -40,9 +40,9 @@ class AreaDao {
     final List<Area> models = [];
     for (Map<String, dynamic> linha in mapa) {
       final Area model = Area(
-        linha[_descricao],
-        linha[_hospital],
-        linha[_id],
+       descricao:  linha[_descricao],
+       hospital: linha[_hospital],
+       id: linha[_id],
       );
       models.add(model);
     }
@@ -65,7 +65,7 @@ class Area{
   String descricao;
   int? hospital;
 
-  Area(this.descricao, this.id, [this.hospital]);
+  Area({required this.descricao, required this.id, this.hospital});
 
   Area.fromMap(Map<String, dynamic> map)
       : id = map["id"],

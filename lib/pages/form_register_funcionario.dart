@@ -146,15 +146,11 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                         onUpload: (imageUrl) async {
                           setState(() {
                             _imageUrl = imageUrl;
-                            print(_imageUrl);
                           });
                           final userId = widget.funcionarioEdit!.id;
-                          print(userId);
                           await supabase
                               .from('funcionario')
                               .update({'foto': imageUrl}).eq('id', userId!);
-                          print(_imageUrl);
-                          print(userId);
                         })
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
@@ -171,10 +167,10 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                       print(
                           '${nomeController.text} ${cpfController.text} ${int.parse(dropCargoValue.value)} \n$_imageUrl');
                       FuncionarioDao().save(Funcionario(
-                        nomeController.text,
-                        cpfController.text,
-                        int.parse(dropCargoValue.value),
-                        (_imageUrl != '') ? _imageUrl : '',
+                        nome: nomeController.text,
+                        cpf: cpfController.text,
+                        cargo: int.parse(dropCargoValue.value),
+                        foto: (_imageUrl != '') ? _imageUrl : '',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

@@ -18,7 +18,8 @@ class FormCadastroEquipamento extends StatefulWidget {
       required this.tipoCadastro});
 
   @override
-  State<FormCadastroEquipamento> createState() => _FormCadastroEquipamentoState();
+  State<FormCadastroEquipamento> createState() =>
+      _FormCadastroEquipamentoState();
 }
 
 class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
@@ -144,15 +145,11 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
                         onUpload: (imageUrl) async {
                           setState(() {
                             _imageUrl = imageUrl;
-                            print(_imageUrl);
                           });
                           final userId = widget.equipamentoEdit!.id;
-                          print(userId);
                           await supabase
                               .from('equipamento')
                               .update({'foto': imageUrl}).eq('id', userId!);
-                          print(_imageUrl);
-                          print(userId);
                         })
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
@@ -169,10 +166,10 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
                       print(
                           '${descricaoController.text}  ${dropTipoValue.value} ${codigoController.text} \n$_imageUrl');
                       EquipamentoDao().save(Equipamento(
-                        descricaoController.text,
-                        dropTipoValue.value,
-                        codigoController.text,
-                        (_imageUrl != '')? _imageUrl :'',
+                        descricao: descricaoController.text,
+                        tipo: dropTipoValue.value,
+                        codigo: codigoController.text,
+                        foto: (_imageUrl != '') ? _imageUrl : '',
                       ));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

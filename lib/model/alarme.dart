@@ -6,7 +6,6 @@ class AlarmeDao {
   static const String _codigo = 'codigo';
   static const String _id = 'id';
 
-
   Map<String, dynamic> toMap(Alarme model) {
     final Map<String, dynamic> mapa = {};
     mapa[_descricao] = model.descricao;
@@ -15,8 +14,10 @@ class AlarmeDao {
   }
 
   Future<List<Alarme>> findAll() async {
-    final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().order(_descricao, ascending: true);
+    final List<Map<String, dynamic>> result = await supabase
+        .from(_tablename)
+        .select()
+        .order(_descricao, ascending: true);
     return toList(result);
   }
 
@@ -24,9 +25,9 @@ class AlarmeDao {
     final List<Alarme> model = [];
     for (Map<String, dynamic> linha in mapa) {
       final Alarme alarme = Alarme(
-        linha[_descricao],
-        linha[_codigo],
-        linha[_id],
+        descricao: linha[_descricao],
+        codigo: linha[_codigo],
+        id: linha[_id],
       );
       model.add(alarme);
     }
@@ -35,21 +36,20 @@ class AlarmeDao {
 
   Future<List<Alarme>> findNome(String descricao) async {
     final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().eq('descricao', descricao);
+        await supabase.from(_tablename).select().eq('descricao', descricao);
     return toList(result);
   }
 
   Future<Alarme> findID(String id) async {
     final Map<String, dynamic> result =
-    await supabase.from(_tablename).select().eq('id', id).single();
+        await supabase.from(_tablename).select().eq('id', id).single();
     final Alarme model = Alarme(
-      result[_descricao],
-      result[_codigo],
-      result[_id],
+      descricao: result[_descricao],
+      codigo: result[_codigo],
+      id: result[_id],
     );
     return model;
   }
-
 }
 
 class Alarme {
@@ -57,7 +57,7 @@ class Alarme {
   String descricao;
   String codigo;
 
-  Alarme(this.descricao,this.codigo, [this.id]);
+  Alarme({required this.descricao, required this.codigo, this.id});
 
   Alarme.fromMap(Map<String, dynamic> map)
       : id = map["id"],

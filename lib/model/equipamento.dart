@@ -37,8 +37,10 @@ class EquipamentoDao {
   }
 
   Future<List<Equipamento>> findAll() async {
-    final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().order(_descricao, ascending: true);
+    final List<Map<String, dynamic>> result = await supabase
+        .from(_tablename)
+        .select()
+        .order(_descricao, ascending: true);
     return toList(result);
   }
 
@@ -46,11 +48,11 @@ class EquipamentoDao {
     final List<Equipamento> models = [];
     for (Map<String, dynamic> linha in mapa) {
       final Equipamento model = Equipamento(
-        linha[_descricao],
-        linha[_tipo],
-        linha[_codigo],
-        linha[_foto],
-        linha[_id],
+        descricao: linha[_descricao],
+        tipo: linha[_tipo],
+        codigo: linha[_codigo],
+        foto: linha[_foto],
+        id: linha[_id],
       );
       models.add(model);
     }
@@ -59,19 +61,19 @@ class EquipamentoDao {
 
   Future<List<Equipamento>> find(String codigo) async {
     final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().eq(_codigo, codigo);
+        await supabase.from(_tablename).select().eq(_codigo, codigo);
     return toList(result);
   }
 
   Future<Equipamento> findID(String id) async {
     final Map<String, dynamic> result =
-    await supabase.from(_tablename).select().eq(_id, id).single();
+        await supabase.from(_tablename).select().eq(_id, id).single();
     final Equipamento model = Equipamento(
-      result[_descricao],
-      result[_tipo],
-      result[_codigo],
-      result[_foto],
-      result[_id],
+      descricao: result[_descricao],
+      tipo: result[_tipo],
+      codigo: result[_codigo],
+      foto: result[_foto],
+      id: result[_id],
     );
     return model;
   }
@@ -81,15 +83,19 @@ class EquipamentoDao {
   }
 }
 
-class Equipamento{
+class Equipamento {
   String? id;
   String descricao;
   String tipo;
   String codigo;
   String? foto;
 
-  Equipamento(this.descricao, this.tipo, this.codigo,
-      [this.foto, this.id]);
+  Equipamento(
+      {required this.descricao,
+      required this.tipo,
+      required this.codigo,
+      this.foto,
+      this.id});
 
   @override
   String toString() {

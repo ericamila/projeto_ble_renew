@@ -17,7 +17,7 @@ class VincularDispositivos extends StatefulWidget {
 
 class _VincularDispositivosState extends State<VincularDispositivos> {
   final _formKey = GlobalKey<FormState>();
-  late List<DispUser> listVinculos = [];//Alterar
+  late List<DispUser> listVinculos = []; //Alterar
 
   List<Pessoa> _listPessoa = [];
   List<Dispositivo> _listDispositivo = [];
@@ -40,7 +40,7 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
     }
     if (usuarioController.text == '' || usuarioController == null) {
       usuarioController.text =
-      (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
+          (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
     }
   }
 
@@ -58,17 +58,9 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
     });
     for (var i in vinculosTemp) {
       listVinculos.add(DispUser.fromMap(i));
-      print(listVinculos);
     }
-
-
-      _listPessoa = await PessoaDao().findAll();
-      print(_listPessoa);
-
-
-      _listDispositivo = await DispositivoDao().findAll();
-    print(_listDispositivo);
-
+    _listPessoa = await PessoaDao().findAll();
+    _listDispositivo = await DispositivoDao().findAll();
   }
 
   @override
@@ -87,156 +79,156 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
         body: listVinculos.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey),
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      space,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            child: TextFormField(
-                              key: const ValueKey('dispositivo'),
-                              controller: dispositivoController,
-                              validator: (value) {
-                                return (value == null || value.isEmpty)
-                                    ? 'Preencha este campo'
-                                    : null;
-                              },
-                              decoration: myDecoration('Dispositivo'),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blueGrey),
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.white,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            space,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 250,
+                                  child: TextFormField(
+                                    key: const ValueKey('dispositivo'),
+                                    controller: dispositivoController,
+                                    validator: (value) {
+                                      return (value == null || value.isEmpty)
+                                          ? 'Preencha este campo'
+                                          : null;
+                                    },
+                                    decoration: myDecoration('Dispositivo'),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Pesquisa(
+                                                      param: 'dispositivo')));
+                                      setState(() {});
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        )),
+                                    child: const Icon(Icons.search))
+                              ],
                             ),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                        const Pesquisa(
-                                            param: 'dispositivo')));
-                                setState(() {});
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(5),
-                                  )),
-                              child: const Icon(Icons.search))
-                        ],
-                      ),
-                      space,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            child: TextFormField(
-                              key: const ValueKey('usuario'),
-                              controller: usuarioController,
-                              validator: (value) {
-                                return (value == null || value.isEmpty)
-                                    ? 'Preencha este campo'
-                                    : null;
-                              },
-                              decoration: myDecoration('Usuário'),
+                            space,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 250,
+                                  child: TextFormField(
+                                    key: const ValueKey('usuario'),
+                                    controller: usuarioController,
+                                    validator: (value) {
+                                      return (value == null || value.isEmpty)
+                                          ? 'Preencha este campo'
+                                          : null;
+                                    },
+                                    decoration: myDecoration('Usuário'),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Pesquisa(
+                                                    param: 'pessoa_fisica'))),
+                                    style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        )),
+                                    child: const Icon(Icons.search)),
+                              ],
                             ),
-                          ),
-                          ElevatedButton(
-                              onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const Pesquisa(
-                                          param: 'pessoa_fisica'))),
-                              style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 15),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(5),
-                                  )),
-                              child: const Icon(Icons.search)),
-                        ],
+                            space,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content:
+                                                  Text('Processando dados')),
+                                        );
+                                        //A L T E R A R
+                                        _cadastrar(
+                                            dispositivoID:
+                                                dispositivoSelecionadoX!.id!,
+                                            pessoaID: pessoaSelecionadaX!.id!);
+                                        setState(() {
+                                          dispositivoController.text = '';
+                                          usuarioController.text = '';
+                                        });
+                                      }
+                                    },
+                                    child: const Text('Vincular')),
+                                ElevatedButton(
+                                    onPressed: () => Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomePage())),
+                                    child: const Text('   Voltar   ')),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      space,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                        Text('Processando dados')),
-                                  );
-                                  //A L T E R A R
-                                  _cadastrar(
-                                      dispositivoID:
-                                      dispositivoSelecionadoX!.id!,
-                                      pessoaID: pessoaSelecionadaX!.id!);
-                                  setState(() {
-                                    dispositivoController.text = '';
-                                    usuarioController.text = '';
-                                  });
-                                }
-                              },
-                              child: const Text('Vincular')),
-                          ElevatedButton(
-                              onPressed: () => Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const HomePage())),
-                              child: const Text('   Voltar   ')),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: space),
-            const SliverToBoxAdapter(
-              child: Text(
-                'Dispositivos ativos:',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Color(0xFF081E27),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) => MyListTile(
-                    text: listVinculos[index].nome,
-                    subText:
-                    '${listVinculos[index].mac} - ${listVinculos[index].tipo}',
-                    tileCor: Colors.blueGrey[100 * (index % 2)],
-                    onTap: () {}),
-                childCount: listVinculos.length,
-              ),
-            ),
-          ],
-        ));
+                  const SliverToBoxAdapter(child: space),
+                  const SliverToBoxAdapter(
+                    child: Text(
+                      'Dispositivos ativos:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Color(0xFF081E27),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => MyListTile(
+                          text: listVinculos[index].nome,
+                          subText:
+                              '${listVinculos[index].mac} - ${listVinculos[index].tipo}',
+                          tileCor: Colors.blueGrey[100 * (index % 2)],
+                          onTap: () {}),
+                      childCount: listVinculos.length,
+                    ),
+                  ),
+                ],
+              ));
   }
 
   //CADASTRAR
