@@ -164,43 +164,93 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
           ),
         ),
       ),
-      body: (isSwitched[0])
-          ? ListView.builder(
-              itemCount: pessoas.length,
-              itemBuilder: (context, index) {
-                if (pesquisa.isEmpty ||
-                    pessoas[index].cpf!.contains(pesquisa) ||
-                    pessoas[index].nome!.contains(pesquisa)) {
-                  return MyListTile(
-                    text: pessoas[index].nome!,
-                    onTap: () {},
-                    icon: Icons.account_circle,
-                    subText: pessoas[index].cpf!,
-                    tileCor: _getCor(index),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            )
-          : ListView.builder(
-              itemCount: dispositivos.length,
-              itemBuilder: (context, index) {
-                if (pesquisa.isEmpty ||
-                    dispositivos[index].tag!.contains(pesquisa) ||
-                    dispositivos[index].mac!.contains(pesquisa)) {
-                  return MyListTile(
-                    text: dispositivos[index].tag!,
-                    onTap: () {},
-                    icon: Icons.bluetooth,
-                    subText: dispositivos[index].mac!,
-                    tileCor: _getCor(index),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
+      body: Hero(
+        tag: 'ListTile-Pesquisa',
+        child: Material(
+          child: (isSwitched[0])
+              ? ListView.builder(
+                  itemCount: pessoas.length,
+                  itemBuilder: (context, index) {
+                    if (pesquisa.isEmpty ||
+                        pessoas[index].cpf.contains(pesquisa) ||
+                        pessoas[index].nome.contains(pesquisa)) {
+                      return MyListTile(
+                          text: pessoas[index].nome,
+                          icon: Icons.account_circle,
+                          subText: pessoas[index].cpf,
+                          tileCor: _getCor(index),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<Widget>(
+                                  builder: (BuildContext context) {
+                                return Scaffold(
+                                  appBar: AppBar(
+                                      title: const Text('Pessoa Selecionada')),
+                                  body: Center(
+                                    child: Hero(
+                                      tag: 'ListTile-Pesquisa',
+                                      child: Material(
+                                        child: MyListTile(
+                                            text: 'ListTile with Hero',
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            }),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            );
+                          });
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                )
+              : ListView.builder(
+                  itemCount: dispositivos.length,
+                  itemBuilder: (context, index) {
+                    if (pesquisa.isEmpty ||
+                        dispositivos[index].tag!.contains(pesquisa) ||
+                        dispositivos[index].mac!.contains(pesquisa)) {
+                      return MyListTile(
+                          text: dispositivos[index].tag!,
+                          icon: Icons.bluetooth,
+                          subText: dispositivos[index].mac!,
+                          tileCor: _getCor(index),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<Widget>(
+                                  builder: (BuildContext context) {
+                                return Scaffold(
+                                  appBar: AppBar(
+                                      title: const Text(
+                                          'Dispositivo Selecionado')),
+                                  body: Center(
+                                    child: Hero(
+                                      tag: 'ListTile-Pesquisa',
+                                      child: Material(
+                                        child: MyListTile(
+                                            text: 'ListTile with Hero',
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            }),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            );
+                          });
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
+        ),
+      ),
     );
   }
 

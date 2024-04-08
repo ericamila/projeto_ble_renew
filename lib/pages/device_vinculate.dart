@@ -3,8 +3,6 @@ import 'package:projeto_ble_renew/pages/home_page.dart';
 import 'package:projeto_ble_renew/pages/pesquisa.dart';
 import '../components/my_list_tile.dart';
 import '../model/device_person.dart';
-import '../model/dispositivo.dart';
-import '../model/pessoa.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
 
@@ -18,10 +16,6 @@ class VincularDispositivos extends StatefulWidget {
 class _VincularDispositivosState extends State<VincularDispositivos> {
   final _formKey = GlobalKey<FormState>();
   late List<DispUser> listVinculos = []; //Alterar
-
-  List<Pessoa> _listPessoa = [];
-  List<Dispositivo> _listDispositivo = [];
-
   final dispositivoController = TextEditingController();
   final usuarioController = TextEditingController();
 
@@ -33,12 +27,12 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
   }
 
   void _verifica() {
-    if (dispositivoController.text == '' || dispositivoController == null) {
+    if (dispositivoController.text == '') {
       dispositivoController.text = (dispositivoSelecionadoX == null)
           ? ''
           : dispositivoSelecionadoX.toString();
     }
-    if (usuarioController.text == '' || usuarioController == null) {
+    if (usuarioController.text == '') {
       usuarioController.text =
           (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
     }
@@ -59,8 +53,6 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
     for (var i in vinculosTemp) {
       listVinculos.add(DispUser.fromMap(i));
     }
-    _listPessoa = await PessoaDao().findAll();
-    _listDispositivo = await DispositivoDao().findAll();
   }
 
   @override
