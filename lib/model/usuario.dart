@@ -96,7 +96,7 @@ class Usuario extends Pessoa {
       required this.email,
       required this.funcionario,
       this.uid,
-      super.id});
+      super.id, super.cpf=''});
 
   @override
   String toString() {

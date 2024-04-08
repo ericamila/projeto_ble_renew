@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_ble_renew/model/pessoa.dart';
+import 'package:projeto_ble_renew/util/app_cores.dart';
+import '../components/my_list_tile.dart';
+import '../model/dispositivo.dart';
 import '../util/constants.dart';
 import '../util/formatters.dart';
 
@@ -10,168 +14,204 @@ class MenuPesquisa extends StatefulWidget {
 }
 
 class _MenuPesquisaState extends State<MenuPesquisa> {
-  TextEditingController userCPFController = TextEditingController();
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController deviceIdController = TextEditingController();
-  TextEditingController deviceTagController = TextEditingController();
-  TextEditingController deviceMacController = TextEditingController();
-
+  TextEditingController macController = TextEditingController();
+  TextEditingController tagController = TextEditingController();
+  TextEditingController cpfController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   List<bool> isSwitched = [true, false];
 
-  _limpa() {
-    setState(() {
-      userCPFController.text = '';
-      userNameController.text = '';
-      deviceIdController.text = '';
-      deviceTagController.text = '';
-      deviceMacController.text = '';
-    });
+  @override
+  void initState() {
+    carrega();
+    super.initState();
   }
 
   @override
   void dispose() {
-    userCPFController.dispose();
-    userNameController.dispose();
-    deviceIdController.dispose();
-    deviceTagController.dispose();
-    deviceMacController.dispose();
+    cpfController.dispose();
+    nameController.dispose();
+    tagController.dispose();
+    macController.dispose();
     super.dispose();
   }
 
+  List<Dispositivo> dispositivos = [];
+  List<Pessoa> pessoas = [];
+
+  carrega() async {
+    dispositivos = await DispositivoDao().findAll();
+    pessoas = await PessoaDao().findAll();
+  }
+
+  String pesquisa = '';
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pesquisa', style: TextStyle(color: escuro)),
+        backgroundColor: claro,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(215.0),
+          child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: ToggleButtons(
-                    constraints: BoxConstraints(
-                        minHeight: 45,
-                        minWidth: MediaQuery.of(context).size.width * 0.35),
-                    isSelected: isSwitched,
-                    onPressed: (index) {
-                      setState(() {
-                        isSwitched[0] = !isSwitched[0];
-                        isSwitched[1] = !isSwitched[1];
-                      });
-                    },
-                    children: const [
-                      Text('Usuário', style: TextStyle(fontSize: 17)),
-                      Text('Dispositivo', style: TextStyle(fontSize: 17)),
-                    ]),
+              ToggleButtons(
+                  constraints: BoxConstraints(
+                      minHeight: 45,
+                      minWidth: MediaQuery.of(context).size.width * 0.35),
+                  isSelected: isSwitched,
+                  onPressed: (index) {
+                    setState(() {
+                      isSwitched[0] = !isSwitched[0];
+                      isSwitched[1] = !isSwitched[1];
+                    });
+                  },
+                  children: const [
+                    Text('Usuário', style: TextStyle(fontSize: 17)),
+                    Text('Dispositivo', style: TextStyle(fontSize: 17)),
+                  ]),
+              space,
+              Row(
+                children: <Widget>[
+                  space,
+                  (isSwitched[0])
+                      ? Expanded(
+                          child: TextField(
+                            controller: cpfController,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                pesquisa = value;
+                                nameController.text = '';
+                              });
+                            },
+                            decoration: myDecoration('CPF',
+                                icone: const Icon(Icons.search)),
+                            inputFormatters: [cpfFormatter],
+                          ),
+                        )
+                      : Expanded(
+                          child: TextField(
+                            controller: tagController,
+                            onChanged: (value) {
+                              setState(() {
+                                pesquisa = value;
+                                macController.text = '';
+                              });
+                            },
+                            decoration: myDecoration('TAG',
+                                icone: const Icon(Icons.search)),
+                          ),
+                        ),
+                  IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          pesquisa = '';
+                          tagController.text = '';
+                          cpfController.text = '';
+                        });
+                      }),
+                ],
               ),
               spaceMenor,
-              (isSwitched[0])
-                  ? TextField(
-                      controller: userCPFController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'CPF',
-                        suffixIcon: Icon(Icons.search),
-                      ),
-                      inputFormatters: [cpfFormatter],
-                    )
-                  : TextField(
-                      controller: deviceTagController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Tag',
-                        suffixIcon: Icon(Icons.search),
-                      ),
-                    ),
+              const Center(child: Text('OU')),
               spaceMenor,
-              const Center(child: Text('ou')),
-              (isSwitched[0])
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: TextField(
-                        controller: userNameController,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Nome',
-                          suffixIcon: Icon(Icons.search),
-                        ),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: TextField(
-                          controller: deviceMacController,
+              Row(children: <Widget>[
+                space,
+                (isSwitched[0])
+                    ? Expanded(
+                        child: TextField(
+                          controller: nameController,
                           keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'MAC Address',
-                            suffixIcon: Icon(Icons.search),
-                          ),
-                          inputFormatters: [macFormatter]),
-                    ),
-              space,
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                ElevatedButton(
+                          onChanged: (value) {
+                            setState(() {
+                              pesquisa = value;
+                              cpfController.text = '';
+                            });
+                          },
+                          decoration: myDecoration('Nome',
+                              icone: const Icon(Icons.search)),
+                        ),
+                      )
+                    : Expanded(
+                        child: TextField(
+                            controller: macController,
+                            onChanged: (value) {
+                              setState(() {
+                                pesquisa = value;
+                                tagController.text = '';
+                              });
+                            },
+                            decoration: myDecoration('MAC',
+                                icone: const Icon(Icons.search)),
+                            inputFormatters: [macFormatter],
+                            textCapitalization: TextCapitalization.characters),
+                      ),
+                IconButton(
+                  icon: const Icon(Icons.clear),
                   onPressed: () {
-                    if (isSwitched[0]) {
-                      if ((userCPFController.text != '') &&
-                          (userNameController.text != '')) {
-                        print('Escolha CPF ou Nome');
-                      } else {
-                        if (userCPFController.text != '') {
-                          print('ver cpf');
-                        } else if (userNameController.text != '') {
-                          print('ver nome');
-                        } else {
-                          print('usuario invalido');
-                        }
-                      }
-                    } else {
-                      if ((deviceTagController.text != '') &&
-                          (deviceMacController.text != '')) {
-                        print('Escolha Tag ou MAC');
-                      } else {
-                        if (deviceTagController.text != '') {
-                          print('ver mac');
-                        } else if (deviceMacController.text != '') {
-                          print('ver tag');
-                        } else {
-                          print('dispositivo invalido');
-                        }
-                      }
-                    }
+                    setState(() {
+                      pesquisa = '';
+                      macController.text = '';
+                      nameController.text = '';
+                    });
                   },
-                  style: estiloSearchButton,
-                  child: const Row(
-                    children: [
-                      Icon(Icons.search),
-                      spaceMenor,
-                      Text("Pesquisar"),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => _limpa(),
-                  style: estiloSearchButton,
-                  child: const Row(children: [
-                    Icon(Icons.refresh),
-                    spaceMenor,
-                    Text("Limpar")
-                  ]),
                 ),
               ]),
               space,
-              const Text("Resultado:"),
-              const Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: ListTile(title: Text('Resultado 1')),
-              ),
-            ]),
+            ],
+          ),
+        ),
       ),
+      body: (isSwitched[0])
+          ? ListView.builder(
+              itemCount: pessoas.length,
+              itemBuilder: (context, index) {
+                if (pesquisa.isEmpty ||
+                    pessoas[index].cpf!.contains(pesquisa) ||
+                    pessoas[index].nome!.contains(pesquisa)) {
+                  return MyListTile(
+                    text: pessoas[index].nome!,
+                    onTap: () {},
+                    icon: Icons.account_circle,
+                    subText: pessoas[index].cpf!,
+                    tileCor: _getCor(index),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            )
+          : ListView.builder(
+              itemCount: dispositivos.length,
+              itemBuilder: (context, index) {
+                if (pesquisa.isEmpty ||
+                    dispositivos[index].tag!.contains(pesquisa) ||
+                    dispositivos[index].mac!.contains(pesquisa)) {
+                  return MyListTile(
+                    text: dispositivos[index].tag!,
+                    onTap: () {},
+                    icon: Icons.bluetooth,
+                    subText: dispositivos[index].mac!,
+                    tileCor: _getCor(index),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
     );
+  }
+
+  Color? _getCor(int index) {
+    switch (index % 2) {
+      case 0:
+        return Colors.blueGrey[100];
+      case 1:
+        return claro;
+      default:
+        return Colors.blueGrey[100 * (index + 1)];
+    }
   }
 }

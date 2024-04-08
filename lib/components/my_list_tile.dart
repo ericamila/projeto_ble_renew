@@ -28,7 +28,7 @@ class MyListTile extends StatelessWidget {
         tileColor: tileCor,
         leading: Icon(
           icon,
-          size: 56,
+          size: 50,
           color: cor,
         ),
         onTap: onTap,

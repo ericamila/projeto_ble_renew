@@ -28,7 +28,7 @@ const carregando = Center(
   ),
 );
 
-InputDecoration myDecoration(String texto) {
+InputDecoration myDecoration(String texto, {Icon? icone}) {
   return InputDecoration(
       border: const OutlineInputBorder(),
       label: Text(texto),
@@ -36,5 +36,7 @@ InputDecoration myDecoration(String texto) {
       floatingLabelBehavior: FloatingLabelBehavior.always,
       enabled: true,
       filled: true,
-      fillColor: Colors.white70);
+      fillColor: Colors.white70,
+      prefixIcon: icone
+  );
 }

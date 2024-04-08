@@ -30,7 +30,6 @@ Future<void> main() async {
 
   //apagar um dia
   String os = Platform.operatingSystem;
-  // ignore: avoid_print
   print('\nis a $os');
 
   runApp(ConnectionNotifier(

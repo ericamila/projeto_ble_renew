@@ -10,7 +10,7 @@ class DispositivoDao {
   static const String _id = 'id';
 
   save(Dispositivo model) async {
-    var itemExists = await find(model.mac!);
+    var itemExists = await findMAC(model.mac!);
     Map<String, dynamic> modelMap = toMap(model);
     if (itemExists.isEmpty) {
       await supabase.from(_tablename).insert({
@@ -61,11 +61,18 @@ class DispositivoDao {
     return models;
   }
 
-  Future<List<Dispositivo>> find(String mac) async {
+  Future<List<Dispositivo>> findMAC(String mac) async {
     final List<Map<String, dynamic>> result =
         await supabase.from(_tablename).select().eq(_mac, mac);
     return toList(result);
   }
+
+  Future<List<Dispositivo>> findTAG(String tag) async {
+    final List<Map<String, dynamic>> result =
+    await supabase.from(_tablename).select().eq(_tag, tag);
+    return toList(result);
+  }
+
 
   Future<Dispositivo> findID(String id) async {
     final Map<String, dynamic> result =
