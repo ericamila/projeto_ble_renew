@@ -77,7 +77,6 @@ class _AppState extends State<App> {
     return MaterialApp(
       title: 'Codelink',
       home: const HomePage(),
-      //home: const ListTileExample(),
       //home: const LoginPage(),
       theme: theme,
     );
