@@ -51,8 +51,7 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                               title: Text(funcionario.nome),
                               subtitle:
                                   Text(Cargo.getNomeById(funcionario.cargo)),
-                              leading:
-                                  const Icon(Icons.account_circle, size: 56),
+                              leading: imageLeading(funcionario.foto),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {

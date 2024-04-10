@@ -11,12 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
-  supabase_flutter: ^2.3.4
+  supabase_flutter: ^2.5.0
   flutter_blue_plus: ^1.31.17
   curved_labeled_navigation_bar: ^2.0.2
   internet_connection_checker: ^1.0.0+1
   image_picker: ^1.0.7
   mask_text_input_formatter: ^2.9.0
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:

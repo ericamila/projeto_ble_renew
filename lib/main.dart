@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -27,16 +28,21 @@ Future<void> main() async {
   await Supabase.initialize(url: supabaseUrl, anonKey: anonKey);
 
   FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
-  final hasConnection = await InternetConnectionChecker().hasConnection;
+
+  final hasConnection =
+      (kIsWeb) ? null : await InternetConnectionChecker().hasConnection;
 
   //apagar um dia
-  String os = Platform.operatingSystem;
-  print('\nis a $os');
+  //print('\nis a ${Platform.operatingSystem}');
 
-  runApp(ConnectionNotifier(
-    notifier: ValueNotifier(hasConnection),
-    child: const App(),
-  ));
+  if (kIsWeb) {
+    runApp(const App());
+  } else {
+    runApp(ConnectionNotifier(
+      notifier: ValueNotifier(hasConnection!),
+      child: const App(),
+    ));
+  }
 }
 
 class App extends StatefulWidget {
@@ -56,7 +62,7 @@ class _AppState extends State<App> {
     listener = InternetConnectionChecker().onStatusChange.listen((status) {
       final notifier = ConnectionNotifier.of(context);
       notifier.value =
-      status == InternetConnectionStatus.connected ? true : false;
+          status == InternetConnectionStatus.connected ? true : false;
     });
   }
 

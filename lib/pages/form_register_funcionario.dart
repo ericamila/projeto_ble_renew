@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
 import '../model/cargo.dart';
-import '../util/banco.dart';
 import '../util/constants.dart';
 import '../util/formatters.dart';
 
@@ -26,9 +26,10 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
   final _formKey = GlobalKey<FormState>();
   final nomeController = TextEditingController();
   final cpfController = TextEditingController();
-  final imageController = TextEditingController();
   final dropCargoValue = ValueNotifier('');
   String? _imageUrl;
+  bool isEditar = false;
+  var uuid = const Uuid();
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
   void dispose() {
     nomeController.dispose();
     cpfController.dispose();
+    _imageUrl = '';
     super.dispose();
   }
 
@@ -50,6 +52,7 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
         cpfController.text = widget.funcionarioEdit!.cpf;
         dropCargoValue.value = widget.funcionarioEdit!.cargo.toString();
         _imageUrl = widget.funcionarioEdit!.foto;
+        isEditar = true;
       });
     }
   }
@@ -138,46 +141,32 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                     },
                   ),
                 ),
-                //N O V O
-                (widget.funcionarioEdit?.id != null)
-                    ? Foto(
-                        uUID: widget.funcionarioEdit!.id,
-                        imageUrl: _imageUrl,
-                        onUpload: (imageUrl) async {
-                          setState(() {
-                            _imageUrl = imageUrl;
-                          });
-                          final userId = widget.funcionarioEdit!.id;
-                          await supabase
-                              .from('funcionario')
-                              .update({'foto': imageUrl}).eq('id', userId!);
-                        })
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Container(
-                          color: Colors.grey,
-                          child: Image.asset('images/nophoto.png', height: 200),
-                        ),
-                      ),
-                //FotoImagem(),
+                Foto(
+                    uUID: (isEditar) ? widget.funcionarioEdit?.id : uuid.v1(),
+                    imageUrl: _imageUrl,
+                    onUpload: (imageUrl) async {
+                      if (!mounted) return;
+                      setState(() {
+                        _imageUrl = imageUrl;
+                      });
+                    }),
                 space,
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print(
-                          '${nomeController.text} ${cpfController.text} ${int.parse(dropCargoValue.value)} \n$_imageUrl');
                       FuncionarioDao().save(Funcionario(
                         nome: nomeController.text,
                         cpf: cpfController.text,
                         cargo: int.parse(dropCargoValue.value),
                         foto: (_imageUrl != '') ? _imageUrl : '',
                       ));
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Salvando registro!'),
                           duration: Duration(seconds: 3),
                         ),
-                      );
+                      ).setState;
                       Navigator.pop(context);
                     }
                   },

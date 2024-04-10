@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/externo.dart';
 import 'package:projeto_ble_renew/pages/form_register_externo.dart';
-
 import '../util/constants.dart';
 
 class ListaCadastroExterno extends StatefulWidget {
@@ -51,8 +50,7 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                           return ListTile(
                               title: Text(externo.nome),
                               subtitle: Text(externo.tipoExterno),
-                              leading:
-                                  const Icon(Icons.account_circle, size: 56),
+                              leading: imageLeading(externo.foto),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {

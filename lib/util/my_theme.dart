@@ -31,13 +31,21 @@ FilledButton
     ),
   ),
 /*
+ElevatedButton
+ */
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        backgroundColor: verdeBotao,
+        foregroundColor: claro,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+  ),
+/*
 FloatingActionButton
  */
   floatingActionButtonTheme: FloatingActionButtonThemeData(
-    backgroundColor: verdeBotao,
-    foregroundColor: claro,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
-  ),
+      backgroundColor: verdeBotao,
+      foregroundColor: claro,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
 /*
 Scaffold
  */

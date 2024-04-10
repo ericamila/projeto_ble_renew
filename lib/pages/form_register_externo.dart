@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
-
+import 'package:uuid/uuid.dart';
 import '../model/area.dart';
 import '../model/enum_tipo_paciente.dart';
 import '../model/externo.dart';
@@ -31,6 +31,8 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   final dropTipoPacienteValue = ValueNotifier('');
   final dropAreaValue = ValueNotifier('');
   String? _imageUrl;
+  bool isEditar = false;
+  var uuid = const Uuid();
   late List<Area> listArea = [];
   List<bool> isSwitched = [true, false];
 
@@ -53,6 +55,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   void dispose() {
     nomeController.dispose();
     cpfController.dispose();
+    _imageUrl = '';
     super.dispose();
   }
 
@@ -64,6 +67,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
         //dropAreaValue.value = widget.externoEdit!.area; alterar
         dropTipoPacienteValue.value = widget.externoEdit!.tipoPaciente!;
         _imageUrl = widget.externoEdit!.foto;
+        isEditar = true;
       });
     }
   }
@@ -225,34 +229,20 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                     },
                   ),
                 ),
-                //N O V O
-                (widget.externoEdit?.id != null)
-                    ? Foto(
-                        uUID: widget.externoEdit!.id,
-                        imageUrl: _imageUrl,
-                        onUpload: (imageUrl) async {
-                          setState(() {
-                            _imageUrl = imageUrl;
-                          });
-                          final userId = widget.externoEdit!.id;
-                          await supabase
-                              .from('externo')
-                              .update({'foto': imageUrl}).eq('id', userId!);
-                        })
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Container(
-                          color: Colors.grey,
-                          child: Image.asset('images/nophoto.png', height: 200),
-                        ),
-                      ),
-                //FotoImagem(),
+                Foto(
+                    uUID: (isEditar)? widget.externoEdit?.id : uuid.v1(),
+                    imageUrl: _imageUrl,
+                    onUpload: (imageUrl) async {
+                      if (!mounted) return;
+                      setState(() {
+                        _imageUrl = imageUrl;
+                      });
+                    }),
                 space,
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print(
-                          '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} \n$_imageUrl');
+                      print('${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} \n$_imageUrl');
                       ExternoDao().save(Externo(
                         nome: nomeController.text,
                         cpf: cpfController.text,
@@ -267,7 +257,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           content: Text('Salvando registro!'),
                           duration: Duration(seconds: 3),
                         ),
-                      );
+                      ).setState;
                       Navigator.pop(context);
                     }
                   },

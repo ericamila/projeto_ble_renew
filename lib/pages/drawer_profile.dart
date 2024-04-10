@@ -3,6 +3,7 @@ import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
 import '../model/usuario.dart';
 
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -33,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+      return  Scaffold(
             appBar: AppBar(
               title: const Text("Perfil"),
             ),
@@ -93,8 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       style: _texto,
                                       children: <TextSpan>[
                                         TextSpan(
-                                            text:
-                                                LoggedUser.usuarioLogado?.nome,
+                                            text: LoggedUser.usuarioLogado?.nome,
                                             style: _resposta),
                                       ])),
                             ]),

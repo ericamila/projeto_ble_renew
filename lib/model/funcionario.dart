@@ -77,6 +77,19 @@ class FuncionarioDao {
     return funcionario;
   }
 
+  Future<Funcionario> findCPFUnico(String cpf) async {
+    final Map<String, dynamic> result =
+    await supabase.from(_tablename).select().eq('cpf', cpf).single();
+    final Funcionario funcionario = Funcionario(
+      nome: result[_nome],
+      cpf: result[_cpf],
+      cargo: result[_cargo],
+      foto: result[_foto],
+      id: result[_id],
+    );
+    return funcionario;
+  }
+
   delete(String id) async {
     return await supabase.from(_tablename).delete().eq('id', id);
   }
