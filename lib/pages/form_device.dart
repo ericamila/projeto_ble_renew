@@ -113,22 +113,23 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
                             : null;
                       },
                       decoration: myDecoration('MAC'),
-                      inputFormatters: [macFormatter]),
+                      inputFormatters: [macFormatter],
+                      textCapitalization: TextCapitalization.characters),
               space,
               Text(deviceMACBLE),
               Text(deviceNomeBLE),
               space,
               TextFormField(
-                key: const ValueKey('tag'),
-                controller: tagController,
-                enabled: isEnable,
-                validator: (value) {
-                  return (value == null || value.isEmpty)
-                      ? 'Preencha este campo'
-                      : null;
-                },
-                decoration: myDecoration('TAG'),
-              ),
+                  key: const ValueKey('tag'),
+                  controller: tagController,
+                  enabled: isEnable,
+                  validator: (value) {
+                    return (value == null || value.isEmpty)
+                        ? 'Preencha este campo'
+                        : null;
+                  },
+                  decoration: myDecoration('TAG'),
+                  textCapitalization: TextCapitalization.characters),
               ListTile(
                 title: const Text('Pulseira'),
                 leading: Radio<TipoDispositivoEnum>(

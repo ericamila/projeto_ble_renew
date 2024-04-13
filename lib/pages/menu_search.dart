@@ -101,6 +101,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                             },
                             decoration: myDecoration('TAG',
                                 icone: const Icon(Icons.search)),
+                              textCapitalization: TextCapitalization.characters
                           ),
                         ),
                   IconButton(

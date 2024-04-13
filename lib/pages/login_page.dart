@@ -5,6 +5,7 @@ import '../model/usuario.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
+import 'drawer_about.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,8 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: "erica@email.com");//apagar em produção
+  TextEditingController passwordController = TextEditingController(text: "eeeeee");//apagar em produção
 
   //LOGAR USUÁRIO
   Future<void> signIn() async {
@@ -39,6 +40,22 @@ class _LoginPageState extends State<LoginPage> {
         const SnackBar(content: Text('Email e/ou senhas inválidos!')),
       );
     }
+  }
+
+  Future _verificarUsuarioLogado() async {
+    User? usuarioLogado = await supabase.auth.currentUser;
+
+    if (usuarioLogado != null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      print(true);
+    }
+  }
+
+  @override
+  void initState() {
+    _verificarUsuarioLogado();
+    super.initState();
   }
 
   @override
