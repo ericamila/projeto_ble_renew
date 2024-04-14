@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/model/usuario.dart';

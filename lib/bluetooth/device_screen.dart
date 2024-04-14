@@ -1,13 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
-//altereiimport '../pages/device_registration.dart';
 import '../pages/form_device.dart';
-import 'service_tile.dart';
-import 'characteristic_tile.dart';
-import 'descriptor_tile.dart';
-import 'snackbar.dart';
 import 'extra.dart';
 
 class DeviceScreen extends StatefulWidget {
@@ -24,11 +18,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
   int? _mtuSize;
   BluetoothConnectionState _connectionState =
       BluetoothConnectionState.disconnected;
-  List<BluetoothService> _services = [];
-  bool _isDiscoveringServices = false;
-  bool _isConnecting = false;
-  bool _isDisconnecting = false;
-
   late StreamSubscription<BluetoothConnectionState>
       _connectionStateSubscription;
   late StreamSubscription<bool> _isConnectingSubscription;
@@ -43,7 +32,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
         widget.device.connectionState.listen((state) async {
       _connectionState = state;
       if (state == BluetoothConnectionState.connected) {
-        _services = []; // must rediscover services
       }
       if (state == BluetoothConnectionState.connected && _rssi == null) {
         _rssi = await widget.device.readRssi();
@@ -61,7 +49,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
     });
 
     _isConnectingSubscription = widget.device.isConnecting.listen((value) {
-      _isConnecting = value;
       if (mounted) {
         setState(() {});
       }
@@ -69,13 +56,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
     _isDisconnectingSubscription =
         widget.device.isDisconnecting.listen((value) {
-      _isDisconnecting = value;
       if (mounted) {
         setState(() {});
       }
     });
-     deviceMACBLE = widget.device.remoteId.str;
-     deviceNomeBLE = widget.device.platformName;
+    deviceMACBLE = widget.device.remoteId.str;
+    deviceNomeBLE = widget.device.platformName;
   }
 
   @override
@@ -89,93 +75,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
   bool get isConnected {
     return _connectionState == BluetoothConnectionState.connected;
-  }
-
-  Future onConnectPressed() async {
-    try {
-      await widget.device.connectAndUpdateStream();
-      Snackbar.show(ABC.c, "Conexão: Sucesso", success: true);
-    } catch (e) {
-      if (e is FlutterBluePlusException &&
-          e.code == FbpErrorCode.connectionCanceled.index) {
-        // ignore connections canceled by the user
-      } else {
-        Snackbar.show(ABC.c, prettyException("Erro de Conexão:", e),
-            success: false);
-      }
-    }
-  }
-
-  Future onCancelPressed() async {
-    try {
-      await widget.device.disconnectAndUpdateStream(queue: false);
-      Snackbar.show(ABC.c, "Cancelar: Sucesso", success: true);
-    } catch (e) {
-      Snackbar.show(ABC.c, prettyException("Erro de Cancelamento:", e),
-          success: false);
-    }
-  }
-
-  Future onDisconnectPressed() async {
-    try {
-      await widget.device.disconnectAndUpdateStream();
-      Snackbar.show(ABC.c, "Desconectar: Sucesso", success: true);
-    } catch (e) {
-      Snackbar.show(ABC.c, prettyException("Erro de desconexão:", e),
-          success: false);
-    }
-  }
-
-  Future onDiscoverServicesPressed() async {
-    if (mounted) {
-      setState(() {
-        _isDiscoveringServices = true;
-      });
-    }
-    try {
-      _services = await widget.device.discoverServices();
-      Snackbar.show(ABC.c, "Descoberta Serviços: Sucesso", success: true);
-    } catch (e) {
-      Snackbar.show(
-          ABC.c, prettyException("Erro de descoberta de serviços::", e),
-          success: false);
-    }
-    if (mounted) {
-      setState(() {
-        _isDiscoveringServices = false;
-      });
-    }
-  }
-
-  Future onRequestMtuPressed() async {
-    try {
-      await widget.device.requestMtu(223, predelay: 0);
-      Snackbar.show(ABC.c, "Requisição Mtu: Sucesso", success: true);
-    } catch (e) {
-      Snackbar.show(ABC.c, prettyException("Erro ao alterar Mtu:", e),
-          success: false);
-    }
-  }
-
-  List<Widget> _buildServiceTiles(BuildContext context, BluetoothDevice d) {
-    return _services
-        .map(
-          (s) => ServiceTile(
-            service: s,
-            characteristicTiles: s.characteristics
-                .map((c) => _buildCharacteristicTile(c))
-                .toList(),
-          ),
-        )
-        .toList();
-  }
-
-  CharacteristicTile _buildCharacteristicTile(BluetoothCharacteristic c) {
-    return CharacteristicTile(
-      characteristic: c,
-      descriptorTiles:
-          c.descriptors.map((d) => DescriptorTile(descriptor: d)).toList(),
-    );
   }
 
   Widget buildSpinner(BuildContext context) {
@@ -211,62 +110,19 @@ class _DeviceScreenState extends State<DeviceScreen> {
     );
   }
 
-  Widget buildGetServices(BuildContext context) {
-    return IndexedStack(
-      index: (_isDiscoveringServices) ? 1 : 0,
-      children: <Widget>[
-        TextButton(
-          onPressed: onDiscoverServicesPressed,
-          child: const Text("Obter Serviços"),
-        ),
-        const IconButton(
-          icon: SizedBox(
-            width: 18.0,
-            height: 18.0,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.grey),
-            ),
-          ),
-          onPressed: null,
-        )
-      ],
-    );
-  }
-
   Widget buildMtuTile(BuildContext context) {
     return ListTile(
-        title: const Text('MTU Size'),
-        subtitle: Text('$_mtuSize bytes'),
-        trailing: IconButton(
-          icon: const Icon(Icons.edit),
-          onPressed: onRequestMtuPressed,
-        ));
-  }
-
-  Widget buildConnectButton(BuildContext context) {
-    return Row(children: [
-      if (_isConnecting || _isDisconnecting) buildSpinner(context),
-      TextButton(
-          onPressed: _isConnecting
-              ? onCancelPressed
-              : (isConnected ? onDisconnectPressed : onConnectPressed),
-          child: Text(
-            _isConnecting
-                ? "CANCELAR"
-                : (isConnected ? "DESCONECTAR" : "CONECTAR"),
-          ))
-    ]);
+      title: const Text('MTU Size'),
+      subtitle: Text('$_mtuSize bytes'),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
-      key: Snackbar.snackBarKeyC,
+      key: UniqueKey(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.device.platformName), //apagar
-          actions: [buildConnectButton(context)],
-        ),
+        appBar: AppBar(title: Text(widget.device.platformName)),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -274,11 +130,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
               ListTile(
                 leading: buildRssiTile(context),
                 title: Text(
-                    'O dispositivo está ${_connectionState.toString().split('.')[1]}.'),
-                trailing: buildGetServices(context),
+                    'O dispositivo ${widget.device.platformName} está selecionado.'),
               ),
               buildMtuTile(context),
-              ..._buildServiceTiles(context, widget.device),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacement(

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../main.dart';
@@ -5,7 +7,6 @@ import '../model/usuario.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
-import 'drawer_about.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -43,12 +44,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future _verificarUsuarioLogado() async {
+    // ignore: await_only_futures
     User? usuarioLogado = await supabase.auth.currentUser;
 
     if (usuarioLogado != null) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
-      print(true);
     }
   }
 

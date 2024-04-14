@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/pages/home_page.dart';
 import 'package:projeto_ble_renew/pages/pesquisa.dart';
@@ -15,7 +17,7 @@ class VincularDispositivos extends StatefulWidget {
 
 class _VincularDispositivosState extends State<VincularDispositivos> {
   final _formKey = GlobalKey<FormState>();
-  late List<DispUser> listVinculos = []; //Alterar
+  late List<DispUser> listVinculos = [];
   final dispositivoController = TextEditingController();
   final usuarioController = TextEditingController();
 
@@ -40,15 +42,9 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
 
   void _carregaDados() async {
     List vinculosTemp = [];
-    List pessoasTemp = [];
-    List dispositivosTemp = [];
     List dataDU = await supabase.from('vw_dispositivos_usuarios').select();
-    List dataPs = await supabase.from('pessoa_fisica').select();
-    List dataDp = await supabase.from('dispositivo').select();
     setState(() {
       vinculosTemp.addAll(dataDU);
-      pessoasTemp.addAll(dataPs);
-      dispositivosTemp.addAll(dataDp);
     });
     for (var i in vinculosTemp) {
       listVinculos.add(DispUser.fromMap(i));

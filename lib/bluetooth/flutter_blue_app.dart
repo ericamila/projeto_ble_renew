@@ -44,11 +44,6 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
     return screen;
 
-    // return MaterialApp(
-    //   home: screen,
-    //   theme: tema,
-    //   navigatorObservers: [BluetoothAdapterStateObserver()],
-    // );
   }
 }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/enum_tipo_equipamento.dart';
 import '../model/equipamento.dart';
-import '../util/banco.dart';
 import '../util/constants.dart';
 
 class FormCadastroEquipamento extends StatefulWidget {
@@ -29,6 +29,8 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
   final imageController = TextEditingController();
   final dropTipoValue = ValueNotifier('');
   String? _imageUrl;
+  bool isEditar = false;
+  var uuid = const Uuid();
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
   void dispose() {
     descricaoController.dispose();
     codigoController.dispose();
+    _imageUrl = '';
     super.dispose();
   }
 
@@ -50,6 +53,7 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
         codigoController.text = widget.equipamentoEdit!.codigo;
         dropTipoValue.value = widget.equipamentoEdit!.tipo;
         _imageUrl = widget.equipamentoEdit!.foto;
+        isEditar = true;
       });
     }
   }
@@ -137,34 +141,19 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
                     },
                   ),
                 ),
-                //N O V O
-                (widget.equipamentoEdit?.id != null)
-                    ? Foto(
-                        uUID: widget.equipamentoEdit!.id,
-                        imageUrl: _imageUrl,
-                        onUpload: (imageUrl) async {
-                          setState(() {
-                            _imageUrl = imageUrl;
-                          });
-                          final userId = widget.equipamentoEdit!.id;
-                          await supabase
-                              .from('equipamento')
-                              .update({'foto': imageUrl}).eq('id', userId!);
-                        })
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Container(
-                          color: Colors.grey,
-                          child: Image.asset('images/nophoto.png', height: 200),
-                        ),
-                      ),
-                //FotoImagem(),
+              Foto(
+                  uUID: (isEditar) ? widget.equipamentoEdit?.id : uuid.v1(),
+                  imageUrl: _imageUrl,
+                  onUpload: (imageUrl) async {
+                    if (!mounted) return;
+                    setState(() {
+                      _imageUrl = imageUrl;
+                    });
+                  }),
                 space,
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print(
-                          '${descricaoController.text}  ${dropTipoValue.value} ${codigoController.text} \n$_imageUrl');
                       EquipamentoDao().save(Equipamento(
                         descricao: descricaoController.text,
                         tipo: dropTipoValue.value,

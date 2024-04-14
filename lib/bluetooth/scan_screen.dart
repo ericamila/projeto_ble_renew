@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:projeto_ble_renew/bluetooth/snackbar.dart';
 import '../bluetooth/device_screen.dart';
-import 'snackbar.dart';
-import 'system_device_tile.dart';
 import 'scan_result_tile.dart';
 import 'extra.dart';
 
@@ -15,7 +14,6 @@ class ScanScreen extends StatefulWidget {
 }
 
 class _ScanScreenState extends State<ScanScreen> {
-  List<BluetoothDevice> _systemDevices = [];
   List<ScanResult> _scanResults = [];
   bool _isScanning = false;
   late StreamSubscription<List<ScanResult>> _scanResultsSubscription;
@@ -50,11 +48,6 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future onScanPressed() async {
-    try {
-      _systemDevices = await FlutterBluePlus.systemDevices;
-    } catch (e) {
-      Snackbar.show(ABC.b, prettyException("Erro de dispositivos do sistema:", e), success: false);
-    }
     try {
       await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
     } catch (e) {
@@ -104,22 +97,7 @@ class _ScanScreenState extends State<ScanScreen> {
     }
   }
 
-  List<Widget> _buildSystemDeviceTiles(BuildContext context) {
-    return _systemDevices
-        .map(
-          (d) => SystemDeviceTile(
-            device: d,
-            onOpen: () => Navigator.of(context).pushReplacement(//alterei
-              MaterialPageRoute(
-                builder: (context) => DeviceScreen(device: d),
-                settings: const RouteSettings(name: '/DeviceScreen'),
-              ),
-            ),
-            onConnect: () => onConnectPressed(d),
-          ),
-        )
-        .toList();
-  }
+
 
   List<Widget> _buildScanResultTiles(BuildContext context) {
     return _scanResults
@@ -135,7 +113,7 @@ class _ScanScreenState extends State<ScanScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
-      key: Snackbar.snackBarKeyB,
+      key: UniqueKey(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Encontrar Dispositivos'),
@@ -146,7 +124,6 @@ class _ScanScreenState extends State<ScanScreen> {
             onRefresh: onRefresh,
             child: ListView(
               children: <Widget>[
-                ..._buildSystemDeviceTiles(context),
                 ..._buildScanResultTiles(context),
               ],
             ),

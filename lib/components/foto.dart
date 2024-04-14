@@ -50,8 +50,11 @@ class Foto extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage(imagemPadraoUrl),
+              fit: BoxFit.cover,
+            ),
             border: Border.all(width: 2.0, color: verdeBotao),
-            color: verde,
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: ClipRRect(

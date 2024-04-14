@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/pages/list_register_funcionario.dart';
 import 'package:projeto_ble_renew/pages/list_register_externo.dart';
-import '../components/foto_imagem.dart';
 import '../components/my_filled_button.dart';
 import 'list_register_equipamento.dart';
 
@@ -93,19 +92,6 @@ class _MenuCadastroState extends State<MenuCadastro> {
                 },
                 text: tiposCadastrosMenu[4]),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: myPadding),
-            child: MyFlilledButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const FotoImagem()));
-              },
-              text: 'Foto temp',
-              cor: Colors.orangeAccent,
-            ),
-          )
         ],
       )),
     );

@@ -35,12 +35,13 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
     super.dispose();
   }
 
-  List<Dispositivo> dispositivos = [];
-  List<Pessoa> pessoas = [];
+  List<Dispositivo> listDevices = [];
+  List<Pessoa> listPersons = [];
 
   carrega() async {
-    dispositivos = await DispositivoDao().findAll();
-    pessoas = await PessoaDao().findAll();
+    listDevices = await DispositivoDao().findAll();
+    listPersons = await PessoaDao().findAll();
+    setState(() {});
   }
 
   String pesquisa = '';
@@ -92,17 +93,17 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                         )
                       : Expanded(
                           child: TextField(
-                            controller: tagController,
-                            onChanged: (value) {
-                              setState(() {
-                                pesquisa = value;
-                                macController.text = '';
-                              });
-                            },
-                            decoration: myDecoration('TAG',
-                                icone: const Icon(Icons.search)),
-                              textCapitalization: TextCapitalization.characters
-                          ),
+                              controller: tagController,
+                              onChanged: (value) {
+                                setState(() {
+                                  pesquisa = value;
+                                  macController.text = '';
+                                });
+                              },
+                              decoration: myDecoration('TAG',
+                                  icone: const Icon(Icons.search)),
+                              textCapitalization:
+                                  TextCapitalization.characters),
                         ),
                   IconButton(
                       icon: const Icon(Icons.clear),
@@ -170,15 +171,15 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
         child: Material(
           child: (isSwitched[0])
               ? ListView.builder(
-                  itemCount: pessoas.length,
+                  itemCount: listPersons.length,
                   itemBuilder: (context, index) {
                     if (pesquisa.isEmpty ||
-                        pessoas[index].cpf.contains(pesquisa) ||
-                        pessoas[index].nome.contains(pesquisa)) {
+                        listPersons[index].cpf.contains(pesquisa) ||
+                        listPersons[index].nome.contains(pesquisa)) {
                       return MyListTile(
-                          text: pessoas[index].nome,
+                          text: listPersons[index].nome,
                           icon: Icons.account_circle,
-                          subText: pessoas[index].cpf,
+                          subText: listPersons[index].cpf,
                           tileCor: _getCor(index),
                           onTap: () {
                             Navigator.push(
@@ -210,15 +211,15 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                   },
                 )
               : ListView.builder(
-                  itemCount: dispositivos.length,
+                  itemCount: listDevices.length,
                   itemBuilder: (context, index) {
                     if (pesquisa.isEmpty ||
-                        dispositivos[index].tag!.contains(pesquisa) ||
-                        dispositivos[index].mac!.contains(pesquisa)) {
+                        listDevices[index].tag!.contains(pesquisa) ||
+                        listDevices[index].mac!.contains(pesquisa)) {
                       return MyListTile(
-                          text: dispositivos[index].tag!,
+                          text: listDevices[index].tag!,
                           icon: Icons.bluetooth,
-                          subText: dispositivos[index].mac!,
+                          subText: listDevices[index].mac!,
                           tileCor: _getCor(index),
                           onTap: () {
                             Navigator.push(

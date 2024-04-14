@@ -80,7 +80,7 @@ class _ScanResultTileState extends State<ScanResultTile> {
   Widget _buildConnectButton(BuildContext context) {
     return ElevatedButton(
       onPressed: (widget.result.advertisementData.connectable) ? widget.onTap : null,
-      child: isConnected ? const Text('ABRIR') : const Text('CONECTAR'),
+      child: const Text('CONECTAR'),
     );
   }
 

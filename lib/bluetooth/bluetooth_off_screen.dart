@@ -45,7 +45,7 @@ class BluetoothOffScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
-      key: Snackbar.snackBarKeyA,
+      key: UniqueKey(),
       child: Scaffold(
         backgroundColor: const Color(0xFF292935),
         body: Center(
