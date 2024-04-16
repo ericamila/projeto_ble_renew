@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
-import '../model/usuario.dart';
 
+import '../model/usuario.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -34,13 +34,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-      return  Scaffold(
-            appBar: AppBar(
-              title: const Text("Perfil"),
-            ),
-            body: (cargo == '')
-                ? carregando
-                :SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Perfil"),
+      ),
+      body: (cargo == '')
+          ? carregando
+          : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -94,7 +94,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       style: _texto,
                                       children: <TextSpan>[
                                         TextSpan(
-                                            text: LoggedUser.usuarioLogado?.nome,
+                                            text:
+                                                LoggedUser.usuarioLogado?.nome,
                                             style: _resposta),
                                       ])),
                             ]),
@@ -110,21 +111,29 @@ class _ProfilePageState extends State<ProfilePage> {
                                     style: _resposta),
                                 TextSpan(text: '\n\nStatus: ', style: _texto),
                                 TextSpan(
-                                    text: LoggedUser.currentUserID?.user?.aud
-                                        .toString(),
+                                    text: (LoggedUser.currentUserID == null)
+                                        ? LoggedUser.userLogado?.aud.toString()
+                                        : LoggedUser.currentUserID?.user?.aud
+                                            .toString(),
                                     style: _resposta),
                                 TextSpan(text: '\n\nID: ', style: _texto),
                                 TextSpan(
-                                    text: LoggedUser.currentUserID?.user?.id
-                                        .toString(),
+                                    text: (LoggedUser.currentUserID == null)
+                                        ? LoggedUser.userLogado?.id.toString()
+                                        : LoggedUser.currentUserID?.user?.id
+                                            .toString(),
                                     style: _resposta),
                                 TextSpan(
                                     text: '\n\nÚltimo acesso: ', style: _texto),
                                 TextSpan(
-                                    text: LoggedUser
-                                        .currentUserID?.user?.lastSignInAt
-                                        .toString()
-                                        .substring(0, 10),
+                                    text: (LoggedUser.currentUserID == null)
+                                        ? LoggedUser.userLogado?.lastSignInAt
+                                            .toString()
+                                            .substring(0, 10)
+                                        : LoggedUser
+                                            .currentUserID?.user?.lastSignInAt
+                                            .toString()
+                                            .substring(0, 10),
                                     style: _resposta),
                                 TextSpan(text: '\n\nCargo: ', style: _texto),
                                 TextSpan(text: cargo, style: _resposta),
@@ -132,6 +141,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ]),
               ),
             ),
-          );
+    );
   }
 }

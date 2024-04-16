@@ -43,11 +43,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future _verificarUsuarioLogado() async {
+  Future<void> _verificarUsuarioLogado() async {
     // ignore: await_only_futures
-    User? usuarioLogado = await supabase.auth.currentUser;
+    LoggedUser.userLogado = await supabase.auth.currentUser;
 
-    if (usuarioLogado != null) {
+    if (LoggedUser.userLogado != null) {
+
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     }

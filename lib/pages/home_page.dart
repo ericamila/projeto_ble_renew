@@ -69,6 +69,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    verificarUsuarioLogado();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Codelink"),

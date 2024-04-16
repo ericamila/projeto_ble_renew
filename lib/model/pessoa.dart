@@ -60,7 +60,7 @@ class Pessoa {
   Pessoa({required this.nome, required this.cpf, this.id});
 
   Pessoa.fromMap(Map<String, dynamic> map)
-      : id = map["uuid"],
+      : id = map["id"],
         nome = map["nome"],
         cpf = map["cpf"];
 

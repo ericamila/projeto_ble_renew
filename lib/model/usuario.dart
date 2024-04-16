@@ -107,6 +107,7 @@ class Usuario extends Pessoa {
 class LoggedUser {
   static Usuario? usuarioLogado;
   static AuthResponse? currentUserID;
+  static User? userLogado;
 
   static Future<String?> pegaCargo() async {
     var funcionario = await FuncionarioDao().findID(usuarioLogado!.funcionario);

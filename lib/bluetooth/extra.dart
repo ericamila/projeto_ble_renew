@@ -23,7 +23,6 @@ extension Extra on BluetoothDevice {
   Stream<bool> get isConnecting {
     return _cstream.stream;
   }
-
   // get stream
   Stream<bool> get isDisconnecting {
     return _dstream.stream;
@@ -39,13 +38,5 @@ extension Extra on BluetoothDevice {
     }
   }
 
-  // disconnect & update stream
-  Future<void> disconnectAndUpdateStream({bool queue = true}) async {
-    _dstream.add(true);
-    try {
-      await disconnect(queue: queue);
-    } finally {
-      _dstream.add(false);
-    }
-  }
+
 }

@@ -53,6 +53,7 @@ class _FormUsuarioState extends State<FormUsuario> {
     for (var i in listaTemp) {
       listFuncionario.add(Pessoa.fromMap(i));
     }
+    print(listFuncionario);
     setState(() {});
   }
 
@@ -64,6 +65,9 @@ class _FormUsuarioState extends State<FormUsuario> {
         password: senhaController.text.trim(),
         email: emailController.text.trim(),
       );
+      print(senhaController.text.trim());
+      print(emailController.text.trim());
+
       user = res.user;
 
       if (!mounted) return 'erro';
@@ -72,7 +76,7 @@ class _FormUsuarioState extends State<FormUsuario> {
     } on AuthException catch (e) {
       debugPrint(e.message);
     }
-    return user!.id;
+    return user?.id;
   }
 
   @override
@@ -122,6 +126,7 @@ class _FormUsuarioState extends State<FormUsuario> {
                               )
                               .toList(),
                           onChanged: (escolha) {
+                            print(escolha.toString());
                             dropNomeFuncionarioValue.value = escolha.toString();
                           });
                     },
@@ -145,6 +150,7 @@ class _FormUsuarioState extends State<FormUsuario> {
                 Padding(
                   padding: paddingPadraoFormulario,
                   child: TextFormField(
+                    obscureText: true,
                     validator: (String? value) {
                       if (valueValidator(value)) {
                         return 'Preencha o campo';
@@ -159,6 +165,7 @@ class _FormUsuarioState extends State<FormUsuario> {
                 Padding(
                   padding: paddingPadraoFormulario,
                   child: TextFormField(
+                    obscureText: true,
                     validator: (String? value) {
                       if (valueValidator(value)) {
                         return 'Preencha o campo';
