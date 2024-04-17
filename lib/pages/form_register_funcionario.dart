@@ -64,6 +64,20 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
     return false;
   }
 
+  Future<bool> register() async {
+    try {
+      FuncionarioDao().save(Funcionario(
+        nome: nomeController.text,
+        cpf: cpfController.text,
+        cargo: int.parse(dropCargoValue.value),
+        foto: (_imageUrl != '') ? _imageUrl : '',
+      ));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -154,20 +168,9 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      FuncionarioDao().save(Funcionario(
-                        nome: nomeController.text,
-                        cpf: cpfController.text,
-                        cargo: int.parse(dropCargoValue.value),
-                        foto: (_imageUrl != '') ? _imageUrl : '',
-                      ));
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Salvando registro!'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      ).setState;
-                      Navigator.pop(context);
+                      register().then((value) {
+                        Navigator.pop(context, value);
+                      });
                     }
                   },
                   child: const Text('Salvar'),

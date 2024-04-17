@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/pages/form_register_funcionario.dart';
-
 import '../model/cargo.dart';
 import '../util/constants.dart';
 
@@ -32,7 +31,7 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
         child: FutureBuilder<List<Funcionario>>(
-            future: FuncionarioDao().findAll(),
+            future: refresh(),
             builder: (context, snapshot) {
               List<Funcionario>? items = snapshot.data;
               switch (snapshot.connectionState) {
@@ -150,7 +149,26 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                   funcionarioContext: context,
                   tipoCadastro: widget.tipoCadastro),
             ),
-          ).then((value) => setState(() {}));
+          ).then((value) {
+            refresh();
+            if (value == true) {
+              showSnackBar(context, "Registro salvo com sucesso.", true);
+             /* ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Registro salvo com sucesso."),
+                  duration: Duration(seconds: 3),
+                ),
+              );*/
+            } else {
+              showSnackBar(context, "Houve uma falha ao registar.", false);
+              /*ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Houve uma falha ao registar."),
+                  duration: Duration(seconds: 3),
+                ),
+              );*/
+            }
+          });
         },
         label: const Text(
           'ADICIONAR',
@@ -159,5 +177,10 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
         icon: const Icon(Icons.person_add),
       ),
     );
+  }
+
+  Future<List<Funcionario>> refresh() async {
+    setState(() {});
+    return FuncionarioDao().findAll();
   }
 }

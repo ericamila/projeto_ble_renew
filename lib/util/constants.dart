@@ -54,3 +54,12 @@ InputDecoration myDecoration(String texto, {Icon? icone}) {
       fillColor: Colors.white70,
       prefixIcon: icone);
 }
+
+void showSnackBar(BuildContext context, String message, bool sucess ) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    backgroundColor: (sucess)? Colors.teal: Colors.orangeAccent,
+    behavior: SnackBarBehavior.floating,
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}

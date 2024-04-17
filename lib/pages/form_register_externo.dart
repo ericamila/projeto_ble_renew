@@ -91,6 +91,20 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     return false;
   }
 
+  String _tipoExterno() {
+    if (widget.tipoCadastro == tiposCadastrosMenu[1]) {
+      return tiposCadastrosMenu[1];
+    } else if (widget.tipoCadastro == tiposCadastrosMenu[3]) {
+      return tiposCadastrosMenu[3];
+    } else {
+      if (isSwitched[0] == true) {
+        return 'Visitante';
+      } else {
+        return 'Acompanhante';
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -105,7 +119,8 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                (widget.tipoCadastro == tiposCadastrosMenu[1])
+                (widget.tipoCadastro == tiposCadastrosMenu[1] ||
+                        (widget.tipoCadastro == tiposCadastrosMenu[3]))
                     ? nada
                     : Center(
                         child: ToggleButtons(
@@ -230,7 +245,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                   ),
                 ),
                 Foto(
-                    uUID: (isEditar)? widget.externoEdit?.id : uuid.v1(),
+                    uUID: (isEditar) ? widget.externoEdit?.id : uuid.v1(),
                     imageUrl: _imageUrl,
                     onUpload: (imageUrl) async {
                       if (!mounted) return;
@@ -242,23 +257,19 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print('${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} \n$_imageUrl');
-                      ExternoDao().save(Externo(
+                      print(
+                          '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} \n$_imageUrl');
+                      ExternoDao()
+                          .save(Externo(
                         nome: nomeController.text,
                         cpf: cpfController.text,
-                        tipoExterno: (isSwitched[0] == true)
-                            ? 'Visitante'
-                            : 'Acompanhante',
+                        tipoExterno: _tipoExterno(),
                         tipoPaciente: dropTipoPacienteValue.value,
                         foto: (_imageUrl != '') ? _imageUrl : '',
-                      ));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Salvando registro!'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      ).setState;
-                      Navigator.pop(context);
+                      ))
+                          .then((value) {
+                        Navigator.pop(context, value);
+                      });
                     }
                   },
                   child: const Text('Salvar'),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-enum ABC {
+enum SnackEnum {
   a,
   b,
   c,
@@ -13,18 +13,18 @@ class Snackbar {
   static final snackBarKeyB = GlobalKey<ScaffoldMessengerState>();
   static final snackBarKeyC = GlobalKey<ScaffoldMessengerState>();
 
-  static GlobalKey<ScaffoldMessengerState> getSnackbar(ABC abc) {
+  static GlobalKey<ScaffoldMessengerState> getSnackbar(SnackEnum abc) {
     switch (abc) {
-      case ABC.a:
+      case SnackEnum.a:
         return snackBarKeyA;
-      case ABC.b:
+      case SnackEnum.b:
         return snackBarKeyB;
-      case ABC.c:
+      case SnackEnum.c:
         return snackBarKeyC;
     }
   }
 
-  static show(ABC abc, String msg, {required bool success}) {
+  static show(SnackEnum abc, String msg, {required bool success}) {
     final snackBar = success
         ? SnackBar(content: Text(msg), backgroundColor: Colors.blue[200])
         : SnackBar(content: Text(msg), backgroundColor: Colors.red[200]);

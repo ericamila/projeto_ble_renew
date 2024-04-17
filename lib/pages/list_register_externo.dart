@@ -30,9 +30,7 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
         child: FutureBuilder<List<Externo>>(
-            future: (widget.tipoCadastro == 'Acompanhante/Visitante')
-                ? ExternoDao().findAllTypeAC()
-                : ExternoDao().findAllType(widget.tipoCadastro),
+            future: refresh(),
             builder: (context, snapshot) {
               List<Externo>? items = snapshot.data;
               switch (snapshot.connectionState) {
@@ -148,7 +146,22 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
               builder: (contextNew) => FormCadastroExterno(
                   externoContext: context, tipoCadastro: widget.tipoCadastro),
             ),
-          ).then((value) => setState(() {}));
+          ).then((value) {
+            refresh();
+            if (value == true) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Registro salvo com sucesso."),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Houve uma falha ao registar."),
+                ),
+              );
+            }
+          });
         },
         label: const Text(
           'ADICIONAR',
@@ -157,5 +170,12 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
         icon: const Icon(Icons.person_add),
       ),
     );
+  }
+
+  Future<List<Externo>> refresh() async {
+    setState(() {});
+    return (widget.tipoCadastro == 'Acompanhante/Visitante')
+        ?  ExternoDao().findAllTypeAC()
+        :  ExternoDao().findAllType(widget.tipoCadastro);
   }
 }
