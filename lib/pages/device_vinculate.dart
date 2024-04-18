@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/pages/home_page.dart';
 import 'package:projeto_ble_renew/pages/pesquisa.dart';
 import '../components/my_list_tile.dart';
 import '../model/device_person.dart';

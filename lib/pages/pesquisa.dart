@@ -40,7 +40,9 @@ class _PesquisaState extends State<Pesquisa> {
       }
     } else if (widget.param == 'externo') {
       for (var item in listaTemp) {
-        _lista.add(ExternoDao().fromMap(item));
+        if(item['tipo_externo'] == 'Paciente'){
+          _lista.add(ExternoDao().fromMap(item));
+        }
       }
     } else {
       for (var item in listaTemp) {

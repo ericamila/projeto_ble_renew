@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
+import 'package:projeto_ble_renew/model/pessoa.dart';
+import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:uuid/uuid.dart';
 import '../model/area.dart';
 import '../model/enum_tipo_paciente.dart';
@@ -35,6 +37,8 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   bool isEditar = false;
   var uuid = const Uuid();
   List<bool> isSwitched = [true, false];
+  String areaDestino = '';
+  Externo? pacienteTemp;
 
   List<String> tiposCadastrosMenu = [
     'Funcionário',
@@ -61,7 +65,19 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     super.dispose();
   }
 
-  void _seEditar() {
+  void _seEditar() async {
+    if (widget.tipoCadastro == tiposCadastrosMenu[2]) {
+      if (widget.externoEdit!.paciente == null) {
+        pacienteController.text = '';
+      } else {
+        pessoaSelecionadaX =
+            await PessoaDao().findID(widget.externoEdit!.paciente!);
+        pacienteController.text = pessoaSelecionadaX.toString();
+        pacienteTemp = await ExternoDao().findID(pessoaSelecionadaX!.id!);
+        areaDestino = Area.getNomeById(pacienteTemp!.area!);
+        print(areaDestino);
+      }
+    }
     if (widget.externoEdit != null) {
       setState(() {
         nomeController.text = widget.externoEdit!.nome;
@@ -99,6 +115,11 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     setState(() {
       pacienteController.text =
           (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
+      print(pacienteTemp != null);
+      if (pacienteTemp != null) {
+        areaDestino = Area.getNomeById(pacienteTemp!.area!);
+        print(pacienteTemp != null);
+      }
     });
   }
 
@@ -116,6 +137,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                space,
                 (widget.tipoCadastro == tiposCadastrosMenu[1] ||
                         (widget.tipoCadastro == tiposCadastrosMenu[3]))
                     ? nada
@@ -216,7 +238,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: 250,
+                              width: MediaQuery.of(context).size.width * 0.77,
                               child: TextFormField(
                                 key: const ValueKey('paciente'),
                                 controller: pacienteController,
@@ -234,8 +256,10 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => const Pesquisa(
-                                              param: 'externo'))).then((value) {
+                                              param: 'externo'))).then((value) async {
                                     _verifica();
+                                    pacienteTemp = await ExternoDao().findID(pessoaSelecionadaX!.id!);
+                                    areaDestino = Area.getNomeById(pacienteTemp!.area!);
                                     setState(() {});
                                   });
                                 },
@@ -255,6 +279,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           valueListenable: dropAreaValue,
                           builder: (BuildContext context, String value, _) {
                             return DropdownButtonFormField<String>(
+                                enableFeedback: false,
                                 validator: (value) {
                                   return (value == null)
                                       ? 'Campo obrigatório!'
@@ -282,7 +307,16 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           },
                         ),
                       ),
-                space,
+                (widget.tipoCadastro == tiposCadastrosMenu[2])
+                    ? Text(
+                        areaDestino,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: verdeBotao,
+                            fontSize: 18),
+                      )
+                    : nada,
                 Foto(
                     uUID: (isEditar) ? widget.externoEdit?.id : uuid.v1(),
                     imageUrl: _imageUrl,
@@ -297,13 +331,15 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       print(
-                          '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} ${dropAreaValue.value}\n$_imageUrl');
+                          '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} ${dropAreaValue.value}'
+                          ' \n$_imageUrl \n${pessoaSelecionadaX?.nome} ${pessoaSelecionadaX?.id}');
                       ExternoDao()
                           .save(Externo(
                         nome: nomeController.text,
                         cpf: cpfController.text,
                         tipoExterno: _tipoExterno(),
                         tipoPaciente: dropTipoPacienteValue.value,
+                        paciente: pessoaSelecionadaX?.id,
                         area: int.parse(dropAreaValue.value),
                         foto: (_imageUrl != '') ? _imageUrl : '',
                       ))

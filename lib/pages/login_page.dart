@@ -7,7 +7,6 @@ import '../model/usuario.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
-import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

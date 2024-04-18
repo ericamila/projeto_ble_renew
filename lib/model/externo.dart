@@ -10,6 +10,7 @@ class ExternoDao {
   static const String _tipoPaciente = 'tipo_paciente';
   static const String _foto = 'foto';
   static const String _area = 'area_id';
+  static const String _paciente = 'externo_id';
   static const String _id = 'id';
 
   save(Externo model) async {
@@ -22,7 +23,8 @@ class ExternoDao {
         _tipoExterno: model.tipoExterno,
         _tipoPaciente: model.tipoPaciente,
         _foto : model.foto,
-        _area : model.area
+        _area : model.area,
+        _paciente : model.paciente
       });
     } else {
       model.id = itemExists.last.id;
@@ -41,6 +43,7 @@ class ExternoDao {
     mapa[_tipoPaciente] = model.tipoPaciente;
     mapa[_foto] = model.foto;
     mapa[_area] = model.area;
+    mapa[_paciente] = model.paciente;
     return mapa;
   }
 
@@ -78,6 +81,7 @@ class ExternoDao {
         tipoPaciente: linha[_tipoPaciente],
         foto: linha[_foto],
         area: linha[_area],
+        paciente: linha[_paciente],
         id: linha[_id],
       );
       models.add(model);
@@ -101,6 +105,7 @@ class ExternoDao {
       tipoPaciente: result[_tipoPaciente],
       foto: result[_foto],
       area: result[_area],
+      paciente: result[_paciente],
       id: result[_id],
     );
     return model;
@@ -114,6 +119,7 @@ class ExternoDao {
       tipoPaciente: result[_tipoPaciente],
       foto: result[_foto],
       area: result[_area],
+      paciente: result[_paciente],
       id: result[_id],
     );
     return model;
@@ -127,12 +133,14 @@ class ExternoDao {
 class Externo extends PessoaFisica {
   String tipoExterno;
   String? tipoPaciente;
+  String? paciente;
 
   Externo(
       {required super.nome,
       required super.cpf,
       required this.tipoExterno,
       this.tipoPaciente,
+      this.paciente,
       super.foto,
       super.area,
       super.id});

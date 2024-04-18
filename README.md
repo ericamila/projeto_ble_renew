@@ -4,11 +4,17 @@ Controle de fluxo de pessoas e equipamentos em hospital
 
 ## Getting Started
 
-Verificar Salvar Externo
 Terminar hero da pesquisa
 Verificar rotas ao voltar
-Criar opção de desvincular dispositivo
-Dispositivo ativo não deve aparecer na lista de vincular
+trigger para dispositivo ficar true ao vincular
+Dispositivos ativos não devem aparecer na lista de vincular
+Criar opção de DESVINCULAR dispositivo
+ATUALIZAR lista apos vincular
 Regras de negócio para usuário e dispositivo único
 Incluir info de paciente no cadastro do externo ou uma area
 Mapa com RFID
+Imagem usuario
+Ajustar layout para desktop
+Verificar as deleções
+Vincular equipamento area
+Quando paciente for dependente vincular externo

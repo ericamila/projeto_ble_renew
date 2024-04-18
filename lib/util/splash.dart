@@ -1,9 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/pages/login_page.dart';
 import '../model/usuario.dart';
-import '../pages/home_page.dart';
 import 'app_cores.dart';
 import 'banco.dart';
 
