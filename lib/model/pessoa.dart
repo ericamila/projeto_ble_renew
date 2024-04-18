@@ -66,6 +66,6 @@ class Pessoa {
 
   @override
   String toString() {
-    return '$nome $cpf $id';
+    return '$nome \n$cpf';
   }
 }

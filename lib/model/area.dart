@@ -1,78 +1,33 @@
-import '../util/banco.dart';
+enum Area {
+  recepcao(1, 'Recepção'),
+  pediatria(2, 'Pediatria'),
+  quarto1(3, 'Quarto 1'),
+  quarto2(4, 'Quarto 2'),
+  quarto3(5, 'Quarto 3'),
+  uti1(6, 'UTI 1'),
+  laboratorio01(7, 'Laboratório 01'),
+  laboratorio02(8, 'Laboratório 02'),
+  salaraiox(9, 'Sala de Raio-X'),
+  emergencia(10, 'Emergência'),
+  neurologia(11, 'Neurologia'),
+  cardiologia(12, 'Cardiologia'),
+  ortopedia(13, 'Ortopedia'),
+  corredorprincipal(14, 'Corredor Principal'),
+  alainfantil(15, 'Ala Infantil');
 
-class AreaDao {
-  static const String _tablename = 'area';
-  static const String _descricao = 'descricao';
-  static const String _hospital = 'hospital';
-  static const String _id = 'id';
+  const Area(this.codigo, this.descricao);
+  final int codigo;
+  final String descricao;
 
-  save(Area model) async {
-    var itemExists = await find(model.id);
-    Map<String, dynamic> modelMap = toMap(model);
-    if (itemExists.isEmpty) {
-      await supabase.from(_tablename).insert({
-        _descricao: model.descricao,
-        _hospital: model.hospital
-      });
-    } else {
-      model.id = itemExists.last.id;
-      await supabase
-          .from(_tablename)
-          .update(modelMap)
-          .eq('id', model.id.toString());
-    }
+  static Area fromId(int codigo) {
+    return Area.values.firstWhere((cargo) => cargo.codigo == codigo);
   }
 
-  Map<String, dynamic> toMap(Area model) {
-    final Map<String, dynamic> mapa = {};
-    mapa[_descricao] = model.descricao;
-    mapa[_hospital] = model.hospital;
-    return mapa;
+  static String getNomeById(int codigo) {
+    return Area.values.firstWhere((cargo) => cargo.codigo == codigo).descricao;
   }
 
-  Future<List<Area>> findAll() async {
-    final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().order(_descricao, ascending: true);
-    return toList(result);
-  }
-
-  List<Area> toList(List<Map<String, dynamic>> mapa) {
-    final List<Area> models = [];
-    for (Map<String, dynamic> linha in mapa) {
-      final Area model = Area(
-       descricao:  linha[_descricao],
-       hospital: linha[_hospital],
-       id: linha[_id],
-      );
-      models.add(model);
-    }
-    return models;
-  }
-
-  Future<List<Area>> find(int id) async {
-    final List<Map<String, dynamic>> result =
-    await supabase.from(_tablename).select().eq(_id, id);
-    return toList(result);
-  }
-
-  delete(String id) async {
-    return await supabase.from(_tablename).delete().eq(_id, id);
-  }
-}
-
-class Area{
-  int id;
-  String descricao;
-  int? hospital;
-
-  Area({required this.descricao, required this.id, this.hospital});
-
-  Area.fromMap(Map<String, dynamic> map)
-      : id = map["id"],
-        descricao = map["descricao"];
-
-  @override
-  String toString() {
-    return '$descricao $hospital $id';
+  static List<Area> getAll() {
+    return Area.values;
   }
 }

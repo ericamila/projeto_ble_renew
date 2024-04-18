@@ -4,9 +4,9 @@ import 'package:uuid/uuid.dart';
 import '../model/area.dart';
 import '../model/enum_tipo_paciente.dart';
 import '../model/externo.dart';
-import '../util/banco.dart';
 import '../util/constants.dart';
 import '../util/formatters.dart';
+import 'pesquisa.dart';
 
 class FormCadastroExterno extends StatefulWidget {
   final BuildContext externoContext;
@@ -28,12 +28,12 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   final nomeController = TextEditingController();
   final cpfController = TextEditingController();
   final imageController = TextEditingController();
+  final pacienteController = TextEditingController();
   final dropTipoPacienteValue = ValueNotifier('');
   final dropAreaValue = ValueNotifier('');
   String? _imageUrl;
   bool isEditar = false;
   var uuid = const Uuid();
-  late List<Area> listArea = [];
   List<bool> isSwitched = [true, false];
 
   List<String> tiposCadastrosMenu = [
@@ -46,7 +46,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
 
   @override
   void initState() {
-    _carregaDrop();
+    pessoaSelecionadaX == null;
     super.initState();
     _seEditar();
   }
@@ -55,6 +55,8 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   void dispose() {
     nomeController.dispose();
     cpfController.dispose();
+    pacienteController.dispose();
+    pessoaSelecionadaX == null;
     _imageUrl = '';
     super.dispose();
   }
@@ -64,24 +66,12 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
       setState(() {
         nomeController.text = widget.externoEdit!.nome;
         cpfController.text = widget.externoEdit!.cpf;
-        //dropAreaValue.value = widget.externoEdit!.area; alterar
+        dropAreaValue.value = widget.externoEdit!.area.toString();
         dropTipoPacienteValue.value = widget.externoEdit!.tipoPaciente!;
         _imageUrl = widget.externoEdit!.foto;
         isEditar = true;
       });
     }
-  }
-
-  _carregaDrop() async {
-    List listaTemp = [];
-    List data = await supabase.from('area').select();
-    setState(() {
-      listaTemp.addAll(data);
-    });
-    for (var i in listaTemp) {
-      listArea.add(Area.fromMap(i));
-    }
-    setState(() {});
   }
 
   bool valueValidator(String? value) {
@@ -103,6 +93,13 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
         return 'Acompanhante';
       }
     }
+  }
+
+  void _verifica() {
+    setState(() {
+      pacienteController.text =
+          (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
+    });
   }
 
   @override
@@ -211,39 +208,81 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           },
                         ),
                       ),
-                Padding(
-                  padding: paddingPadraoFormulario,
-                  child: ValueListenableBuilder(
-                    valueListenable: dropAreaValue,
-                    builder: (BuildContext context, String value, _) {
-                      return DropdownButtonFormField<String>(
-                          validator: (value) {
-                            return (value == null)
-                                ? 'Campo obrigatório!'
-                                : null;
+                (widget.tipoCadastro == tiposCadastrosMenu[2])
+                    ? Padding(
+                        padding: paddingPadraoFormulario,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 250,
+                              child: TextFormField(
+                                key: const ValueKey('paciente'),
+                                controller: pacienteController,
+                                validator: (value) {
+                                  return (value == null || value.isEmpty)
+                                      ? 'Preencha este campo'
+                                      : null;
+                                },
+                                decoration: myDecoration('Paciente'),
+                              ),
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Pesquisa(
+                                              param: 'externo'))).then((value) {
+                                    _verifica();
+                                    setState(() {});
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    )),
+                                child: const Icon(Icons.search))
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: paddingPadraoFormulario,
+                        child: ValueListenableBuilder(
+                          valueListenable: dropAreaValue,
+                          builder: (BuildContext context, String value, _) {
+                            return DropdownButtonFormField<String>(
+                                validator: (value) {
+                                  return (value == null)
+                                      ? 'Campo obrigatório!'
+                                      : null;
+                                },
+                                isExpanded: true,
+                                hint: const Text('Selecione'),
+                                decoration: myDecoration('Setor/Zona/Área'),
+                                value: (value.isEmpty) ? null : value,
+                                items: Area.getAll()
+                                    .map(
+                                      (op) => DropdownMenuItem(
+                                        value: op.codigo.toString(),
+                                        child: Text(
+                                          op.descricao,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (escolha) {
+                                  dropAreaValue.value = escolha.toString();
+                                });
                           },
-                          isExpanded: true,
-                          hint: const Text('Selecione'),
-                          decoration: myDecoration('Setor/Zona/Área'),
-                          value: (value.isEmpty) ? null : value,
-                          items: listArea
-                              .map(
-                                (op) => DropdownMenuItem(
-                                  value: op.id.toString(),
-                                  child: Text(
-                                    op.descricao,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (escolha) {
-                            dropAreaValue.value = escolha.toString();
-                          });
-                    },
-                  ),
-                ),
+                        ),
+                      ),
+                space,
                 Foto(
                     uUID: (isEditar) ? widget.externoEdit?.id : uuid.v1(),
                     imageUrl: _imageUrl,
@@ -258,13 +297,14 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       print(
-                          '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} \n$_imageUrl');
+                          '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} ${dropAreaValue.value}\n$_imageUrl');
                       ExternoDao()
                           .save(Externo(
                         nome: nomeController.text,
                         cpf: cpfController.text,
                         tipoExterno: _tipoExterno(),
                         tipoPaciente: dropTipoPacienteValue.value,
+                        area: int.parse(dropAreaValue.value),
                         foto: (_imageUrl != '') ? _imageUrl : '',
                       ))
                           .then((value) {

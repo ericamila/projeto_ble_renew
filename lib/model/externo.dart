@@ -1,5 +1,6 @@
 import 'package:projeto_ble_renew/model/pessoa_fisica.dart';
 import '../util/banco.dart';
+import 'area.dart';
 
 class ExternoDao {
   static const String _tablename = 'externo';
@@ -8,6 +9,7 @@ class ExternoDao {
   static const String _tipoExterno = 'tipo_externo';
   static const String _tipoPaciente = 'tipo_paciente';
   static const String _foto = 'foto';
+  static const String _area = 'area_id';
   static const String _id = 'id';
 
   save(Externo model) async {
@@ -15,11 +17,12 @@ class ExternoDao {
     Map<String, dynamic> modelMap = toMap(model);
     if (itemExists.isEmpty) {
       await supabase.from(_tablename).insert({
-        'nome': model.nome,
-        'cpf': model.cpf,
-        'tipo_externo': model.tipoExterno,
-        'tipo_paciente': model.tipoPaciente,
-        'foto': model.foto
+        _nome: model.nome,
+        _cpf: model.cpf,
+        _tipoExterno: model.tipoExterno,
+        _tipoPaciente: model.tipoPaciente,
+        _foto : model.foto,
+        _area : model.area
       });
     } else {
       model.id = itemExists.last.id;
@@ -37,6 +40,7 @@ class ExternoDao {
     mapa[_tipoExterno] = model.tipoExterno;
     mapa[_tipoPaciente] = model.tipoPaciente;
     mapa[_foto] = model.foto;
+    mapa[_area] = model.area;
     return mapa;
   }
 
@@ -73,6 +77,7 @@ class ExternoDao {
         tipoExterno: linha[_tipoExterno],
         tipoPaciente: linha[_tipoPaciente],
         foto: linha[_foto],
+        area: linha[_area],
         id: linha[_id],
       );
       models.add(model);
@@ -95,6 +100,20 @@ class ExternoDao {
       tipoExterno: result[_tipoExterno],
       tipoPaciente: result[_tipoPaciente],
       foto: result[_foto],
+      area: result[_area],
+      id: result[_id],
+    );
+    return model;
+  }
+
+  Externo fromMap (Map<String, dynamic> result){
+    Externo model = Externo(
+      nome: result[_nome],
+      cpf: result[_cpf],
+      tipoExterno: result[_tipoExterno],
+      tipoPaciente: result[_tipoPaciente],
+      foto: result[_foto],
+      area: result[_area],
       id: result[_id],
     );
     return model;
@@ -115,10 +134,11 @@ class Externo extends PessoaFisica {
       required this.tipoExterno,
       this.tipoPaciente,
       super.foto,
+      super.area,
       super.id});
 
   @override
   String toString() {
-    return '$nome $cpf $tipoExterno $tipoPaciente $foto $id';
+    return '$nome \n$cpf \n$tipoExterno \n${Area.fromId(area!).descricao}';
   }
 }

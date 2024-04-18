@@ -18,6 +18,15 @@ AppBar
       foregroundColor: verde,
       titleTextStyle: TextStyle(color: claro, fontSize: 22)),
 /*
+ElevatedButton
+ */
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        backgroundColor: verdeBotao,
+        foregroundColor: claro,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+  ),
+/*
 FilledButton
  */
   filledButtonTheme: FilledButtonThemeData(
@@ -29,15 +38,6 @@ FilledButton
       shape:
           MaterialStateProperty.all<RoundedRectangleBorder>(borderRadiusPadrao),
     ),
-  ),
-/*
-ElevatedButton
- */
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-        backgroundColor: verdeBotao,
-        foregroundColor: claro,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
   ),
 /*
 FloatingActionButton

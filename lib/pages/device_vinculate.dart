@@ -180,11 +180,7 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
                                     },
                                     child: const Text('Vincular')),
                                 ElevatedButton(
-                                    onPressed: () => Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const HomePage())),
+                                    onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
                                     child: const Text('   Voltar   ')),
                               ],
                             ),

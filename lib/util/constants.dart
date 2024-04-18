@@ -55,10 +55,30 @@ InputDecoration myDecoration(String texto, {Icon? icone}) {
       prefixIcon: icone);
 }
 
-void showSnackBar(BuildContext context, String message, bool sucess ) {
+InputDecoration myDecorationLogin({required String texto, Icon? icone}) {
+  return InputDecoration(
+      hintText: texto,
+      prefixIcon: icone,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(
+          color: Colors.white70,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.white30),
+      ),
+      hintStyle: TextStyle(fontSize: 16.0, color: Colors.blueGrey.shade300),
+      contentPadding: const EdgeInsets.all(12),
+      filled: true,
+      fillColor: Colors.white70);
+}
+
+void showSnackBar(BuildContext context, String message, bool sucess) {
   final snackBar = SnackBar(
     content: Text(message),
-    backgroundColor: (sucess)? Colors.teal: Colors.orangeAccent,
+    backgroundColor: (sucess) ? Colors.teal : Colors.orangeAccent,
     behavior: SnackBarBehavior.floating,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);

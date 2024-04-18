@@ -5,9 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:projeto_ble_renew/pages/login_page.dart';
-import 'package:projeto_ble_renew/util/banco.dart';
-import 'package:projeto_ble_renew/util/my_theme.dart';
+import 'pages/home_page.dart';
+import 'util/banco.dart';
+import 'util/my_theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'util/splash.dart';
 
 class ConnectionNotifier extends InheritedNotifier<ValueNotifier<bool>> {
   const ConnectionNotifier(
@@ -54,7 +56,7 @@ class _AppState extends State<App> {
   late final StreamSubscription<InternetConnectionStatus> listener;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     listener = InternetConnectionChecker().onStatusChange.listen((status) {
@@ -74,8 +76,13 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Codelink',
-      home: const LoginPage(),
       theme: theme,
+      initialRoute: '/splash',
+      routes: {
+        '/splash': (context) => const SplashScreen(),
+        '/home': (context) => const HomePage(),
+        '/login': (context) => const LoginPage(),
+      },
     );
   }
 }

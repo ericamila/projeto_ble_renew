@@ -20,6 +20,11 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: "erica@email.com");//apagar em produção
   TextEditingController passwordController = TextEditingController(text: "eeeeee");//apagar em produção
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   //LOGAR USUÁRIO
   Future<void> signIn() async {
     try {
@@ -32,8 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       LoggedUser.usuarioLogado = await UsuarioDao().findUUID(
           LoggedUser.currentUserID!.user!.userMetadata!['sub'].toString());
 
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.pushReplacementNamed(context, '/home');
 
     } on AuthException catch (e) {
       debugPrint(e.message);
@@ -46,23 +50,6 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Theme.of(context).colorScheme.error,
       );
     }
-  }
-
-  Future<void> _verificarUsuarioLogado() async {
-    // ignore: await_only_futures
-    LoggedUser.userLogado = await supabase.auth.currentUser;
-
-    if (LoggedUser.userLogado != null) {
-
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
-    }
-  }
-
-  @override
-  void initState() {
-    _verificarUsuarioLogado();
-    super.initState();
   }
 
   @override
@@ -110,30 +97,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.blue.shade50),
+                      border: Border.all(color: Colors.blue.shade100),
                     ),
                     child: TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      decoration: InputDecoration(
-                          hintText: 'Email',
-                          prefixIcon: const Icon(Icons.email),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
-                              color: Colors.white70,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: Colors.white30),
-                          ),
-                          hintStyle: TextStyle(
-                              fontSize: 16.0, color: Colors.blueGrey.shade300),
-                          contentPadding: const EdgeInsets.all(12),
-                          filled: true,
-                          fillColor: Colors.white70),
+                      decoration: myDecorationLogin(texto: "Email", icone: const Icon(Icons.email)),
                     ),
                   ),
                 ),
@@ -142,29 +112,12 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.blue.shade50),
+                      border: Border.all(color: Colors.blue.shade100),
                     ),
                     child: TextFormField(
                       controller: passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
-                          hintText: 'Senha',
-                          prefixIcon: const Icon(Icons.lock),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
-                              color: Colors.white30,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(color: Colors.white30),
-                          ),
-                          hintStyle: TextStyle(
-                              fontSize: 16.0, color: Colors.blueGrey.shade300),
-                          contentPadding: const EdgeInsets.all(12),
-                          filled: true,
-                          fillColor: Colors.white70),
+                      decoration: myDecorationLogin(texto: "Senha", icone: const Icon(Icons.lock)),
                     ),
                   ),
                 ),
