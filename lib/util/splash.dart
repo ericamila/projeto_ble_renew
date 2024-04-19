@@ -29,10 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
       LoggedUser.usuarioLogado = await UsuarioDao().findUUID(
           LoggedUser.userLogado!.id);
 
-      print("Usuario L O G A D O ${LoggedUser.usuarioLogado?.id} \n ${LoggedUser
-          .usuarioLogado?.uid}");
-      print("User L O G A D O ${LoggedUser.userLogado?.id}");
-
       Navigator.pushReplacementNamed(context, '/home');
     }
     else{

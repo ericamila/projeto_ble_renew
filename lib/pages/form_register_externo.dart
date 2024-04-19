@@ -75,7 +75,6 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
         pacienteController.text = pessoaSelecionadaX.toString();
         pacienteTemp = await ExternoDao().findID(pessoaSelecionadaX!.id!);
         areaDestino = Area.getNomeById(pacienteTemp!.area!);
-        print(areaDestino);
       }
     }
     if (widget.externoEdit != null) {
@@ -115,10 +114,8 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     setState(() {
       pacienteController.text =
           (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
-      print(pacienteTemp != null);
       if (pacienteTemp != null) {
         areaDestino = Area.getNomeById(pacienteTemp!.area!);
-        print(pacienteTemp != null);
       }
     });
   }
@@ -330,10 +327,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      print(
-                          '${nomeController.text} ${cpfController.text} ${dropTipoPacienteValue.value} ${dropAreaValue.value}'
-                          ' \n$_imageUrl \n${pessoaSelecionadaX?.nome} ${pessoaSelecionadaX?.id}');
-                      ExternoDao()
+                       ExternoDao()
                           .save(Externo(
                         nome: nomeController.text,
                         cpf: cpfController.text,

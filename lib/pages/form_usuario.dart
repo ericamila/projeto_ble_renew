@@ -53,7 +53,6 @@ class _FormUsuarioState extends State<FormUsuario> {
     for (var i in listaTemp) {
       listFuncionario.add(Pessoa.fromMap(i));
     }
-    print(listFuncionario);
     setState(() {});
   }
 
@@ -65,8 +64,6 @@ class _FormUsuarioState extends State<FormUsuario> {
         password: senhaController.text.trim(),
         email: emailController.text.trim(),
       );
-      print(senhaController.text.trim());
-      print(emailController.text.trim());
 
       user = res.user;
 
@@ -126,7 +123,6 @@ class _FormUsuarioState extends State<FormUsuario> {
                               )
                               .toList(),
                           onChanged: (escolha) {
-                            print(escolha.toString());
                             dropNomeFuncionarioValue.value = escolha.toString();
                           });
                     },
