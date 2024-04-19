@@ -11,9 +11,8 @@ Dispositivos ativos não devem aparecer na lista de vincular
 Criar opção de DESVINCULAR dispositivo
 ATUALIZAR lista apos vincular
 Regras de negócio para usuário e dispositivo único
-Incluir info de paciente no cadastro do externo ou uma area
 Mapa com RFID
-Imagem usuario
+Imagem usuario para o banco de dados
 Ajustar layout para desktop
 Verificar as deleções
 Vincular equipamento area

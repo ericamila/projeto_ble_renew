@@ -19,6 +19,14 @@ ButtonStyle estiloSearchButton = ElevatedButton.styleFrom(
     backgroundColor: verde,
     foregroundColor: claro);
 
+const TextStyle textoPerfil = TextStyle(
+    fontWeight: FontWeight.normal,
+    color: Colors.black54,
+    fontSize: 16,
+    height: 1.3);
+const TextStyle respostaPerfil = TextStyle(
+    fontWeight: FontWeight.bold, color: verdeBotao, fontSize: 18);
+
 Dispositivo? dispositivoSelecionadoX;
 Pessoa? pessoaSelecionadaX;
 // A P A G A R

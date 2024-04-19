@@ -10,6 +10,7 @@ class UsuarioDao {
   static const String _email = 'email';
   static const String _funcionario = 'funcionario_id';
   static const String _uid = 'uid';
+  static const String _foto = 'foto';
   static const String _id = 'id';
 
   save(Usuario usuario) async {
@@ -32,6 +33,7 @@ class UsuarioDao {
     mapa[_email] = usuario.email;
     mapa[_funcionario] = usuario.funcionario;
     mapa[_uid] = usuario.uid;
+    mapa[_foto] = usuario.foto;
     return mapa;
   }
 
@@ -49,6 +51,7 @@ class UsuarioDao {
         email: linha[_email],
         funcionario: linha[_funcionario],
         uid: linha[_uid],
+        foto: linha[_foto],
         id: linha[_id],
       );
       usuarios.add(model);
@@ -76,6 +79,7 @@ class UsuarioDao {
       email: result[_email],
       funcionario: result[_funcionario],
       uid: result[_uid],
+      foto: result[_foto],
       id: result[_id],
     );
     return model;
@@ -89,6 +93,7 @@ class UsuarioDao {
 class Usuario extends Pessoa {
   String email;
   String? uid;
+  String? foto;
   String funcionario;
 
   Usuario(
@@ -96,6 +101,7 @@ class Usuario extends Pessoa {
       required this.email,
       required this.funcionario,
       this.uid,
+      this.foto,
       super.id, super.cpf=''});
 
   @override
