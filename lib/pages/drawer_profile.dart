@@ -17,66 +17,111 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final imagePicker = ImagePicker();
   File? imageFile;
-  var cargo = '';
-  String? _imageUrl;
+  String cargo = '';
+  XFile? _imagem;
+  String? _urlImagemRecuperada;
+  late String nome;
+  late String email;
+  late String status;
+  late String id;
+  late String acess;
 
   @override
   initState() {
     super.initState();
-    _imageUrl = LoggedUser.usuarioLogado?.foto;
+    _recuperarDadosUsuario();
+  }
+
+  @override
+  void dispose() {
+    _urlImagemRecuperada = null;
+    super.dispose();
+  }
+
+  Future _recuperarImagem(ImageSource source) async {
+    XFile? imagemSelecionada = await imagePicker.pickImage(source: source);
+
+    setState(() {
+      _imagem = imagemSelecionada;
+      if (_imagem != null) {
+        _uploadImagem();
+      }
+    });
+  }
+
+  Future _uploadImagem() async {
+    final imageExtension = _imagem?.path.split('.').last.toLowerCase();
+    final imageBytes = await _imagem?.readAsBytes();
+    final imagePath = '/${LoggedUser.userLogado?.id}/profile';
+    setState(() {});
+    await supabase.storage.from('profile').uploadBinary(
+          imagePath,
+          imageBytes!,
+          fileOptions: FileOptions(
+            upsert: true,
+            contentType: 'image/$imageExtension',
+          ),
+        );
+
+    // Recuperar URL da imagem
+    String imageUrl = supabase.storage.from('profile').getPublicUrl(imagePath);
+    imageUrl = Uri.parse(imageUrl).replace(queryParameters: {
+      't': DateTime.now().millisecondsSinceEpoch.toString()
+    }).toString();
+    _recuperarUrlImagem(imageUrl);
+  }
+
+  Future _recuperarUrlImagem(String url) async {
+    _atualizarUrlImagemFirestore(url);
+
+    setState(() {
+      _urlImagemRecuperada = url;
+      LoggedUser.usuarioLogado?.foto = url;
+    });
+  }
+
+  _atualizarUrlImagemFirestore(String url) async {
+    try {
+      await supabase.from('usuario').update({'foto': url}).match({'uid': id});
+    } on StorageException catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.message),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Erro inesperado'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    }
+  }
+
+  _recuperarDadosUsuario() async {
+    id = LoggedUser.userLogado!.id;
+    nome = LoggedUser.usuarioLogado!.nome;
+    email = LoggedUser.userLogado!.email!;
+    status = LoggedUser.userLogado!.aud.toString();
+    acess = LoggedUser.userLogado!.lastSignInAt.toString().substring(0, 10);
     _atualizaCargo();
+
+    if (LoggedUser.usuarioLogado?.foto != null) {
+      setState(() {
+        _urlImagemRecuperada = LoggedUser.usuarioLogado?.foto;
+      });
+    }
   }
 
   _atualizaCargo() async {
     cargo = (await LoggedUser.pegaCargo())!;
     setState(() {});
-  }
-
-  pick(ImageSource source) async {
-    final pickedFile = await imagePicker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-        print(pickedFile.path);
-      });
-
-      try {
-        final bytes = await imageFile?.readAsBytes();
-        final fileExt = imageFile?.path.split('.').last;
-        final fileName = '${LoggedUser.usuarioLogado!.id}/${DateTime.now().toIso8601String()}.$fileExt';
-        final filePath = fileName;
-        await supabase.storage.from('avatars').uploadBinary(
-          filePath,
-          bytes!,
-        );
-        final imageUrlResponse = await supabase.storage
-            .from('avatars')
-            .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 10);
-
-        print(imageUrlResponse);
-      } on StorageException catch (error) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(error.message),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-        }
-      } catch (error) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Unexpected error occurred'),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-        }
-      }
-
-      print('FOI');
-    }
   }
 
   @override
@@ -106,9 +151,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                   child: CircleAvatar(
                                     radius: 70,
                                     backgroundColor: Colors.grey[300],
-                                    backgroundImage: imageFile != null
-                                        ? FileImage(imageFile!)
-                                        : null,
+                                    backgroundImage: (_urlImagemRecuperada !=
+                                            null)
+                                        ? NetworkImage(_urlImagemRecuperada!)
+                                        : const NetworkImage(
+                                            'https://cavikcnsdlhepwnlucge.supabase.co/storage/v1/object/public/profile/nophoto.png'),
                                   ),
                                 ),
                                 Positioned(
@@ -140,9 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       style: textoPerfil,
                                       children: <TextSpan>[
                                         TextSpan(
-                                            text:
-                                                LoggedUser.usuarioLogado?.nome,
-                                            style: respostaPerfil),
+                                            text: nome, style: respostaPerfil),
                                       ])),
                             ]),
                       ),
@@ -152,27 +197,17 @@ class _ProfilePageState extends State<ProfilePage> {
                               text: '\nEmail: ',
                               style: textoPerfil,
                               children: <TextSpan>[
-                                TextSpan(
-                                    text: LoggedUser.usuarioLogado?.email,
-                                    style: respostaPerfil),
+                                TextSpan(text: email, style: respostaPerfil),
                                 const TextSpan(
                                     text: '\n\nStatus: ', style: textoPerfil),
-                                TextSpan(
-                                    text: LoggedUser.userLogado?.aud.toString(),
-                                    style: respostaPerfil),
+                                TextSpan(text: status, style: respostaPerfil),
                                 const TextSpan(
                                     text: '\n\nID: ', style: textoPerfil),
-                                TextSpan(
-                                    text: LoggedUser.userLogado?.id.toString(),
-                                    style: respostaPerfil),
+                                TextSpan(text: id, style: respostaPerfil),
                                 const TextSpan(
                                     text: '\n\nÚltimo acesso: ',
                                     style: textoPerfil),
-                                TextSpan(
-                                    text: LoggedUser.userLogado?.lastSignInAt
-                                        .toString()
-                                        .substring(0, 10),
-                                    style: respostaPerfil),
+                                TextSpan(text: acess, style: respostaPerfil),
                                 const TextSpan(
                                     text: '\n\nCargo: ', style: textoPerfil),
                                 TextSpan(text: cargo, style: respostaPerfil),
@@ -205,7 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: const Text('Galeria'),
                 onTap: () {
                   Navigator.of(context).pop();
-                  pick(ImageSource.gallery);
+                  _recuperarImagem(ImageSource.gallery);
                 },
               ),
               ListTile(
@@ -221,7 +256,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: const Text('Câmera'),
                 onTap: () {
                   Navigator.of(context).pop();
-                  pick(ImageSource.camera);
+                  _recuperarImagem(ImageSource.camera);
                 },
               ),
               ListTile(
@@ -238,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTap: () {
                   Navigator.of(context).pop();
                   setState(() {
-                    imageFile = null;
+                    _urlImagemRecuperada = null;
                   });
                 },
               ),

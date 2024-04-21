@@ -1,13 +1,12 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/pages/drawer_list_usuario.dart';
-import 'package:projeto_ble_renew/pages/menu_search.dart';
+import 'drawer_list_usuario.dart';
+import 'menu_search.dart';
 import '../components/drawer.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
 import '../util/my_theme.dart';
-import 'config.dart';
 import 'drawer_about.dart';
 import 'drawer_profile.dart';
 import 'menu_alarme.dart';
@@ -74,8 +73,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              //signOut();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Configuracoes()));
+              signOut();
             },
             icon: const Icon(Icons.logout),
           ),

@@ -6,6 +6,8 @@ import 'app_cores.dart';
 
 final ImagePicker picker = ImagePicker();
 const String imagemPadraoUrl = 'images/nophoto.png';
+const String imagemPadraoNetwork =
+    'https://cavikcnsdlhepwnlucge.supabase.co/storage/v1/object/public/profile/nophoto.png';
 final Image imagemPadrao = Image.asset(imagemPadraoUrl, height: 250);
 
 const space = Padding(padding: EdgeInsets.all(8));
@@ -24,8 +26,8 @@ const TextStyle textoPerfil = TextStyle(
     color: Colors.black54,
     fontSize: 16,
     height: 1.3);
-const TextStyle respostaPerfil = TextStyle(
-    fontWeight: FontWeight.bold, color: verdeBotao, fontSize: 18);
+const TextStyle respostaPerfil =
+    TextStyle(fontWeight: FontWeight.bold, color: verdeBotao, fontSize: 18);
 
 Dispositivo? dispositivoSelecionadoX;
 Pessoa? pessoaSelecionadaX;
