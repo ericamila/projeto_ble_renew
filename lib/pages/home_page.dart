@@ -7,6 +7,7 @@ import '../components/drawer.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
 import '../util/my_theme.dart';
+import 'config.dart';
 import 'drawer_about.dart';
 import 'drawer_profile.dart';
 import 'menu_alarme.dart';
@@ -73,7 +74,8 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              signOut();
+              //signOut();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Configuracoes()));
             },
             icon: const Icon(Icons.logout),
           ),
