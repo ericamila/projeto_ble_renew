@@ -16,9 +16,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final imagePicker = ImagePicker();
-  File? imageFile;
   String cargo = '';
-  XFile? _imagem;
+  XFile? _imagemUpload;
   String? _urlImagemRecuperada;
   late String nome;
   late String email;
@@ -42,16 +41,16 @@ class _ProfilePageState extends State<ProfilePage> {
     XFile? imagemSelecionada = await imagePicker.pickImage(source: source);
 
     setState(() {
-      _imagem = imagemSelecionada;
-      if (_imagem != null) {
+      _imagemUpload = imagemSelecionada;
+      if (_imagemUpload != null) {
         _uploadImagem();
       }
     });
   }
 
   Future _uploadImagem() async {
-    final imageExtension = _imagem?.path.split('.').last.toLowerCase();
-    final imageBytes = await _imagem?.readAsBytes();
+    final imageExtension = _imagemUpload?.path.split('.').last.toLowerCase();
+    final imageBytes = await _imagemUpload?.readAsBytes();
     final imagePath = '/${LoggedUser.userLogado?.id}/profile';
     setState(() {});
     await supabase.storage.from('profile').uploadBinary(
@@ -108,9 +107,9 @@ class _ProfilePageState extends State<ProfilePage> {
     id = LoggedUser.userLogado!.id;
     nome = LoggedUser.usuarioLogado!.nome;
     email = LoggedUser.userLogado!.email!;
-    status = LoggedUser.userLogado!.aud.toString();
+    status = (LoggedUser.userLogado!.aud == 'authenticated'? 'Autenticado': 'Não Autenticado');
     acess = LoggedUser.userLogado!.lastSignInAt.toString().substring(0, 10);
-    _atualizaCargo();
+    cargo = (await LoggedUser.pegaCargo())!;
 
     if (LoggedUser.usuarioLogado?.foto != null) {
       setState(() {
@@ -119,16 +118,11 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  _atualizaCargo() async {
-    cargo = (await LoggedUser.pegaCargo())!;
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Perfil"),
+        title: const Text("Perfil")
       ),
       body: (cargo == '')
           ? carregando
@@ -146,16 +140,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               Stack(children: [
                                 CircleAvatar(
-                                  radius: 78,
+                                  radius: 85,
                                   backgroundColor: Colors.grey[200],
                                   child: CircleAvatar(
-                                    radius: 70,
+                                    radius: 78,
                                     backgroundColor: Colors.grey[300],
                                     backgroundImage: (_urlImagemRecuperada !=
                                             null)
                                         ? NetworkImage(_urlImagemRecuperada!)
-                                        : const NetworkImage(
-                                            'https://cavikcnsdlhepwnlucge.supabase.co/storage/v1/object/public/profile/nophoto.png'),
+                                        : const NetworkImage(imagemPadraoNetwork),
                                   ),
                                 ),
                                 Positioned(

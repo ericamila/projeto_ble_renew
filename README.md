@@ -12,8 +12,8 @@ Criar opção de DESVINCULAR dispositivo
 ATUALIZAR lista apos vincular
 Regras de negócio para usuário e dispositivo único
 Mapa com RFID
-Imagem usuario para o banco de dados
 Ajustar layout para desktop
 Verificar as deleções
 Vincular equipamento area
 Quando paciente for dependente vincular externo
+Cadastro de usuario no auth
