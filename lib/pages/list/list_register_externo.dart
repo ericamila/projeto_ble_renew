@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/model/equipamento.dart';
+import 'package:projeto_ble_renew/model/externo.dart';
 
-import '../util/constants.dart';
-import 'form_register_equipamento.dart';
+import '../../util/constants.dart';
+import '../forms/external.dart';
 
-class ListaCadastroEquipamento extends StatefulWidget {
+class ListaCadastroExterno extends StatefulWidget {
   final String tipoCadastro;
 
-  const ListaCadastroEquipamento({super.key, required this.tipoCadastro});
+  const ListaCadastroExterno({super.key, required this.tipoCadastro});
 
   @override
-  State<ListaCadastroEquipamento> createState() => _ListaCadastroEquipamentoState();
+  State<ListaCadastroExterno> createState() => _ListaCadastroExternoState();
 }
 
-class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
+class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +30,10 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
-        child: FutureBuilder<List<Equipamento>>(
-            future: EquipamentoDao().findAll(),
+        child: FutureBuilder<List<Externo>>(
+            future: refresh(),
             builder: (context, snapshot) {
-              List<Equipamento>? items = snapshot.data;
+              List<Externo>? items = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
@@ -45,13 +45,11 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                       return ListView.separated(
                         itemCount: items.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final Equipamento equipamento = items[index];
+                          final Externo externo = items[index];
                           return ListTile(
-                              title: Text(equipamento.descricao),
-                              subtitle:
-                                  Text(equipamento.codigo),
-                              leading:
-                                  const Icon(Icons.devices_other_outlined, size: 56),
+                              title: Text(externo.nome),
+                              subtitle: Text(externo.tipoExterno),
+                              leading: imageLeading(externo.foto),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {
@@ -59,9 +57,10 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) => FormCadastroEquipamento(
-                                          equipamentoContext: context,
-                                          equipamentoEdit: equipamento,
+                                        builder: (contextNew) =>
+                                            FormCadastroExterno(
+                                          externoContext: context,
+                                          externoEdit: externo,
                                           tipoCadastro: widget.tipoCadastro,
                                         ),
                                       ),
@@ -73,7 +72,7 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                                         return AlertDialog(
                                           title: const Text('Deletar'),
                                           content: Text(
-                                              'Tem certeza que deseja deletar ${equipamento.descricao}?'),
+                                              'Tem certeza que deseja deletar ${externo.nome}?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -92,8 +91,7 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                                       },
                                     );
                                     if (deletedConfirmed) {
-                                      await EquipamentoDao()
-                                          .delete(equipamento.id!);
+                                      await ExternoDao().delete(externo.id!);
                                       setState(() {});
                                     }
                                   }
@@ -146,11 +144,25 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (contextNew) => FormCadastroEquipamento(
-                  equipamentoContext: context,
-                  tipoCadastro: widget.tipoCadastro),
+              builder: (contextNew) => FormCadastroExterno(
+                  externoContext: context, tipoCadastro: widget.tipoCadastro),
             ),
-          ).then((value) => setState(() {}));
+          ).then((value) {
+            refresh();
+            if (value == true) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Registro salvo com sucesso."),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Houve uma falha ao registar."),
+                ),
+              );
+            }
+          });
         },
         label: const Text(
           'ADICIONAR',
@@ -159,5 +171,12 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
         icon: const Icon(Icons.person_add),
       ),
     );
+  }
+
+  Future<List<Externo>> refresh() async {
+    setState(() {});
+    return (widget.tipoCadastro == 'Acompanhante/Visitante')
+        ?  ExternoDao().findAllTypeAC()
+        :  ExternoDao().findAllType(widget.tipoCadastro);
   }
 }

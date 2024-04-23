@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../util/constants.dart';
+import '../../util/constants.dart';
 
 class Sobre extends StatelessWidget {
   const Sobre({super.key});

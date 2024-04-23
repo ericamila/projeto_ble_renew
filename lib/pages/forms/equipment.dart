@@ -1,32 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
-import 'package:projeto_ble_renew/model/funcionario.dart';
-import '../model/cargo.dart';
-import '../util/constants.dart';
-import '../util/formatters.dart';
+import 'package:projeto_ble_renew/util/constants.dart';
+import 'package:uuid/uuid.dart';
+import '../../model/enum_tipo_equipamento.dart';
+import '../../model/equipamento.dart';
 
-class FormCadastroFuncionario extends StatefulWidget {
-  final BuildContext funcionarioContext;
-  final Funcionario? funcionarioEdit;
+
+class FormCadastroEquipamento extends StatefulWidget {
+  final BuildContext equipamentoContext;
+  final Equipamento? equipamentoEdit;
   final String tipoCadastro;
 
-  const FormCadastroFuncionario(
+  const FormCadastroEquipamento(
       {super.key,
-      required this.funcionarioContext,
-      this.funcionarioEdit,
+      required this.equipamentoContext,
+      this.equipamentoEdit,
       required this.tipoCadastro});
 
   @override
-  State<FormCadastroFuncionario> createState() =>
-      _FormCadastroFuncionarioState();
+  State<FormCadastroEquipamento> createState() =>
+      _FormCadastroEquipamentoState();
 }
 
-class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
+class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
   final _formKey = GlobalKey<FormState>();
-  final nomeController = TextEditingController();
-  final cpfController = TextEditingController();
-  final dropCargoValue = ValueNotifier('');
+  final descricaoController = TextEditingController();
+  final codigoController = TextEditingController();
+  final imageController = TextEditingController();
+  final dropTipoValue = ValueNotifier('');
   String? _imageUrl;
   bool isEditar = false;
   var uuid = const Uuid();
@@ -39,19 +40,19 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
 
   @override
   void dispose() {
-    nomeController.dispose();
-    cpfController.dispose();
+    descricaoController.dispose();
+    codigoController.dispose();
     _imageUrl = '';
     super.dispose();
   }
 
   void _seEditar() {
-    if (widget.funcionarioEdit != null) {
+    if (widget.equipamentoEdit != null) {
       setState(() {
-        nomeController.text = widget.funcionarioEdit!.nome;
-        cpfController.text = widget.funcionarioEdit!.cpf;
-        dropCargoValue.value = widget.funcionarioEdit!.cargo.toString();
-        _imageUrl = widget.funcionarioEdit!.foto;
+        descricaoController.text = widget.equipamentoEdit!.descricao;
+        codigoController.text = widget.equipamentoEdit!.codigo;
+        dropTipoValue.value = widget.equipamentoEdit!.tipo;
+        _imageUrl = widget.equipamentoEdit!.foto;
         isEditar = true;
       });
     }
@@ -62,20 +63,6 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
       return true;
     }
     return false;
-  }
-
-  Future<bool> register() async {
-    try {
-      FuncionarioDao().save(Funcionario(
-        nome: nomeController.text,
-        cpf: cpfController.text,
-        cargo: int.parse(dropCargoValue.value),
-        foto: (_imageUrl != '') ? _imageUrl : '',
-      ));
-      return true;
-    } catch (error) {
-      return false;
-    }
   }
 
   @override
@@ -101,9 +88,9 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                       }
                       return null;
                     },
-                    controller: nomeController,
+                    controller: descricaoController,
                     textAlign: TextAlign.center,
-                    decoration: myDecoration('Nome Completo'),
+                    decoration: myDecoration('Descrição'),
                   ),
                 ),
                 Padding(
@@ -116,16 +103,15 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                       return null;
                     },
                     keyboardType: TextInputType.number,
-                    controller: cpfController,
+                    controller: codigoController,
                     textAlign: TextAlign.center,
-                    decoration: myDecoration('CPF'),
-                    inputFormatters: [cpfFormatter],
+                    decoration: myDecoration('Código'),
                   ),
                 ),
                 Padding(
                   padding: paddingPadraoFormulario,
                   child: ValueListenableBuilder(
-                    valueListenable: dropCargoValue,
+                    valueListenable: dropTipoValue,
                     builder: (BuildContext context, String value, _) {
                       return DropdownButtonFormField<String>(
                           validator: (value) {
@@ -135,9 +121,9 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                           },
                           isExpanded: true,
                           hint: const Text('Selecione'),
-                          decoration: myDecoration('*Cargo'),
+                          decoration: myDecoration('Tipo'),
                           value: (value.isEmpty) ? null : value,
-                          items: Cargo.getAll()
+                          items: TipoEquipamentoEnum.getAll()
                               .map(
                                 (op) => DropdownMenuItem(
                                   value: op.codigo.toString(),
@@ -150,27 +136,37 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                               )
                               .toList(),
                           onChanged: (escolha) {
-                            dropCargoValue.value = escolha.toString();
+                            dropTipoValue.value = escolha.toString();
                           });
                     },
                   ),
                 ),
-                Foto(
-                    uUID: (isEditar) ? widget.funcionarioEdit?.id : uuid.v1(),
-                    imageUrl: _imageUrl,
-                    onUpload: (imageUrl) async {
-                      if (!mounted) return;
-                      setState(() {
-                        _imageUrl = imageUrl;
-                      });
-                    }),
+              Foto(
+                  uUID: (isEditar) ? widget.equipamentoEdit?.id : uuid.v1(),
+                  imageUrl: _imageUrl,
+                  onUpload: (imageUrl) async {
+                    if (!mounted) return;
+                    setState(() {
+                      _imageUrl = imageUrl;
+                    });
+                  }),
                 space,
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      register().then((value) {
-                        Navigator.pop(context, value);
-                      });
+                      EquipamentoDao().save(Equipamento(
+                        descricao: descricaoController.text,
+                        tipo: dropTipoValue.value,
+                        codigo: codigoController.text,
+                        foto: (_imageUrl != '') ? _imageUrl : '',
+                      ));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Salvando registro!'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text('Salvar'),

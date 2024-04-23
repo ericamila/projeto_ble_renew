@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/model/externo.dart';
-import 'package:projeto_ble_renew/pages/form_register_externo.dart';
-import '../util/constants.dart';
+import 'package:projeto_ble_renew/model/usuario.dart';
+import '../../util/constants.dart';
+import '../forms/user.dart';
 
-class ListaCadastroExterno extends StatefulWidget {
-  final String tipoCadastro;
-
-  const ListaCadastroExterno({super.key, required this.tipoCadastro});
+class Usuarios extends StatefulWidget {
+  const Usuarios({super.key});
 
   @override
-  State<ListaCadastroExterno> createState() => _ListaCadastroExternoState();
+  State<Usuarios> createState() => _UsuariosState();
 }
 
-class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
+class _UsuariosState extends State<Usuarios> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.tipoCadastro}s'),
+        title: const Text('Usuários'),
         actions: [
           IconButton(
             onPressed: () {
@@ -29,10 +27,10 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
-        child: FutureBuilder<List<Externo>>(
-            future: refresh(),
+        child: FutureBuilder<List<Usuario>>(
+            future: UsuarioDao().findAll(),
             builder: (context, snapshot) {
-              List<Externo>? items = snapshot.data;
+              List<Usuario>? items = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
@@ -44,11 +42,13 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                       return ListView.separated(
                         itemCount: items.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final Externo externo = items[index];
+                          final Usuario usuario = items[index];
                           return ListTile(
-                              title: Text(externo.nome),
-                              subtitle: Text(externo.tipoExterno),
-                              leading: imageLeading(externo.foto),
+                              title: Text(usuario.nome),
+                              subtitle:
+                              Text(usuario.email),
+                              leading:
+                              const Icon(Icons.account_circle, size: 56),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {
@@ -56,14 +56,12 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) =>
-                                            FormCadastroExterno(
-                                          externoContext: context,
-                                          externoEdit: externo,
-                                          tipoCadastro: widget.tipoCadastro,
+                                        builder: (contextNew) => FormUsuario(
+                                          usuarioContext: context, usuarioEdit: usuario,
                                         ),
                                       ),
-                                    ).then((value) => setState(() {}));
+                                    ).then((value) => setState(() {
+                                    }));
                                   } else {
                                     bool deletedConfirmed = await showDialog(
                                       context: context,
@@ -71,7 +69,7 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                                         return AlertDialog(
                                           title: const Text('Deletar'),
                                           content: Text(
-                                              'Tem certeza que deseja deletar ${externo.nome}?'),
+                                              'Tem certeza que deseja deletar ${usuario.nome}?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -90,25 +88,23 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                                       },
                                     );
                                     if (deletedConfirmed) {
-                                      await ExternoDao().delete(externo.id!);
+                                      await UsuarioDao()
+                                          .delete(usuario.id!);
                                       setState(() {});
                                     }
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<bool>>[
+                                <PopupMenuEntry<bool>>[
                                   const PopupMenuItem<bool>(
+                                    enabled: false,
                                       value: true,
-                                      child: ListTile(
-                                        leading: Icon(Icons.edit),
-                                        title: Text('Editar'),
-                                      )),
+                                      child: ListTile(leading:Icon(Icons.edit) , title: Text('Editar'),)
+                                  ),
                                   const PopupMenuItem<bool>(
                                       value: false,
-                                      child: ListTile(
-                                        leading: Icon(Icons.delete_forever),
-                                        title: Text('Excluir'),
-                                      )),
+                                      child: ListTile(leading:Icon(Icons.delete_forever) , title: Text('Excluir'),)
+                                  ),
                                 ],
                               ));
                         },
@@ -119,19 +115,19 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                     }
                     return const Center(
                         child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 96,
-                        ),
-                        Text(
-                          'Não há nenhum dado.',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ],
-                    ));
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              size: 96,
+                            ),
+                            Text(
+                              'Não há nenhum dado.',
+                              style: TextStyle(fontSize: 32),
+                            ),
+                          ],
+                        ));
                   }
                   return const Text('Erro ao carregar dados');
               }
@@ -143,25 +139,12 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (contextNew) => FormCadastroExterno(
-                  externoContext: context, tipoCadastro: widget.tipoCadastro),
+              builder: (contextNew) => FormUsuario(
+                usuarioContext: context,
+              ),
             ),
-          ).then((value) {
-            refresh();
-            if (value == true) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Registro salvo com sucesso."),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Houve uma falha ao registar."),
-                ),
-              );
-            }
-          });
+          ).then((value) => setState(() {
+          }));
         },
         label: const Text(
           'ADICIONAR',
@@ -170,12 +153,5 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
         icon: const Icon(Icons.person_add),
       ),
     );
-  }
-
-  Future<List<Externo>> refresh() async {
-    setState(() {});
-    return (widget.tipoCadastro == 'Acompanhante/Visitante')
-        ?  ExternoDao().findAllTypeAC()
-        :  ExternoDao().findAllType(widget.tipoCadastro);
   }
 }

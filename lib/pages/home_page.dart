@@ -1,18 +1,19 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'drawer_list_usuario.dart';
-import 'menu_search.dart';
+import 'drawer/drawer_list_usuario.dart';
+import 'drawer/drawer_profile.dart';
+import 'menu/device.dart';
+import 'menu/map.dart';
+import 'menu/register.dart';
+import 'menu/search.dart';
 import '../components/drawer.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
 import '../util/my_theme.dart';
-import 'drawer_about.dart';
-import 'drawer_profile.dart';
-import 'menu_alarme.dart';
-import 'menu_device.dart';
-import 'menu_map.dart';
-import 'menu_register.dart';
+import 'drawer/drawer_about.dart';
+import 'menu/alarme.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

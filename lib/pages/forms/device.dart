@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/dispositivo.dart';
 import 'package:projeto_ble_renew/util/formatters.dart';
 
-import '../bluetooth/flutter_blue_app.dart';
-import '../model/enum_tipo_dispositivo.dart';
-import '../util/constants.dart';
+import '../../bluetooth/flutter_blue_app.dart';
+import '../../model/enum_tipo_dispositivo.dart';
+import '../../util/constants.dart';
 
 class FormCadastroDispositivo extends StatefulWidget {
   final String? atualiza;
@@ -77,14 +77,8 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
                       });
                     },
                     children: const [
-                      Text(
-                        'Automático',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      Text(
-                        'Manual',
-                        style: TextStyle(fontSize: 17),
-                      ),
+                      Text('Automático', style: TextStyle(fontSize: 17)),
+                      Text('Manual', style: TextStyle(fontSize: 17)),
                     ]),
               ),
               (isSwitched[0])
@@ -94,11 +88,8 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
                         const Text('Escanear Dispositivo'),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const FlutterBlueApp()));
+                            Navigator.pushReplacementNamed(
+                                context, '/bluetooth');
                           },
                           child: const Text('Escanear'),
                         ),
@@ -193,11 +184,7 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
                         //Limpa tudo e retorna
                         deviceMACBLE = '';
                         deviceNomeBLE = '';
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const FormCadastroDispositivo()));
+                        Navigator.pushReplacementNamed(context, '/form_device');
                       } on Error catch (e) {
                         debugPrint(e as String?);
                         ScaffoldMessenger.of(context).showSnackBar(

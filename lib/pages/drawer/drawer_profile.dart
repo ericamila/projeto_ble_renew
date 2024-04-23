@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../model/usuario.dart';
-import '../util/banco.dart';
+import '../../model/usuario.dart';
+import '../../util/banco.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

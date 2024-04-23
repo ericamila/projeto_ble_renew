@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/pages/pesquisa.dart';
+import '../components/my_elevated_button.dart';
 import '../components/my_list_tile.dart';
 import '../model/device_person.dart';
 import '../util/banco.dart';
@@ -99,21 +100,9 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Pesquisa(
-                                                      param: 'dispositivo')));
-                                      setState(() {});
+                                      _pesquisaDispositivo(context);
                                     },
-                                    style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        )),
+                                    style: buttonPesquisa,
                                     child: const Icon(Icons.search))
                               ],
                             ),
@@ -136,19 +125,8 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
                                   ),
                                 ),
                                 ElevatedButton(
-                                    onPressed: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Pesquisa(
-                                                    param: 'pessoa_fisica'))),
-                                    style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        )),
+                                    onPressed: () => _pesquisaPessoa(context),
+                                    style: buttonPesquisa,
                                     child: const Icon(Icons.search)),
                               ],
                             ),
@@ -178,7 +156,9 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
                                     },
                                     child: const Text('Vincular')),
                                 ElevatedButton(
-                                    onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+                                    onPressed: () =>
+                                        Navigator.pushReplacementNamed(
+                                            context, '/home'),
                                     child: const Text('   Voltar   ')),
                               ],
                             ),
@@ -211,6 +191,21 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
                   ),
                 ],
               ));
+  }
+
+  Future<dynamic> _pesquisaPessoa(BuildContext context) {
+    return Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Pesquisa(param: 'pessoa_fisica')));
+  }
+
+  void _pesquisaDispositivo(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Pesquisa(param: 'dispositivo')));
+    setState(() {});
   }
 
   //CADASTRAR

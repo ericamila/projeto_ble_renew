@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
-import '../components/my_list_tile.dart';
-import '../model/dispositivo.dart';
-import '../util/constants.dart';
-import '../util/formatters.dart';
+
+import '../../components/my_list_tile.dart';
+import '../../model/dispositivo.dart';
+import '../../util/constants.dart';
+import '../../util/formatters.dart';
 
 class MenuPesquisa extends StatefulWidget {
   const MenuPesquisa({super.key});

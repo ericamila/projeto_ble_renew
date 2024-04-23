@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/dispositivo.dart';
 
-import '../components/my_list_tile.dart';
+import '../../components/my_list_tile.dart';
 
 class ListarDispositivos extends StatefulWidget {
    const ListarDispositivos({super.key});

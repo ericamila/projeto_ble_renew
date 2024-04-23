@@ -3,12 +3,13 @@ import 'package:projeto_ble_renew/components/foto.dart';
 import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:uuid/uuid.dart';
-import '../model/area.dart';
-import '../model/enum_tipo_paciente.dart';
-import '../model/externo.dart';
-import '../util/constants.dart';
-import '../util/formatters.dart';
-import 'pesquisa.dart';
+import '../../model/area.dart';
+import '../../model/enum_tipo_paciente.dart';
+import '../../model/externo.dart';
+import '../../util/constants.dart';
+import '../../util/formatters.dart';
+import '../pesquisa.dart';
+
 
 class FormCadastroExterno extends StatefulWidget {
   final BuildContext externoContext;
@@ -141,7 +142,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                     : Center(
                         child: ToggleButtons(
                             constraints: BoxConstraints(
-                                minHeight: 45, //alterar
+                                minHeight: 45,
                                 minWidth:
                                     MediaQuery.of(context).size.width * 0.35),
                             isSelected: isSwitched,
@@ -235,7 +236,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.77,
+                              width: MediaQuery.of(context).size.width * 0.75,
                               child: TextFormField(
                                 key: const ValueKey('paciente'),
                                 controller: pacienteController,
@@ -260,12 +261,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                                     setState(() {});
                                   });
                                 },
-                                style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    )),
+                                style: buttonPesquisa,
                                 child: const Icon(Icons.search))
                           ],
                         ),
@@ -326,21 +322,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                 space,
                 FilledButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                       ExternoDao()
-                          .save(Externo(
-                        nome: nomeController.text,
-                        cpf: cpfController.text,
-                        tipoExterno: _tipoExterno(),
-                        tipoPaciente: dropTipoPacienteValue.value,
-                        paciente: pessoaSelecionadaX?.id,
-                        area: int.parse(dropAreaValue.value),
-                        foto: (_imageUrl != '') ? _imageUrl : '',
-                      ))
-                          .then((value) {
-                        Navigator.pop(context, value);
-                      });
-                    }
+                    _salvar(context);
                   },
                   child: const Text('Salvar'),
                 ),
@@ -350,5 +332,23 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
         ),
       ),
     );
+  }
+
+  void _salvar(BuildContext context) {
+     if (_formKey.currentState!.validate()) {
+       ExternoDao()
+          .save(Externo(
+        nome: nomeController.text,
+        cpf: cpfController.text,
+        tipoExterno: _tipoExterno(),
+        tipoPaciente: dropTipoPacienteValue.value,
+        paciente: pessoaSelecionadaX?.id,
+        area: int.parse(dropAreaValue.value),
+        foto: (_imageUrl != '') ? _imageUrl : '',
+      ))
+          .then((value) {
+        Navigator.pop(context, value);
+      });
+    }
   }
 }

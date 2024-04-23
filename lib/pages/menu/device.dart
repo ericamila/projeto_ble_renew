@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/pages/device_vinculate.dart';
-import 'package:projeto_ble_renew/pages/form_device.dart';
+import 'package:projeto_ble_renew/pages/forms/device.dart';
+import '../../components/my_filled_button.dart';
+import '../list/list_device.dart';
 
-import '../components/my_filled_button.dart';
-import 'list_device.dart';
 
 class MenuDispositivo extends StatefulWidget {
   const MenuDispositivo({super.key});

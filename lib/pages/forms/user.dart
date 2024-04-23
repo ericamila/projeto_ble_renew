@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/model/usuario.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../model/pessoa.dart';
-import '../util/banco.dart';
-import '../util/constants.dart';
+import '../../model/pessoa.dart';
+import '../../util/banco.dart';
+import '../../util/constants.dart';
 
 class FormUsuario extends StatefulWidget {
   final BuildContext usuarioContext;

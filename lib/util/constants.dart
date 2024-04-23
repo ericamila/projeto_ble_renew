@@ -21,6 +21,12 @@ ButtonStyle estiloSearchButton = ElevatedButton.styleFrom(
     backgroundColor: verde,
     foregroundColor: claro);
 
+ButtonStyle buttonPesquisa = ElevatedButton.styleFrom(
+    padding: const EdgeInsets.symmetric(vertical: 15),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ));
+
 const TextStyle textoPerfil = TextStyle(
     fontWeight: FontWeight.normal,
     color: Colors.black54,

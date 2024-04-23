@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../components/alarme_list_tile.dart';
-import '../util/banco.dart';
+import '../../components/alarme_list_tile.dart';
+import '../../util/banco.dart';
 
 class MenuAlarme extends StatefulWidget {
   const MenuAlarme({super.key});

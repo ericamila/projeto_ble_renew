@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/model/funcionario.dart';
-import 'package:projeto_ble_renew/pages/form_register_funcionario.dart';
-import '../model/cargo.dart';
-import '../util/constants.dart';
+import 'package:projeto_ble_renew/model/equipamento.dart';
+import '../../util/constants.dart';
+import '../forms/equipment.dart';
 
-class ListaCadastroFuncionario extends StatefulWidget {
+
+class ListaCadastroEquipamento extends StatefulWidget {
   final String tipoCadastro;
 
-  const ListaCadastroFuncionario({super.key, required this.tipoCadastro});
+  const ListaCadastroEquipamento({super.key, required this.tipoCadastro});
 
   @override
-  State<ListaCadastroFuncionario> createState() => _ListaCadastroFuncionarioState();
+  State<ListaCadastroEquipamento> createState() => _ListaCadastroEquipamentoState();
 }
 
-class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
+class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +30,10 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
-        child: FutureBuilder<List<Funcionario>>(
-            future: refresh(),
+        child: FutureBuilder<List<Equipamento>>(
+            future: EquipamentoDao().findAll(),
             builder: (context, snapshot) {
-              List<Funcionario>? items = snapshot.data;
+              List<Equipamento>? items = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
@@ -45,12 +45,13 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                       return ListView.separated(
                         itemCount: items.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final Funcionario funcionario = items[index];
+                          final Equipamento equipamento = items[index];
                           return ListTile(
-                              title: Text(funcionario.nome),
+                              title: Text(equipamento.descricao),
                               subtitle:
-                                  Text(Cargo.getNomeById(funcionario.cargo)),
-                              leading: imageLeading(funcionario.foto),
+                                  Text(equipamento.codigo),
+                              leading:
+                                  const Icon(Icons.devices_other_outlined, size: 56),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {
@@ -58,9 +59,9 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) => FormCadastroFuncionario(
-                                          funcionarioContext: context,
-                                          funcionarioEdit: funcionario,
+                                        builder: (contextNew) => FormCadastroEquipamento(
+                                          equipamentoContext: context,
+                                          equipamentoEdit: equipamento,
                                           tipoCadastro: widget.tipoCadastro,
                                         ),
                                       ),
@@ -72,7 +73,7 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                                         return AlertDialog(
                                           title: const Text('Deletar'),
                                           content: Text(
-                                              'Tem certeza que deseja deletar ${funcionario.nome}?'),
+                                              'Tem certeza que deseja deletar ${equipamento.descricao}?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -91,8 +92,8 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                                       },
                                     );
                                     if (deletedConfirmed) {
-                                      await FuncionarioDao()
-                                          .delete(funcionario.id!);
+                                      await EquipamentoDao()
+                                          .delete(equipamento.id!);
                                       setState(() {});
                                     }
                                   }
@@ -145,30 +146,11 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (contextNew) => FormCadastroFuncionario(
-                  funcionarioContext: context,
+              builder: (contextNew) => FormCadastroEquipamento(
+                  equipamentoContext: context,
                   tipoCadastro: widget.tipoCadastro),
             ),
-          ).then((value) {
-            refresh();
-            if (value == true) {
-              showSnackBar(context, "Registro salvo com sucesso.", true);
-             /* ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Registro salvo com sucesso."),
-                  duration: Duration(seconds: 3),
-                ),
-              );*/
-            } else {
-              showSnackBar(context, "Houve uma falha ao registar.", false);
-              /*ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Houve uma falha ao registar."),
-                  duration: Duration(seconds: 3),
-                ),
-              );*/
-            }
-          });
+          ).then((value) => setState(() {}));
         },
         label: const Text(
           'ADICIONAR',
@@ -177,10 +159,5 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
         icon: const Icon(Icons.person_add),
       ),
     );
-  }
-
-  Future<List<Funcionario>> refresh() async {
-    setState(() {});
-    return FuncionarioDao().findAll();
   }
 }
