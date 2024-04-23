@@ -40,7 +40,7 @@ class _PesquisaState extends State<Pesquisa> {
       }
     } else if (widget.param == 'externo') {
       for (var item in listaTemp) {
-        if(item['tipo_externo'] == 'Paciente'){
+        if (item['tipo_externo'] == 'Paciente') {
           _lista.add(ExternoDao().fromMap(item));
         }
       }
@@ -103,20 +103,13 @@ class _PesquisaState extends State<Pesquisa> {
   seleciona(int index) {
     if (widget.param == 'pessoa_fisica') {
       pessoaSelecionadaX = _lista[index];
-
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const VincularDispositivos()));
+      Navigator.pushReplacementNamed(context, '/vinculate_device');
     } else if (widget.param == 'externo') {
       pessoaSelecionadaX = _lista[index];
       Navigator.pop(context);
     } else {
       dispositivoSelecionadoX = _lista[index];
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const VincularDispositivos()));
+      Navigator.pushReplacementNamed(context, '/vinculate_device');
     }
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:projeto_ble_renew/pages/device_vinculate.dart';
+import 'package:projeto_ble_renew/pages/forms/device.dart';
 import 'package:projeto_ble_renew/pages/login_page.dart';
 import 'bluetooth/flutter_blue_app.dart';
 import 'pages/home_page.dart';
@@ -84,7 +86,8 @@ class _AppState extends State<App> {
         '/home': (context) => const HomePage(),
         '/login': (context) => const LoginPage(),
         '/bluetooth': (context) => const FlutterBlueApp(),
-        '/form_device': (context) => const FlutterBlueApp(),
+        '/form_device': (context) => const FormCadastroDispositivo(),
+        '/vinculate_device': (context) => const VincularDispositivos(),
       },
     );
   }

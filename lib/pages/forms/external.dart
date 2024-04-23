@@ -68,7 +68,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
 
   void _seEditar() async {
     if (widget.tipoCadastro == tiposCadastrosMenu[2]) {
-      if (widget.externoEdit!.paciente == null) {
+      if (widget.externoEdit?.paciente == null) {
         pacienteController.text = '';
       } else {
         pessoaSelecionadaX =
