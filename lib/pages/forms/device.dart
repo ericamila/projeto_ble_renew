@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/dispositivo.dart';
 import 'package:projeto_ble_renew/util/formatters.dart';
-
-import '../../bluetooth/flutter_blue_app.dart';
 import '../../model/enum_tipo_dispositivo.dart';
 import '../../util/constants.dart';
 

@@ -34,14 +34,6 @@ class _FormUsuarioState extends State<FormUsuario> {
     super.initState();
   }
 
-  void _showPasswordModal(BuildContext context) async {
-    senhaLogada = await showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return PasswordModal();
-      },
-    );
-  }
 
   bool valueValidator(String? value) {
     if (value != null && value.isEmpty) {
@@ -68,51 +60,29 @@ class _FormUsuarioState extends State<FormUsuario> {
 
   //Sign Up User
   Future<String?> signUp() async {
-    User? user;
-
-    // Faz logout do usuário atual
-    await supabase.auth.signOut();
-    print('logout');
-    print('id logado ${LoggedUser.usuarioLogado?.email}');
-
     try {
+      User? user;
       final AuthResponse res = await supabase.auth.signUp(
         password: senhaController.text.trim(),
         email: emailController.text.trim(),
       );
 
       user = res.user;
-      print('user ${res.user?.email!.toString()}');
 
       if (!mounted) return 'erro';
 
+      return user?.id;
+
       //Navigator.pop(context);
     } on AuthException catch (e) {
-      print('mensagem ' + e.message);
       debugPrint(e.message);
-    } finally {
-      try {
-        print('tentando logar');
-        LoggedUser.currentUserID = await supabase.auth.signInWithPassword(
-          password: 'eeeeee',
-          email: LoggedUser.usuarioLogado?.email,
-        );
-
-        Navigator.pushReplacementNamed(context, '/home');
-      } on AuthException catch (e) {
-        debugPrint(e.message);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Senhas inválida!')),
-        );
-      } on PostgrestException catch (error) {
-        SnackBar(
-          content: Text(error.message),
-          backgroundColor: Theme
-              .of(context)
-              .colorScheme
-              .error,
-        );
-      }
+      return null;
+    } on PostgrestException catch (error) {
+      SnackBar(
+        content: Text(error.message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
+      return null;
     }
   }
 
@@ -156,16 +126,14 @@ class _FormUsuarioState extends State<FormUsuario> {
                           value: (value.isEmpty) ? null : value,
                           items: listFuncionario
                               .map(
-                                (op) =>
-                                DropdownMenuItem(
+                                (op) => DropdownMenuItem(
                                   value: op.id.toString(),
                                   child: Text(op.nome),
                                 ),
-                          )
+                              )
                               .toList(),
                           onChanged: (escolha) {
-                            dropNomeFuncionarioValue.value =
-                                escolha.toString();
+                            dropNomeFuncionarioValue.value = escolha.toString();
                           });
                     },
                   ),
@@ -224,19 +192,10 @@ class _FormUsuarioState extends State<FormUsuario> {
                     if (_formKey.currentState!.validate()) {
                       Funcionario funcionario = await FuncionarioDao()
                           .findID(dropNomeFuncionarioValue.value);
-                      await _showPasswordModal;
                       String? uid = await signUp();
-                      print('nnoo botao' + uid.toString());
+                      debugPrint('no botao $uid');
                       try {
-                        UsuarioDao().save(
-                          Usuario(
-                              nome: funcionario.nome,
-                              email: emailController.text,
-                              funcionario: funcionario.id!,
-                              uid: uid,
-                              foto: 'https://cavikcnsdlhepwnlucge.supabase.co/storage/v1/object/public/profile/nophoto.png' //usuario novo
-                          ),
-                        );
+                        _salvar(funcionario, uid);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Salvando registro!'),
@@ -264,47 +223,15 @@ class _FormUsuarioState extends State<FormUsuario> {
       ),
     );
   }
-}
 
-
-
-class PasswordModal extends StatelessWidget {
-  final TextEditingController _passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            'Enter Password',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 10.0),
-          TextField(
-            controller: _passwordController,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              border: OutlineInputBorder(),
-            ),
-            obscureText: true,
-          ),
-          SizedBox(height: 10.0),
-          ElevatedButton(
-            onPressed: () {
-              String password = _passwordController.text;
-              Navigator.pop(
-                  context, password); // Fecha o modal e retorna a senha
-            },
-            child: Text('Confirm'),
-          ),
-        ],
-      ),
+  void _salvar(Funcionario funcionario, String? uid) {
+    UsuarioDao().save(
+      Usuario(
+          nome: funcionario.nome,
+          email: emailController.text,
+          funcionario: funcionario.id!,
+          uid: uid,
+          foto: imagemPadraoNetwork),
     );
   }
 }
