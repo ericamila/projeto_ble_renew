@@ -3,7 +3,6 @@ import '../components/my_list_tile.dart';
 import '../model/dispositivo.dart';
 import '../model/externo.dart';
 import '../model/pessoa.dart';
-import '../pages/device_vinculate.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
 
