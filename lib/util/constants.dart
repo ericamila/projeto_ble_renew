@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../model/dispositivo.dart';
-import '../model/pessoa.dart';
 import 'app_cores.dart';
 
 final ImagePicker picker = ImagePicker();
@@ -35,9 +33,6 @@ const TextStyle textoPerfil = TextStyle(
 const TextStyle respostaPerfil =
     TextStyle(fontWeight: FontWeight.bold, color: verdeBotao, fontSize: 18);
 
-Dispositivo? dispositivoSelecionadoX;
-Pessoa? pessoaSelecionadaX;
-// A P A G A R
 const sizeFontToggleButtons = 15.0;
 
 const carregando = Center(

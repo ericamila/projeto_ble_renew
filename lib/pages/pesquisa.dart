@@ -4,7 +4,6 @@ import '../model/dispositivo.dart';
 import '../model/externo.dart';
 import '../model/pessoa.dart';
 import '../util/banco.dart';
-import '../util/constants.dart';
 
 class Pesquisa extends StatefulWidget {
   final String param;
@@ -101,14 +100,11 @@ class _PesquisaState extends State<Pesquisa> {
 
   seleciona(int index) {
     if (widget.param == 'pessoa_fisica') {
-      pessoaSelecionadaX = _lista[index];
-      Navigator.pushReplacementNamed(context, '/vinculate_device');
+      Navigator.pop(context, _lista[index]);
     } else if (widget.param == 'externo') {
-      //pessoaSelecionadaX = _lista[index];hoje
       Navigator.pop(context, _lista[index]);
     } else {
-      dispositivoSelecionadoX = _lista[index];
-      Navigator.pushReplacementNamed(context, '/vinculate_device');
+      Navigator.pop(context, _lista[index]);
     }
   }
 }

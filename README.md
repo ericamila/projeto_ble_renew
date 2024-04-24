@@ -9,7 +9,6 @@ Verificar rotas ao voltar
 trigger para dispositivo ficar true ao vincular
 Dispositivos ativos não devem aparecer na lista de vincular
 Criar opção de DESVINCULAR dispositivo
-ATUALIZAR lista apos vincular
 Regras de negócio para usuário e dispositivo único
 Mapa com RFID
 Ajustar layout para desktop

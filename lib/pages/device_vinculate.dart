@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:projeto_ble_renew/model/dispositivo.dart';
 import 'package:projeto_ble_renew/pages/pesquisa.dart';
 import '../components/my_list_tile.dart';
 import '../model/device_person.dart';
+import '../model/pessoa.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
 
@@ -18,24 +20,13 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
   late List<DispUser> listVinculos = [];
   final dispositivoController = TextEditingController();
   final usuarioController = TextEditingController();
+  Dispositivo? dispositivoTemp;
+  Pessoa? pessoaTemp;
 
   @override
   void initState() {
     _carregaDados();
-    _verifica();
     super.initState();
-  }
-
-  void _verifica() {
-    if (dispositivoController.text == '') {
-      dispositivoController.text = (dispositivoSelecionadoX == null)
-          ? ''
-          : dispositivoSelecionadoX.toString();
-    }
-    if (usuarioController.text == '') {
-      usuarioController.text =
-          (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
-    }
   }
 
   void _carregaDados() async {
@@ -47,13 +38,6 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
     for (var i in vinculosTemp) {
       listVinculos.add(DispUser.fromMap(i));
     }
-  }
-
-  @override
-  void dispose() {
-    dispositivoController.dispose();
-    usuarioController.dispose();
-    super.dispose();
   }
 
   @override
@@ -142,11 +126,9 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
                                               content:
                                                   Text('Processando dados')),
                                         );
-                                        //A L T E R A R
                                         _cadastrar(
-                                            dispositivoID:
-                                                dispositivoSelecionadoX!.id!,
-                                            pessoaID: pessoaSelecionadaX!.id!);
+                                            dispositivoID: dispositivoTemp!.id!,
+                                            pessoaID: pessoaTemp!.id!);
                                         setState(() {
                                           dispositivoController.text = '';
                                           usuarioController.text = '';
@@ -194,17 +176,24 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
 
   Future<dynamic> _pesquisaPessoa(BuildContext context) {
     return Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const Pesquisa(param: 'pessoa_fisica')));
+            context,
+            MaterialPageRoute(
+                builder: (context) => const Pesquisa(param: 'pessoa_fisica')))
+        .then((pessoa) async {
+      await _carregaPessoa(pessoa);
+      setState(() {});
+    });
   }
 
   void _pesquisaDispositivo(BuildContext context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const Pesquisa(param: 'dispositivo')));
-    setState(() {});
+            context,
+            MaterialPageRoute(
+                builder: (context) => const Pesquisa(param: 'dispositivo')))
+        .then((dispositivo) async {
+      await _carregaDispositivo(dispositivo);
+      setState(() {});
+    });
   }
 
   //CADASTRAR
@@ -219,9 +208,7 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Cadastro realizado com sucesso!')),
       );
-      //Limpa tudo e retorna
-      pessoaSelecionadaX = null;
-      dispositivoSelecionadoX = null;
+      _carregaDados();
       setState(() {});
     } on Error catch (e) {
       debugPrint(e as String?);
@@ -229,5 +216,23 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
         SnackBar(content: Text('Erro: $e')),
       );
     }
+  }
+
+  Future<void> _carregaDispositivo(Dispositivo dispositivo) async {
+    if (dispositivo.id != null) {
+      dispositivoTemp = await DispositivoDao().findID(dispositivo.id!);
+    }
+    setState(() {
+      dispositivoController.text = dispositivo.toString();
+    });
+  }
+
+  Future<void> _carregaPessoa(Pessoa pessoa) async {
+    if (pessoa.id != null) {
+      pessoaTemp = await PessoaDao().findID(pessoa.id!);
+    }
+    setState(() {
+      usuarioController.text = pessoa.toString();
+    });
   }
 }
