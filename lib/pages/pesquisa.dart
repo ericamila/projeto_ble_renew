@@ -104,8 +104,8 @@ class _PesquisaState extends State<Pesquisa> {
       pessoaSelecionadaX = _lista[index];
       Navigator.pushReplacementNamed(context, '/vinculate_device');
     } else if (widget.param == 'externo') {
-      pessoaSelecionadaX = _lista[index];
-      Navigator.pop(context);
+      //pessoaSelecionadaX = _lista[index];hoje
+      Navigator.pop(context, _lista[index]);
     } else {
       dispositivoSelecionadoX = _lista[index];
       Navigator.pushReplacementNamed(context, '/vinculate_device');

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../components/my_filled_button.dart';
-import '../list/list_register_equipamento.dart';
-import '../list/list_register_externo.dart';
-import '../list/list_register_funcionario.dart';
+import '../list/list_equipment.dart';
+import '../list/list_external.dart';
+import '../list/list_employee.dart';
 
 
 class MenuCadastro extends StatefulWidget {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/foto.dart';
-import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:uuid/uuid.dart';
 import '../../model/area.dart';
@@ -9,7 +8,6 @@ import '../../model/externo.dart';
 import '../../util/constants.dart';
 import '../../util/formatters.dart';
 import '../pesquisa.dart';
-
 
 class FormCadastroExterno extends StatefulWidget {
   final BuildContext externoContext;
@@ -51,7 +49,6 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
 
   @override
   void initState() {
-    pessoaSelecionadaX == null;
     super.initState();
     _seEditar();
   }
@@ -61,7 +58,6 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     nomeController.dispose();
     cpfController.dispose();
     pacienteController.dispose();
-    pessoaSelecionadaX == null;
     _imageUrl = '';
     super.dispose();
   }
@@ -71,10 +67,8 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
       if (widget.externoEdit?.paciente == null) {
         pacienteController.text = '';
       } else {
-        pessoaSelecionadaX =
-            await PessoaDao().findID(widget.externoEdit!.paciente!);
-        pacienteController.text = pessoaSelecionadaX.toString();
-        pacienteTemp = await ExternoDao().findID(pessoaSelecionadaX!.id!);
+        pacienteTemp = await ExternoDao().findID(widget.externoEdit!.paciente!);
+        pacienteController.text = pacienteTemp.toString();
         areaDestino = Area.getNomeById(pacienteTemp!.area!);
       }
     }
@@ -103,21 +97,17 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     } else if (widget.tipoCadastro == tiposCadastrosMenu[3]) {
       return tiposCadastrosMenu[3];
     } else {
-      if (isSwitched[0] == true) {
-        return 'Visitante';
-      } else {
-        return 'Acompanhante';
-      }
+      return (isSwitched[0] == true) ? 'Visitante' : 'Acompanhante';
     }
   }
 
-  void _verifica() {
-    setState(() {
-      pacienteController.text =
-          (pessoaSelecionadaX == null) ? '' : pessoaSelecionadaX.toString();
-      if (pacienteTemp != null) {
-        areaDestino = Area.getNomeById(pacienteTemp!.area!);
-      }
+  void _carregaPacienteArea(Externo paciente) async{
+    if (paciente.id != null) {
+      pacienteTemp = await ExternoDao().findID(paciente.id!);
+    }
+    setState(()  {
+      pacienteController.text = paciente.toString();
+      areaDestino = Area.getNomeById(paciente.area!);
     });
   }
 
@@ -254,10 +244,9 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => const Pesquisa(
-                                              param: 'externo'))).then((value) async {
-                                    _verifica();
-                                    pacienteTemp = await ExternoDao().findID(pessoaSelecionadaX!.id!);
-                                    areaDestino = Area.getNomeById(pacienteTemp!.area!);
+                                              param: 'externo'))).then(
+                                      (paciente){
+                                    _carregaPacienteArea(paciente);
                                     setState(() {});
                                   });
                                 },
@@ -326,6 +315,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                   },
                   child: const Text('Salvar'),
                 ),
+                space
               ],
             ),
           ),
@@ -335,15 +325,17 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
   }
 
   void _salvar(BuildContext context) {
-     if (_formKey.currentState!.validate()) {
-       ExternoDao()
+    if (_formKey.currentState!.validate()) {
+      ExternoDao()
           .save(Externo(
         nome: nomeController.text,
         cpf: cpfController.text,
         tipoExterno: _tipoExterno(),
         tipoPaciente: dropTipoPacienteValue.value,
-        paciente: pessoaSelecionadaX?.id,
-        area: int.parse(dropAreaValue.value),
+        paciente: pacienteTemp?.id,
+        area: (dropAreaValue.value == '')
+            ? pacienteTemp!.area!
+            : int.parse(dropAreaValue.value),
         foto: (_imageUrl != '') ? _imageUrl : '',
       ))
           .then((value) {
