@@ -48,7 +48,7 @@ class _ListaCadastroExternoState extends State<ListaCadastroExterno> {
                           final Externo externo = items[index];
                           return ListTile(
                               title: Text(externo.nome),
-                              subtitle: Text(externo.tipoExterno),
+                              subtitle: Text(externo.tipoExterno!),
                               leading: imageLeading(externo.foto),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(

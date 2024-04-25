@@ -8,32 +8,36 @@ class FuncionarioDao {
   static const String _cargo = 'cargo_id';
   static const String _foto = 'foto';
   static const String _id = 'id';
+  static const String _tipoExterno = 'tipo_externo';
 
-  save(Funcionario funcionario) async {
-    var itemExists = await find(funcionario.cpf);
-    Map<String, dynamic> funcionarioMap = toMap(funcionario);
+  save(Funcionario model) async {
+    var itemExists = await find(model.cpf);
+    Map<String, dynamic> funcionarioMap = toMap(model);
     if (itemExists.isEmpty) {
       await supabase.from(_tablename).insert({
-        'nome': funcionario.nome,
-        'cpf': funcionario.cpf,
-        'foto': funcionario.foto,
-        'cargo_id': funcionario.cargo
+        _nome: model.nome,
+        _cpf: model.cpf,
+        _foto: model.foto,
+        _cargo: model.cargo,
+        _tipoExterno: 'Funcionário',
       });
     } else {
-      funcionario.id = itemExists.last.id;
+      model.id = itemExists.last.id;
       await supabase
           .from(_tablename)
           .update(funcionarioMap)
-          .eq('id', funcionario.id.toString());
+          .eq('id', model.id.toString());
     }
   }
 
-  Map<String, dynamic> toMap(Funcionario funcionario) {
+  Map<String, dynamic> toMap(Funcionario model) {
     final Map<String, dynamic> mapa = {};
-    mapa[_nome] = funcionario.nome;
-    mapa[_cpf] = funcionario.cpf;
-    mapa[_cargo] = funcionario.cargo;
-    mapa[_foto] = funcionario.foto;
+    mapa[_nome] = model.nome;
+    mapa[_cpf] = model.cpf;
+    mapa[_cargo] = model.cargo;
+    mapa[_foto] = model.foto;
+    mapa[_tipoExterno] = 'Funcionário';
+
     return mapa;
   }
 
@@ -52,6 +56,7 @@ class FuncionarioDao {
         cargo: linha[_cargo],
         foto: linha[_foto],
         id: linha[_id],
+        tipoExterno: linha[_tipoExterno],
       );
       funcionarios.add(funcionario);
     }
@@ -73,19 +78,21 @@ class FuncionarioDao {
       cargo: result[_cargo],
       foto: result[_foto],
       id: result[_id],
+      tipoExterno: result[_tipoExterno],
     );
     return funcionario;
   }
 
   Future<Funcionario> findCPFUnico(String cpf) async {
     final Map<String, dynamic> result =
-    await supabase.from(_tablename).select().eq('cpf', cpf).single();
+        await supabase.from(_tablename).select().eq('cpf', cpf).single();
     final Funcionario funcionario = Funcionario(
       nome: result[_nome],
       cpf: result[_cpf],
       cargo: result[_cargo],
       foto: result[_foto],
       id: result[_id],
+      tipoExterno: result[_tipoExterno],
     );
     return funcionario;
   }
@@ -102,6 +109,7 @@ class Funcionario extends PessoaFisica {
       {required super.nome,
       required super.cpf,
       required this.cargo,
+      super.tipoExterno = 'Funcionário',
       super.foto,
       super.id});
 

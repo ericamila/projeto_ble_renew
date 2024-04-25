@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 
 import '../../components/my_list_tile.dart';
 import '../../model/dispositivo.dart';
+import '../../model/externo.dart';
 import '../../util/constants.dart';
 import '../../util/formatters.dart';
 
@@ -20,6 +22,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
   TextEditingController cpfController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   List<bool> isSwitched = [true, false];
+  var selecionado;
 
   @override
   void initState() {
@@ -182,7 +185,8 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                           icon: Icons.account_circle,
                           subText: listPersons[index].cpf,
                           tileCor: _getCor(index),
-                          onTap: () {
+                          onTap: () async {
+                            await _carregaDadosPessoa(listPersons[index]);
                             Navigator.push(
                               context,
                               MaterialPageRoute<Widget>(
@@ -194,11 +198,27 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                                     child: Hero(
                                       tag: 'ListTile-Pesquisa',
                                       child: Material(
-                                        child: MyListTile(
-                                            text: 'ListTile with Hero',
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            }),
+                                        child: Card(
+                                          color: Colors.grey[100],
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Image.network(
+                                                      (selecionado.foto == null)
+                                                          ? imagemPadraoNetwork
+                                                          : selecionado!.foto,
+                                                      height: 250,
+                                                      width: 250),
+                                                  Text(selecionado!.nome),
+                                                  Text(selecionado!.cpf),
+                                                  Text(selecionado.runtimeType
+                                                      .toString()),
+                                                ]),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -236,7 +256,8 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                                       tag: 'ListTile-Pesquisa',
                                       child: Material(
                                         child: MyListTile(
-                                            text: 'ListTile with Hero',
+                                            text:
+                                                'ListTile with Hero ${listDevices[index].tag!}',
                                             onTap: () {
                                               Navigator.pop(context);
                                             }),
@@ -265,6 +286,14 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
         return claro;
       default:
         return Colors.blueGrey[100 * (index + 1)];
+    }
+  }
+
+  Future<void> _carregaDadosPessoa(Pessoa pessoa) async {
+    if (pessoa.tipoExterno == "Funcionário") {
+      selecionado = await FuncionarioDao().findID(pessoa.id!);
+    } else {
+      selecionado = await ExternoDao().findID(pessoa.id!);
     }
   }
 }

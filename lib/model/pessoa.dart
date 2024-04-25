@@ -5,6 +5,7 @@ class PessoaDao {
   static const String _nome = 'nome';
   static const String _id = 'id';
   static const String _cpf = 'cpf';
+  static const String _tipoExterno = 'tipo_externo';
 
   Map<String, dynamic> toMap(Pessoa model) {
     final Map<String, dynamic> mapa = {};
@@ -25,6 +26,7 @@ class PessoaDao {
         nome: linha[_nome],
         cpf: linha[_cpf],
         id: linha[_id],
+        tipoExterno: linha[_tipoExterno],
       );
       model.add(pessoa);
     }
@@ -47,7 +49,7 @@ class PessoaDao {
     final Map<String, dynamic> result =
         await supabase.from(_tablename).select().eq('id', id).single();
     final Pessoa model =
-        Pessoa(nome: result[_nome], cpf: result[_cpf], id: result[_id]);
+        Pessoa(nome: result[_nome], cpf: result[_cpf], id: result[_id], tipoExterno: result[_tipoExterno]);
     return model;
   }
 }
@@ -56,13 +58,15 @@ class Pessoa {
   String? id;
   String nome;
   String cpf;
+  String? tipoExterno;
 
-  Pessoa({required this.nome, required this.cpf, this.id});
+  Pessoa({required this.nome, required this.cpf, this.tipoExterno, this.id});
 
   Pessoa.fromMap(Map<String, dynamic> map)
       : id = map["id"],
         nome = map["nome"],
-        cpf = map["cpf"];
+        cpf = map["cpf"],
+        tipoExterno = map["tipo_externo"];
 
   @override
   String toString() {

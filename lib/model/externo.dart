@@ -131,14 +131,13 @@ class ExternoDao {
 }
 
 class Externo extends PessoaFisica {
-  String tipoExterno;
   String? tipoPaciente;
   String? paciente;
 
   Externo(
       {required super.nome,
       required super.cpf,
-      required this.tipoExterno,
+      required super.tipoExterno,
       this.tipoPaciente,
       this.paciente,
       super.foto,
