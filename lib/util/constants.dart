@@ -94,3 +94,33 @@ void showSnackBar(BuildContext context, String message, bool sucess) {
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+
+RichText textoFormatado(String question, String answer) {
+  return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+          text: '$question: ',
+          style: textoPerfil,
+          children: <TextSpan>[
+            TextSpan(text: answer, style: respostaPerfil),
+          ]));
+}
+
+ClipRRect imagemClipRRect(String? imageUrl) {
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(10.0),
+    child: imageUrl != null
+        ? Image.network(
+            imageUrl,
+            width: 250,
+            height: 250,
+            fit: BoxFit.cover,
+          )
+        : Container(
+            color: Colors.grey,
+            width: 250,
+            height: 250,
+            child: Image.asset(imagemPadraoUrl),
+          ),
+  );
+}

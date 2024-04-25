@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_ble_renew/model/area.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 
 import '../../components/my_list_tile.dart';
+import '../../model/cargo.dart';
 import '../../model/dispositivo.dart';
 import '../../model/externo.dart';
 import '../../util/constants.dart';
@@ -23,6 +25,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
   TextEditingController nameController = TextEditingController();
   List<bool> isSwitched = [true, false];
   var selecionado;
+  Externo? pacienteTemp;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
     tagController.dispose();
     macController.dispose();
     super.dispose();
+    pacienteTemp = null;
   }
 
   List<Dispositivo> listDevices = [];
@@ -191,38 +195,9 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                               context,
                               MaterialPageRoute<Widget>(
                                   builder: (BuildContext context) {
-                                return Scaffold(
-                                  appBar: AppBar(
-                                      title: const Text('Pessoa Selecionada')),
-                                  body: Center(
-                                    child: Hero(
-                                      tag: 'ListTile-Pesquisa',
-                                      child: Material(
-                                        child: Card(
-                                          color: Colors.grey[100],
-                                          child: Container(
-                                            padding: const EdgeInsets.all(10),
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Image.network(
-                                                      (selecionado.foto == null)
-                                                          ? imagemPadraoNetwork
-                                                          : selecionado!.foto,
-                                                      height: 250,
-                                                      width: 250),
-                                                  Text(selecionado!.nome),
-                                                  Text(selecionado!.cpf),
-                                                  Text(selecionado.runtimeType
-                                                      .toString()),
-                                                ]),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                return SearchDetails(
+                                    selecionado: selecionado,
+                                    paciente: pacienteTemp);
                               }),
                             );
                           });
@@ -294,6 +269,91 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
       selecionado = await FuncionarioDao().findID(pessoa.id!);
     } else {
       selecionado = await ExternoDao().findID(pessoa.id!);
+      if (selecionado.paciente != null) {
+        pacienteTemp = await ExternoDao().findID(selecionado.paciente);
+      }
     }
+  }
+}
+
+class SearchDetails extends StatefulWidget {
+  SearchDetails({
+    super.key,
+    required this.selecionado,
+    this.paciente,
+  });
+
+  Externo? paciente;
+  var selecionado;
+
+  @override
+  State<SearchDetails> createState() => _SearchDetailsState();
+}
+
+class _SearchDetailsState extends State<SearchDetails> {
+  @override
+  void dispose() {
+    widget.paciente = null;
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Pessoa Selecionada')),
+      body: Center(
+        child: Hero(
+          tag: 'ListTile-Pesquisa',
+          child: Material(
+            child: Card(
+              color: Colors.grey[100],
+              child: Container(
+                padding: const EdgeInsets.all(30),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      imagemClipRRect(widget.selecionado.foto),
+                      space,
+                      textoFormatado('Nome', widget.selecionado!.nome),
+                      space,
+                      textoFormatado('CPF', widget.selecionado!.cpf),
+                      space,
+                      (widget.selecionado.runtimeType.toString() ==
+                              'Externo')
+                          ? ifExternal()
+                          : ifEmployee(),
+                    ]),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  ifEmployee() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textoFormatado('Cargo', Cargo.getNomeById(widget.selecionado!.cargo)),
+      ],
+    );
+  }
+
+  ifExternal() {
+    Externo externo = widget.selecionado;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textoFormatado('Tipo', externo.tipoExterno!),
+        space,
+        textoFormatado('Área', Area.getNomeById(externo.area!)),
+        space,
+        (externo.paciente != null)
+            ? textoFormatado('Paciente', widget.paciente!.nome)
+            : nada,
+      ],
+    );
   }
 }

@@ -1,6 +1,5 @@
 # projeto_ble_renew
 
-Controle de fluxo de pessoas e equipamentos em hospital   
 
 <h2 align="center">
 <img src="https://img.shields.io/badge/web-%3F-blue?style=for-the-badge" alt="Sistema web ?" />  
@@ -29,6 +28,7 @@ Controle de fluxo de pessoas e equipamentos em hospital
 ## TO DO
 
 - [x] Terminar hero da pesquisa    
+- [ ] Exibir informações do ble no hero (tag, data/hora entrada e saída)
 - [ ] Verificar rotas ao voltar (Scan Blue)   
 - [ ] Trigger para dispositivo ficar true ao vincular
 - [ ] Dispositivos ativos não devem aparecer na lista de vincular

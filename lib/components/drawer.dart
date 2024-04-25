@@ -42,7 +42,7 @@ class MyDrawer extends StatelessWidget {
                   text: 'P R O F I L E',
                   onTap: onProfileTap),
               DrawerListTile(
-                  icon: Icons.person,
+                  icon: Icons.manage_accounts,
                   text: 'U S U Á R I O S',
                   onTap: onUserTap),
               DrawerListTile(
