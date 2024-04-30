@@ -27,7 +27,7 @@
 
 ## TO DO
 
-- [x] Terminar hero da pesquisa    
+- [/] Terminar hero da pesquisa exibir usuario se vinculado   
 - [ ] Exibir informações do ble no hero (tag, data/hora entrada e saída)
 - [ ] Verificar rotas ao voltar (Scan Blue)   
 - [ ] Trigger para dispositivo ficar true ao vincular
