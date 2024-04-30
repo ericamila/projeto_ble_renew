@@ -1,7 +1,7 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
-import 'drawer/drawer_list_usuario.dart';
+import 'drawer/drawer_list_user.dart';
 import 'drawer/drawer_profile.dart';
 import 'menu/device.dart';
 import 'menu/map.dart';

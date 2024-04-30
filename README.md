@@ -39,7 +39,7 @@
 - [ ] Verificar as deleções   
 - [ ] Vincular equipamento area   
 - [ ] Quando paciente for dependente vincular externo
-- [ ] Cadastro de usuario no auth 
+- [x] Cadastro de usuario no auth 
 - [ ] trigger para update em pessoa_fisica e delete
 - [ ] Atualizar documentação
 
