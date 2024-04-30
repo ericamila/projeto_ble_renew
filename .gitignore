@@ -44,3 +44,6 @@ app.*.map.json
 
 #Conexão com o banco
 /lib/util/banco.dart
+
+#Key de release
+/android/key.properties
