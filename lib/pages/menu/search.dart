@@ -226,16 +226,23 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                                   appBar: AppBar(
                                       title: const Text(
                                           'Dispositivo Selecionado')),
-                                  body: Center(
-                                    child: Hero(
-                                      tag: 'ListTile-Pesquisa',
-                                      child: Material(
-                                        child: MyListTile(
-                                            text:
-                                                'ListTile with Hero ${listDevices[index].tag!}',
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            }),
+                                  body: Hero(
+                                    tag: 'ListTile-Pesquisa',
+                                    child: Material(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          MyListTile(
+                                              text:
+                                                  '${listDevices[index].tag!} ${listDevices[index].nome!}',
+                                              subText: '${listDevices[index].tipo!}\n${listDevices[index].mac!}\n${listDevices[index].status!}',
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              }),
+                                          MyListTile(text: 'Exibr usuario ', onTap:() {
+
+                                          }, )
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -305,24 +312,28 @@ class _SearchDetailsState extends State<SearchDetails> {
         child: Hero(
           tag: 'ListTile-Pesquisa',
           child: Material(
-            child: Card(
-              color: Colors.grey[100],
-              child: Container(
-                padding: const EdgeInsets.all(30),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      imagemClipRRect(widget.selecionado.foto),
-                      space,
-                      textoFormatado('Nome', widget.selecionado!.nome),
-                      space,
-                      textoFormatado('CPF', widget.selecionado!.cpf),
-                      space,
-                      (widget.selecionado.runtimeType.toString() ==
-                              'Externo')
-                          ? ifExternal()
-                          : ifEmployee(),
-                    ]),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Card(
+                color: Colors.grey[100],
+                child: Container(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        imagemClipRRect(widget.selecionado.foto),
+                        space,
+                        textoFormatado('Nome', widget.selecionado!.nome),
+                        space,
+                        textoFormatado('CPF', widget.selecionado!.cpf),
+                        space,
+                        (widget.selecionado.runtimeType.toString() == 'Externo')
+                            ? ifExternal()
+                            : ifEmployee(),
+                      ]),
+                ),
               ),
             ),
           ),

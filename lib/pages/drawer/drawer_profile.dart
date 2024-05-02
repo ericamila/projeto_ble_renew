@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projeto_ble_renew/components/extensions.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late String email;
   late String status;
   late String id;
-  late String acess;
+  late DateTime acess;
 
   @override
   initState() {
@@ -107,8 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
     nome = LoggedUser.usuarioLogado!.nome;
     email = LoggedUser.userLogado!.email!;
     status = (LoggedUser.userLogado!.aud == 'authenticated'? 'Autenticado': 'Não Autenticado');
-    acess = LoggedUser.userLogado!.lastSignInAt.toString().substring(0, 10);
     cargo = (await LoggedUser.pegaCargo())!;
+    acess = DateTime.parse(LoggedUser.userLogado!.lastSignInAt.toString());
+
 
     if (LoggedUser.usuarioLogado?.foto != null) {
       setState(() {
@@ -199,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const TextSpan(
                                     text: '\n\nÚltimo acesso: ',
                                     style: textoPerfil),
-                                TextSpan(text: acess, style: respostaPerfil),
+                                TextSpan(text: acess.FormatBrazilianDate, style: respostaPerfil),
                                 const TextSpan(
                                     text: '\n\nCargo: ', style: textoPerfil),
                                 TextSpan(text: cargo, style: respostaPerfil),

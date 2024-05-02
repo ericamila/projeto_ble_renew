@@ -27,7 +27,8 @@
 
 ## TO DO
 
-- [x] Terminar hero da pesquisa    
+- [x] Terminar hero da pesquisa exibir usuario se vinculado   
+- [ ] View para os heros
 - [ ] Exibir informações do ble no hero (tag, data/hora entrada e saída)
 - [ ] Verificar rotas ao voltar (Scan Blue)   
 - [ ] Trigger para dispositivo ficar true ao vincular
@@ -39,9 +40,11 @@
 - [ ] Verificar as deleções   
 - [ ] Vincular equipamento area   
 - [ ] Quando paciente for dependente vincular externo
-- [ ] Cadastro de usuario no auth 
+- [x] Cadastro de usuario no auth 
 - [ ] trigger para update em pessoa_fisica e delete
 - [ ] Atualizar documentação
+- [x] View para os alarmes (falta alterar codigo)
+
 
 
 ## 📁 Acesso ao projeto
@@ -224,6 +227,24 @@ FROM dispositivo_pessoa
 JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
 JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id;
 ````
+
+#### Visão vw_registro_alarmes
+````sql
+CREATE OR REPLACE VIEW vw_registro_alarmes AS
+SELECT  registro_movimentacao.id, data_hora, codigo, alarmes.descricao AS alarme,
+    tag, tipo, dispositivo.status,dispositivo.mac, area.descricao AS area,
+    pessoa_fisica.nome
+FROM registro_movimentacao
+    LEFT JOIN alarmes ON alarmes.id = registro_movimentacao.alarme_id
+    LEFT JOIN raspberry ON raspberry.id = registro_movimentacao.raspberry_id
+    LEFT JOIN area ON area.id = raspberry.area_id
+    LEFT JOIN dispositivo ON dispositivo.id = registro_movimentacao.dispositivo_id
+    LEFT JOIN dispositivo_pessoa ON dispositivo_pessoa.dispositivo_id = dispositivo.id
+    LEFT JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
+WHERE data_hora BETWEEN  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim
+    OR data_hora >=  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim IS NULL;
+````
+
 
 #### Triggers
 ````sql

@@ -45,10 +45,11 @@ class _UsuariosState extends State<Usuarios> {
                           final Usuario usuario = items[index];
                           return ListTile(
                               title: Text(usuario.nome),
-                              subtitle:
-                              Text(usuario.email),
-                              leading:
-                              const Icon(Icons.account_circle, size: 56),
+                              subtitle: Text(usuario.email),
+                              leading: (usuario.foto == null ||
+                                      usuario.foto == imagemPadraoNetwork)
+                                  ? const Icon(Icons.account_circle, size: 58)
+                                  : imageLeading(usuario.foto),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {
@@ -57,11 +58,11 @@ class _UsuariosState extends State<Usuarios> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (contextNew) => FormUsuario(
-                                          usuarioContext: context, usuarioEdit: usuario,
+                                          usuarioContext: context,
+                                          usuarioEdit: usuario,
                                         ),
                                       ),
-                                    ).then((value) => setState(() {
-                                    }));
+                                    ).then((value) => setState(() {}));
                                   } else {
                                     bool deletedConfirmed = await showDialog(
                                       context: context,
@@ -88,23 +89,26 @@ class _UsuariosState extends State<Usuarios> {
                                       },
                                     );
                                     if (deletedConfirmed) {
-                                      await UsuarioDao()
-                                          .delete(usuario.id!);
+                                      await UsuarioDao().delete(usuario.id!);
                                       setState(() {});
                                     }
                                   }
                                 },
                                 itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<bool>>[
+                                    <PopupMenuEntry<bool>>[
                                   const PopupMenuItem<bool>(
-                                    enabled: false,
+                                      enabled: false,
                                       value: true,
-                                      child: ListTile(leading:Icon(Icons.edit) , title: Text('Editar'),)
-                                  ),
+                                      child: ListTile(
+                                        leading: Icon(Icons.edit),
+                                        title: Text('Editar'),
+                                      )),
                                   const PopupMenuItem<bool>(
                                       value: false,
-                                      child: ListTile(leading:Icon(Icons.delete_forever) , title: Text('Excluir'),)
-                                  ),
+                                      child: ListTile(
+                                        leading: Icon(Icons.delete_forever),
+                                        title: Text('Excluir'),
+                                      )),
                                 ],
                               ));
                         },
@@ -115,19 +119,19 @@ class _UsuariosState extends State<Usuarios> {
                     }
                     return const Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              size: 96,
-                            ),
-                            Text(
-                              'Não há nenhum dado.',
-                              style: TextStyle(fontSize: 32),
-                            ),
-                          ],
-                        ));
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 96,
+                        ),
+                        Text(
+                          'Não há nenhum dado.',
+                          style: TextStyle(fontSize: 32),
+                        ),
+                      ],
+                    ));
                   }
                   return const Text('Erro ao carregar dados');
               }
@@ -143,8 +147,7 @@ class _UsuariosState extends State<Usuarios> {
                 usuarioContext: context,
               ),
             ),
-          ).then((value) => setState(() {
-          }));
+          ).then((value) => setState(() {}));
         },
         label: const Text(
           'ADICIONAR',
