@@ -6,6 +6,9 @@ import 'constants.dart';
 const TextStyle estiloLabelCurvedBarItem =
     TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: verde);
 
+const TextStyle estiloLabelRail =
+TextStyle(fontWeight: FontWeight.normal, fontSize: 15, color: claro);
+
 final theme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
   useMaterial3: true,

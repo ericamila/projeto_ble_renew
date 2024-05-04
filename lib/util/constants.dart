@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'app_cores.dart';
@@ -96,9 +98,10 @@ void showSnackBar(BuildContext context, String message, bool sucess) {
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-RichText textoFormatado(String question, String answer) {
+RichText textoFormatado(String question, String answer,
+    {TextAlign? alinhamento}) {
   return RichText(
-      textAlign: TextAlign.center,
+      textAlign: (alinhamento != null) ? alinhamento : TextAlign.center,
       text: TextSpan(
           text: '$question: ',
           style: textoPerfil,
@@ -124,4 +127,8 @@ ClipRRect imagemClipRRect(String? imageUrl) {
             child: Image.asset(imagemPadraoUrl),
           ),
   );
+}
+
+bool isWindows() {
+  return (Platform.operatingSystem == 'windows');
 }
