@@ -5,10 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'app_cores.dart';
 
 final ImagePicker picker = ImagePicker();
-const String imagemPadraoUrl = 'images/nophoto.png';
+const String imagemPadraoAsset = 'images/nophoto.png';
 const String imagemPadraoNetwork =
     'https://cavikcnsdlhepwnlucge.supabase.co/storage/v1/object/public/profile/nophoto.png';
-final Image imagemPadrao = Image.asset(imagemPadraoUrl, height: 250);
+final Image imagemPadrao = Image.asset(imagemPadraoAsset, height: 250);
 
 const space = Padding(padding: EdgeInsets.all(8));
 const spaceMenor = Padding(padding: EdgeInsets.all(4));
@@ -54,7 +54,7 @@ ClipRRect imageLeading(String? foto) {
       borderRadius: BorderRadius.circular(50.0),
       child: foto != null
           ? Image.network(height: 58, width: 58, foto, fit: BoxFit.cover)
-          : Container(color: Colors.grey, child: Image.asset(imagemPadraoUrl)));
+          : Container(color: Colors.grey, child: Image.asset(imagemPadraoAsset)));
 }
 
 InputDecoration myDecoration(String texto, {Icon? icone}) {
@@ -110,21 +110,21 @@ RichText textoFormatado(String question, String answer,
           ]));
 }
 
-ClipRRect imagemClipRRect(String? imageUrl) {
+ClipRRect imagemClipRRect(String? imageUrl, {double? size = 250.0}) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(10.0),
     child: imageUrl != null
         ? Image.network(
             imageUrl,
-            width: 250,
-            height: 250,
+            width: size,
+            height: size,
             fit: BoxFit.cover,
           )
         : Container(
             color: Colors.grey,
-            width: 250,
-            height: 250,
-            child: Image.asset(imagemPadraoUrl),
+            width: size,
+            height: size,
+            child: Image.asset(imagemPadraoAsset),
           ),
   );
 }

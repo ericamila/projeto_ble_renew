@@ -32,7 +32,7 @@ class AlarmeListTile extends StatelessWidget {
               style: DefaultTextStyle.of(context).style,
               children: <TextSpan>[
                 TextSpan(text: '\n${alarme['area']}', style: respostaPerfil),
-                TextSpan(text: '\n${alarme['nome']}!'),
+                TextSpan(text: '\n${alarme['nome']}'),
               ],
             ),
           ),

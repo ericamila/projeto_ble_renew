@@ -233,7 +233,7 @@ JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id;
 CREATE OR REPLACE VIEW vw_registro_alarmes AS
 SELECT  registro_movimentacao.id, data_hora, codigo, alarmes.descricao AS alarme,
     tag, tipo, dispositivo.status,dispositivo.mac, area.descricao AS area,
-    pessoa_fisica.nome
+    pessoa_fisica.nome, pessoa_fisica.tipo_externo, pessoa_fisica.id as id_pessoa
 FROM registro_movimentacao
     LEFT JOIN alarmes ON alarmes.id = registro_movimentacao.alarme_id
     LEFT JOIN raspberry ON raspberry.id = registro_movimentacao.raspberry_id

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/extensions.dart';
+import 'package:projeto_ble_renew/model/funcionario.dart';
+import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
+
+import '../model/externo.dart';
 
 class OcurrenceAlarme extends StatefulWidget {
   final Map<String, dynamic> alarme;
@@ -13,7 +17,8 @@ class OcurrenceAlarme extends StatefulWidget {
 }
 
 class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
-  bool light = true;
+  bool light = false;
+  String _image = imagemPadraoNetwork;
 
   final MaterialStateProperty<Icon?> thumbIcon =
       MaterialStateProperty.resolveWith<Icon?>(
@@ -27,6 +32,7 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
 
   @override
   Widget build(BuildContext context) {
+    _updateImage();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ocorrência'),
@@ -58,13 +64,16 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                 ],
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
+                padding: EdgeInsets.symmetric(vertical: 20),
                 child: TextField(
-                  maxLines: 6,
+                  minLines: 5,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
                   style: TextStyle(),
                   decoration: InputDecoration(
                     filled: true,
-                    hintText: "Detalhamento da condução da ocorrência",
+                    hintText: "Detalhamento da ocorrência",
                   ),
                 ),
               ),
@@ -75,34 +84,59 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                 child: const Text('Salvar'),
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Divider(),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  textoFormatado(
-                      'Data',
-                      DateTime.parse(widget.alarme['data_hora'])
-                          .formatBrazilianDate),
-                  textoFormatado(
-                      'Hora',
-                      DateTime.parse(widget.alarme['data_hora'])
-                          .formatBrazilianTime),
-                  textoFormatado('Local', widget.alarme['area']),
-                  textoFormatado('Usuário', widget.alarme['nome']),
                   textoFormatado('Códico do alarme',
                       '${widget.alarme['codigo']} - ${widget.alarme['alarme']}',
                       alinhamento: TextAlign.start),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      textoFormatado(
+                          'Data',
+                          DateTime.parse(widget.alarme['data_hora'])
+                              .formatBrazilianDate),
+                      textoFormatado(
+                          'Hora',
+                          DateTime.parse(widget.alarme['data_hora'])
+                              .formatBrazilianTime),
+                    ],
+                  ),
+                  textoFormatado('Local', widget.alarme['area']),
+                  textoFormatado('Usuário', widget.alarme['nome']),
+                  spaceMenor,
+                  Center(child: imagemClipRRect(_image, size: 150)),
+                  Center(
+                      child: textoFormatado(
+                          'Tipo', widget.alarme['tipo_externo'])),
                 ],
               ),
-
-              //Image.network(''),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _updateImage() async {
+    widget.alarme['tipo_externo'];
+    if ('Funcionário' == widget.alarme['tipo_externo']) {
+      Funcionario funci =
+          await FuncionarioDao().findID(widget.alarme['id_pessoa']);
+      if (funci.foto != null) {
+        _image = funci.foto!;
+      }
+    } else {
+      Externo externo = await ExternoDao().findID(widget.alarme['id_pessoa']);
+      if (externo.foto != null) {
+        _image = externo.foto!;
+      }
+    }
+    mounted ? setState(() {}) : carregando;
   }
 }

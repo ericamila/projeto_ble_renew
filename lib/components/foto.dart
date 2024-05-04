@@ -51,7 +51,7 @@ class Foto extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: AssetImage(imagemPadraoUrl),
+              image: AssetImage(imagemPadraoAsset),
               fit: BoxFit.cover,
             ),
             border: Border.all(width: 2.0, color: verdeBotao),
@@ -66,7 +66,7 @@ class Foto extends StatelessWidget {
             )
                 : Container(
               color: Colors.grey,
-              child: Image.asset(imagemPadraoUrl),
+              child: Image.asset(imagemPadraoAsset),
             ),
           ),
         ),
