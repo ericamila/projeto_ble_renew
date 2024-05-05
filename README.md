@@ -43,7 +43,7 @@
 - [x] Cadastro de usuario no auth 
 - [ ] trigger para update em pessoa_fisica e delete
 - [ ] Atualizar documentação
-- [x] View para os alarmes (falta alterar codigo)
+- [x] View para os alarmes (falta ação do banco)
 
 
 
