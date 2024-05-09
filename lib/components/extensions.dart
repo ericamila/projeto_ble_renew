@@ -1,8 +1,8 @@
 extension DateTimeExtension on DateTime {
-  String get FormatBrazilianDate{
+  String get formatBrazilianDate{
     return '$day/$month/$year';
   }
-  String get FormatBrazilianTime{ //Alterar
+  String get formatBrazilianTime{ //Alterar
     return '$hour:$minute:$second';
   }
 }

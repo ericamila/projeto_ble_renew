@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/area.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
@@ -52,6 +54,10 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
     setState(() {});
   }
 
+  bool isUser(){
+    return isSwitched[0];
+  }
+
   String pesquisa = '';
 
   @override
@@ -83,22 +89,22 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
               Row(
                 children: <Widget>[
                   space,
-                  (isSwitched[0])
+                  (isUser())
                       ? Expanded(
-                          child: TextField(
-                            controller: cpfController,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                pesquisa = value;
-                                nameController.text = '';
-                              });
-                            },
-                            decoration: myDecoration('CPF',
-                                icone: const Icon(Icons.search)),
-                            inputFormatters: [cpfFormatter],
-                          ),
-                        )
+                        child: TextField(
+                          controller: cpfController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            setState(() {
+                              pesquisa = value;
+                              nameController.text = '';
+                            });
+                          },
+                          decoration: myDecoration('CPF',
+                              icone: const Icon(Icons.search)),
+                          inputFormatters: [cpfFormatter],
+                        ),
+                      )
                       : Expanded(
                           child: TextField(
                               controller: tagController,
@@ -129,7 +135,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
               spaceMenor,
               Row(children: <Widget>[
                 space,
-                (isSwitched[0])
+                (isUser())
                     ? Expanded(
                         child: TextField(
                           controller: nameController,
@@ -177,7 +183,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
       body: Hero(
         tag: 'ListTile-Pesquisa',
         child: Material(
-          child: (isSwitched[0])
+          child: (isUser())
               ? ListView.builder(
                   itemCount: listPersons.length,
                   itemBuilder: (context, index) {
@@ -230,18 +236,21 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                                     tag: 'ListTile-Pesquisa',
                                     child: Material(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           MyListTile(
                                               text:
                                                   '${listDevices[index].tag!} ${listDevices[index].nome!}',
-                                              subText: '${listDevices[index].tipo!}\n${listDevices[index].mac!}\n${listDevices[index].status!}',
+                                              subText:
+                                                  '${listDevices[index].tipo!}\n${listDevices[index].mac!}\n${listDevices[index].status!}',
                                               onTap: () {
                                                 Navigator.pop(context);
                                               }),
-                                          MyListTile(text: 'Exibr usuario ', onTap:() {
-
-                                          }, )
+                                          MyListTile(
+                                            text: 'Exibr usuario ',
+                                            onTap: () {},
+                                          )
                                         ],
                                       ),
                                     ),
@@ -284,14 +293,15 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
 }
 
 class SearchDetails extends StatefulWidget {
+  Externo? paciente;
+  var selecionado;
   SearchDetails({
     super.key,
     required this.selecionado,
     this.paciente,
   });
 
-  Externo? paciente;
-  var selecionado;
+
 
   @override
   State<SearchDetails> createState() => _SearchDetailsState();

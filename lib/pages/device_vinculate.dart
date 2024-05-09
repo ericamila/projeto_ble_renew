@@ -180,8 +180,10 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
             MaterialPageRoute(
                 builder: (context) => const Pesquisa(param: 'pessoa_fisica')))
         .then((pessoa) async {
-      await _carregaPessoa(pessoa);
-      setState(() {});
+      if (pessoa != null) {
+        await _carregaPessoa(pessoa);
+        setState(() {});
+      }
     });
   }
 
@@ -191,8 +193,10 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
             MaterialPageRoute(
                 builder: (context) => const Pesquisa(param: 'dispositivo')))
         .then((dispositivo) async {
-      await _carregaDispositivo(dispositivo);
-      setState(() {});
+      if (dispositivo != null) {
+        await _carregaDispositivo(dispositivo);
+        setState(() {});
+      }
     });
   }
 
@@ -200,16 +204,21 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
   Future<void> _cadastrar(
       {required String dispositivoID, required String pessoaID}) async {
     try {
-      await supabase.from('dispositivo_pessoa').insert({
-        'dispositivo_id': dispositivoID,
-        'pessoa_id': pessoaID,
-      }).select();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Cadastro realizado com sucesso!')),
-      );
-      _carregaDados();
-      setState(() {});
+      await supabase
+          .from('dispositivo_pessoa')
+          .insert({
+            'dispositivo_id': dispositivoID,
+            'pessoa_id': pessoaID,
+          })
+          .select()
+          .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Cadastro realizado com sucesso!')),
+              ))
+          .then((value) => setState(() {
+                listVinculos.clear();
+                _carregaDados();
+              }));
     } on Error catch (e) {
       debugPrint(e as String?);
       ScaffoldMessenger.of(context).showSnackBar(

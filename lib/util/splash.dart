@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
+import '../main.dart';
 import '../model/usuario.dart';
-import 'app_cores.dart';
 import 'banco.dart';
+import 'constants.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,36 +26,34 @@ class _SplashScreenState extends State<SplashScreen> {
     LoggedUser.userLogado = await supabase.auth.currentUser;
 
     if (LoggedUser.userLogado?.id != null) {
-      LoggedUser.usuarioLogado = await UsuarioDao().findUUID(
-          LoggedUser.userLogado!.id);
+      LoggedUser.usuarioLogado =
+          await UsuarioDao().findUUID(LoggedUser.userLogado!.id);
 
       Navigator.pushReplacementNamed(context, '/home');
-    }
-    else{
+    } else {
       Navigator.pushReplacementNamed(context, '/login');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final hasConnection = ConnectionNotifier.of(context).value;
+    final asset =
+        hasConnection ? 'Conectado' : 'Verifique sua conexão com a Internet';
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
-            child:
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Image.asset(
-                'images/codelink_alt.png',
-                height: 96,
-                color: verde,
-              ),
-            ),
+            child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: imagemLogo()),
           ),
-          const Center(
-            child: Text("Carregando..."),
+          Center(
+            child: asset == 'Conectado'
+                ? const Text("Carregando...")
+                : wifiOff(mensagem: asset),
           ),
         ],
       ),

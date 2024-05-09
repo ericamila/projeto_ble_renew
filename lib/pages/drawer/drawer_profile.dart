@@ -201,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const TextSpan(
                                     text: '\n\nÚltimo acesso: ',
                                     style: textoPerfil),
-                                TextSpan(text: acess.FormatBrazilianDate, style: respostaPerfil),
+                                TextSpan(text: acess.formatBrazilianDate, style: respostaPerfil),
                                 const TextSpan(
                                     text: '\n\nCargo: ', style: textoPerfil),
                                 TextSpan(text: cargo, style: respostaPerfil),

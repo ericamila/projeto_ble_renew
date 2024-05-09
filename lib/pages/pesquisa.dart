@@ -33,16 +33,28 @@ class _PesquisaState extends State<Pesquisa> {
     });
 
     if (widget.param == 'pessoa_fisica') {
+      listaTemp.clear();
+      List data = await supabase.from('vw_pessoas_livres').select();
+      setState(() {
+        listaTemp.addAll(data);
+      });
+
       for (var item in listaTemp) {
         _lista.add(Pessoa.fromMap(item));
       }
-    } else if (widget.param == 'externo') {
+    } else if (widget.param == 'externo') {//corrigir
       for (var item in listaTemp) {
         if (item['tipo_externo'] == 'Paciente') {
           _lista.add(ExternoDao().fromMap(item));
         }
       }
     } else {
+      listaTemp.clear();
+      List data = await supabase.from('vw_dispositivos_livres').select();
+      setState(() {
+        listaTemp.addAll(data);
+      });
+
       for (var item in listaTemp) {
         _lista.add(Dispositivo.fromMap(item));
       }

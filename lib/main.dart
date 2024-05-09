@@ -7,6 +7,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:projeto_ble_renew/pages/device_vinculate.dart';
 import 'package:projeto_ble_renew/pages/forms/device.dart';
 import 'package:projeto_ble_renew/pages/login_page.dart';
+import 'package:projeto_ble_renew/util/constants.dart';
 import 'bluetooth/flutter_blue_app.dart';
 import 'pages/home_page.dart';
 import 'util/banco.dart';
@@ -30,13 +31,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(url: supabaseUrl, anonKey: anonKey);
 
-  FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
+  if (!isWindows()) {
+    FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
+  }
 
   final hasConnection =
       (kIsWeb) ? null : await InternetConnectionChecker().hasConnection;
 
-  //apagar um dia
-  //print('\nis a ${Platform.operatingSystem}');
 
   if (kIsWeb) {
     runApp(const App());

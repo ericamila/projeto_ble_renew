@@ -1,6 +1,7 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
+import '../util/constants.dart';
 import 'drawer/drawer_list_user.dart';
 import 'drawer/drawer_profile.dart';
 import 'menu/device.dart';
@@ -13,7 +14,6 @@ import '../util/banco.dart';
 import '../util/my_theme.dart';
 import 'drawer/drawer_about.dart';
 import 'menu/alarme.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,18 +59,24 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => const Usuarios(),
         ));
   }
+
   //navigate to User page
   void goToAboutPage() {
     Navigator.pop(context);
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const Sobre()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const Sobre()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Codelink"),
+        title: isWindows()
+            ? const Padding(
+                padding: EdgeInsets.only(left: 210),
+                child: Text("Codelink"),
+              )
+            : const Text("Codelink"),
         actions: [
           IconButton(
             onPressed: () {
@@ -86,59 +92,119 @@ class _HomePageState extends State<HomePage> {
         onAboutTap: goToAboutPage,
         onSignOut: signOut,
       ),
-      body: _pages[_page],
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: claro,
-        color: escuro,
-        buttonBackgroundColor: verde,
-        onTap: (index) {
-          setState(() {
-            _page = index;
-          });
-        },
-        items: const [
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.home_outlined,
-              color: claro,
+      body: isWindows()
+          ? Row(
+              children: [
+                SafeArea(
+                  child: NavigationRail(
+                    backgroundColor: escuro,
+                    extended: true,
+                    selectedIndex: _page,
+                    minExtendedWidth: 210,
+                    onDestinationSelected: (index) {
+                      setState(() {
+                        _page = index;
+                      });
+                    },
+                    destinations: const <NavigationRailDestination>[
+                      NavigationRailDestination(
+                        icon: Icon(
+                          Icons.home_outlined,
+                          color: verdeBotao,
+                        ),
+                        label: Text('Início', style: estiloLabelRail),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(
+                          Icons.bluetooth,
+                          color: verdeBotao,
+                        ),
+                        label: Text('Dispositivos', style: estiloLabelRail),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(
+                          Icons.search,
+                          color: verdeBotao,
+                        ),
+                        label: Text('Busca', style: estiloLabelRail),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(
+                          Icons.map_outlined,
+                          color: verdeBotao,
+                        ),
+                        label: Text('Mapa', style: estiloLabelRail),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(
+                          Icons.create_new_folder_outlined,
+                          color: verdeBotao,
+                        ),
+                        label: Text('Cadastros', style: estiloLabelRail),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: _pages[_page],
+                )
+              ],
+            )
+          : _pages[_page],
+      bottomNavigationBar: isWindows()
+          ? null
+          : CurvedNavigationBar(
+              backgroundColor: claro,
+              color: escuro,
+              buttonBackgroundColor: verde,
+              onTap: (index) {
+                setState(() {
+                  _page = index;
+                });
+              },
+              items: const [
+                CurvedNavigationBarItem(
+                  child: Icon(
+                    Icons.home_outlined,
+                    color: claro,
+                  ),
+                  label: 'Início',
+                  labelStyle: estiloLabelCurvedBarItem,
+                ),
+                CurvedNavigationBarItem(
+                  child: Icon(
+                    Icons.bluetooth,
+                    color: claro,
+                  ),
+                  label: 'Dispositivos',
+                  labelStyle: estiloLabelCurvedBarItem,
+                ),
+                CurvedNavigationBarItem(
+                  child: Icon(
+                    Icons.search,
+                    color: claro,
+                  ),
+                  label: 'Busca',
+                  labelStyle: estiloLabelCurvedBarItem,
+                ),
+                CurvedNavigationBarItem(
+                  child: Icon(
+                    Icons.map_outlined,
+                    color: claro,
+                  ),
+                  label: 'Mapa',
+                  labelStyle: estiloLabelCurvedBarItem,
+                ),
+                CurvedNavigationBarItem(
+                  child: Icon(
+                    Icons.create_new_folder_outlined,
+                    color: claro,
+                  ),
+                  label: 'Cadastros',
+                  labelStyle: estiloLabelCurvedBarItem,
+                ),
+              ],
             ),
-            label: 'Início',
-            labelStyle: estiloLabelCurvedBarItem,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.bluetooth,
-              color: claro,
-            ),
-            label: 'Dispositivos',
-            labelStyle: estiloLabelCurvedBarItem,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.search,
-              color: claro,
-            ),
-            label: 'Busca',
-            labelStyle: estiloLabelCurvedBarItem,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.map_outlined,
-              color: claro,
-            ),
-            label: 'Mapa',
-            labelStyle: estiloLabelCurvedBarItem,
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.create_new_folder_outlined,
-              color: claro,
-            ),
-            label: 'Cadastros',
-            labelStyle: estiloLabelCurvedBarItem,
-          ),
-        ],
-      ),
     );
   }
 }

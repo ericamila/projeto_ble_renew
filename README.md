@@ -28,7 +28,7 @@
 ## TO DO
 
 - [x] Terminar hero da pesquisa exibir usuario se vinculado   
-- [ ] View para os heros
+- [x] View para os heros
 - [ ] Exibir informações do ble no hero (tag, data/hora entrada e saída)
 - [ ] Verificar rotas ao voltar (Scan Blue)   
 - [ ] Trigger para dispositivo ficar true ao vincular
@@ -36,14 +36,17 @@
 - [ ] Criar opção de DESVINCULAR dispositivo  
 - [ ] Regras de negócio para usuário e dispositivo único  
 - [ ] Mapa com RFID ou lista   
-- [ ] Ajustar layout para desktop
+- [x] Ajustar layout para desktop +/-
 - [ ] Verificar as deleções   
 - [ ] Vincular equipamento area   
 - [ ] Quando paciente for dependente vincular externo
 - [x] Cadastro de usuario no auth 
 - [ ] trigger para update em pessoa_fisica e delete
 - [ ] Atualizar documentação
-- [x] View para os alarmes (falta alterar codigo)
+- [ ] View para os alarmes (falta ação do banco)
+- [ ] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
+- [ ] Apagar coluna area_id de pessoa_fisica
+- [ ] corrigir busca do externo no pesquisa.dart
 
 
 
@@ -222,10 +225,13 @@ CREATE TABLE public.usuario(
 CREATE VIEW public.vw_dispositivos_usuarios AS
 SELECT UPPER(pessoa_fisica.nome) AS nome,
     dispositivo.mac,
-    dispositivo.tipo
+    dispositivo.tipo,
+    dispositivo.tag,
+    dispositivo_pessoa.id
 FROM dispositivo_pessoa
 JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
-JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id;
+JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id
+WHERE dispositivo_pessoa.vinculado = 'TRUE';
 ````
 
 #### Visão vw_registro_alarmes
@@ -233,7 +239,7 @@ JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id;
 CREATE OR REPLACE VIEW vw_registro_alarmes AS
 SELECT  registro_movimentacao.id, data_hora, codigo, alarmes.descricao AS alarme,
     tag, tipo, dispositivo.status,dispositivo.mac, area.descricao AS area,
-    pessoa_fisica.nome
+    pessoa_fisica.nome, pessoa_fisica.tipo_externo, pessoa_fisica.id as id_pessoa
 FROM registro_movimentacao
     LEFT JOIN alarmes ON alarmes.id = registro_movimentacao.alarme_id
     LEFT JOIN raspberry ON raspberry.id = registro_movimentacao.raspberry_id
@@ -243,6 +249,13 @@ FROM registro_movimentacao
     LEFT JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
 WHERE data_hora BETWEEN  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim
     OR data_hora >=  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim IS NULL;
+````
+#### Visão vw_dispositivos_livres
+````sql
+CREATE OR REPLACE VIEW vw_dispositivos_livres AS
+SELECT * FROM dispositivo
+WHERE dispositivo.id NOT IN 
+(SELECT dispositivo_pessoa.dispositivo_id FROM dispositivo_pessoa WHERE vinculado = 'true');
 ````
 
 
@@ -266,5 +279,32 @@ BEGIN
 END;
 $$;
 ````
+
+create or replace function update_dispositivo()
+returns trigger
+language plpgsql
+as $$
+begin
+update dispositivo set status = new.vinculado
+where dispositivo.id = new.dispositivo_id;
+return new;
+end;
+$$;
+
+create trigger update_dispositivo_pessoa
+after update on dispositivo_pessoa
+for each row
+execute function update_dispositivo();
+
+CREATE OR REPLACE VIEW vw_pessoas_livres AS
+SELECT * FROM pessoa_fisica
+WHERE pessoa_fisica.id NOT IN
+(SELECT dispositivo_pessoa.pessoa_id FROM dispositivo_pessoa WHERE vinculado = 'true');
+
+
+
+
+
+
 Schema in 25/04/2024
 ![img.png](img.png)
