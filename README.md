@@ -47,6 +47,9 @@
 - [ ] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
 - [ ] Apagar coluna area_id de pessoa_fisica
 - [ ] corrigir busca do externo no pesquisa.dart
+- [ ] Atualizar funcionário/equipamento após inserir
+- [ ] Mensagem de falha ao inserir paciente
+- [ ] No listar dispositivo, incluir opção de editar
 
 
 
@@ -280,7 +283,8 @@ END;
 $$;
 ````
 
-create or replace function update_dispositivo()
+
+create or replace function update_dispositivos()
 returns trigger
 language plpgsql
 as $$
@@ -291,10 +295,11 @@ return new;
 end;
 $$;
 
-create trigger update_dispositivo_pessoa
-after update on dispositivo_pessoa
+create trigger update_dispositivo_pessoas
+after insert or update on dispositivo_pessoa
 for each row
-execute function update_dispositivo();
+execute function update_dispositivos();
+
 
 CREATE OR REPLACE VIEW vw_pessoas_livres AS
 SELECT * FROM pessoa_fisica

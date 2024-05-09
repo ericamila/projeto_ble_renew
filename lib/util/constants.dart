@@ -155,3 +155,22 @@ Image imagemLogo() {
     color: verde,
   );
 }
+
+Center noData({String msg = 'Dados não encontrados!'}) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.data_object_outlined,
+          size: 96,
+          weight: 0.5,
+          color: Colors.grey[700],
+        ),
+        Text(msg),
+      ],
+    ),
+  );
+}

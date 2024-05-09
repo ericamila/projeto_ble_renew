@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/dispositivo.dart';
 
 import '../../components/my_list_tile.dart';
+import '../../util/constants.dart';
 
 class ListarDispositivos extends StatefulWidget {
-   const ListarDispositivos({super.key});
+  const ListarDispositivos({super.key});
 
   @override
   State<ListarDispositivos> createState() => _ListarDispositivosState();
@@ -26,6 +27,9 @@ class _ListarDispositivosState extends State<ListarDispositivos> {
               return const Center(child: CircularProgressIndicator());
             }
             final dispositivos = snapshot.data!;
+            if (dispositivos.isEmpty) {
+              return noData();
+            }
             return ListView.builder(
               itemCount: dispositivos.length,
               itemBuilder: ((context, index) {
@@ -35,8 +39,7 @@ class _ListarDispositivosState extends State<ListarDispositivos> {
                   icon: (dispositivo.status!)
                       ? Icons.bluetooth
                       : Icons.bluetooth_disabled,
-                  text:
-                  'TAG: ${dispositivo.tag} - Tipo: ${dispositivo.tipo}'
+                  text: 'TAG: ${dispositivo.tag} - Tipo: ${dispositivo.tipo}'
                       '\nMAC: ${dispositivo.mac} \nStatus: ${dispositivo.status}',
                 );
               }),

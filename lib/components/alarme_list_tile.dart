@@ -14,6 +14,7 @@ class AlarmeListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('entrou');
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 5, 14, 0),
       child: Card(

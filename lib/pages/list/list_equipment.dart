@@ -120,21 +120,7 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                         },
                       );
                     }
-                    return const Center(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 96,
-                        ),
-                        Text(
-                          'Não há nenhum dado.',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ],
-                    ));
+                    return noData();
                   }
                   return const Text('Erro ao carregar dados');
               }
