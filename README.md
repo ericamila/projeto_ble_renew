@@ -45,6 +45,8 @@
 - [ ] Atualizar documentação
 - [ ] View para os alarmes (falta ação do banco)
 - [ ] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
+- [ ] Apagar coluna area_id de pessoa_fisica
+- [ ] corrigir busca do externo no pesquisa.dart
 
 
 
@@ -248,6 +250,13 @@ FROM registro_movimentacao
 WHERE data_hora BETWEEN  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim
     OR data_hora >=  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim IS NULL;
 ````
+#### Visão vw_dispositivos_livres
+````sql
+CREATE OR REPLACE VIEW vw_dispositivos_livres AS
+SELECT * FROM dispositivo
+WHERE dispositivo.id NOT IN 
+(SELECT dispositivo_pessoa.dispositivo_id FROM dispositivo_pessoa WHERE vinculado = 'true');
+````
 
 
 #### Triggers
@@ -270,5 +279,32 @@ BEGIN
 END;
 $$;
 ````
+
+create or replace function update_dispositivo()
+returns trigger
+language plpgsql
+as $$
+begin
+update dispositivo set status = new.vinculado
+where dispositivo.id = new.dispositivo_id;
+return new;
+end;
+$$;
+
+create trigger update_dispositivo_pessoa
+after update on dispositivo_pessoa
+for each row
+execute function update_dispositivo();
+
+CREATE OR REPLACE VIEW vw_pessoas_livres AS
+SELECT * FROM pessoa_fisica
+WHERE pessoa_fisica.id NOT IN
+(SELECT dispositivo_pessoa.pessoa_id FROM dispositivo_pessoa WHERE vinculado = 'true');
+
+
+
+
+
+
 Schema in 25/04/2024
 ![img.png](img.png)

@@ -180,8 +180,10 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
             MaterialPageRoute(
                 builder: (context) => const Pesquisa(param: 'pessoa_fisica')))
         .then((pessoa) async {
-      await _carregaPessoa(pessoa);
-      setState(() {});
+      if (pessoa != null) {
+        await _carregaPessoa(pessoa);
+        setState(() {});
+      }
     });
   }
 
@@ -191,8 +193,10 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
             MaterialPageRoute(
                 builder: (context) => const Pesquisa(param: 'dispositivo')))
         .then((dispositivo) async {
-      await _carregaDispositivo(dispositivo);
-      setState(() {});
+      if (dispositivo != null) {
+        await _carregaDispositivo(dispositivo);
+        setState(() {});
+      }
     });
   }
 
