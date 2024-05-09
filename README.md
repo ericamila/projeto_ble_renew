@@ -28,7 +28,7 @@
 ## TO DO
 
 - [x] Terminar hero da pesquisa exibir usuario se vinculado   
-- [ ] View para os heros
+- [x] View para os heros
 - [ ] Exibir informações do ble no hero (tag, data/hora entrada e saída)
 - [ ] Verificar rotas ao voltar (Scan Blue)   
 - [ ] Trigger para dispositivo ficar true ao vincular
@@ -36,14 +36,15 @@
 - [ ] Criar opção de DESVINCULAR dispositivo  
 - [ ] Regras de negócio para usuário e dispositivo único  
 - [ ] Mapa com RFID ou lista   
-- [ ] Ajustar layout para desktop
+- [x] Ajustar layout para desktop +/-
 - [ ] Verificar as deleções   
 - [ ] Vincular equipamento area   
 - [ ] Quando paciente for dependente vincular externo
 - [x] Cadastro de usuario no auth 
 - [ ] trigger para update em pessoa_fisica e delete
 - [ ] Atualizar documentação
-- [x] View para os alarmes (falta ação do banco)
+- [ ] View para os alarmes (falta ação do banco)
+- [ ] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
 
 
 
@@ -222,10 +223,13 @@ CREATE TABLE public.usuario(
 CREATE VIEW public.vw_dispositivos_usuarios AS
 SELECT UPPER(pessoa_fisica.nome) AS nome,
     dispositivo.mac,
-    dispositivo.tipo
+    dispositivo.tipo,
+    dispositivo.tag,
+    dispositivo_pessoa.id
 FROM dispositivo_pessoa
 JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
-JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id;
+JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id
+WHERE dispositivo_pessoa.vinculado = 'TRUE';
 ````
 
 #### Visão vw_registro_alarmes

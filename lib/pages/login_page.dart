@@ -16,8 +16,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController(text: "erica@email.com");//apagar em produção
-  TextEditingController passwordController = TextEditingController(text: "eeeeee");//apagar em produção
+  TextEditingController emailController =
+      TextEditingController(text: "erica@email.com"); //apagar em produção
+  TextEditingController passwordController =
+      TextEditingController(text: "eeeeee"); //apagar em produção
 
   @override
   void initState() {
@@ -37,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
           LoggedUser.currentUserID!.user!.userMetadata!['sub'].toString());
 
       Navigator.pushReplacementNamed(context, '/home');
-
     } on AuthException catch (e) {
       debugPrint(e.message);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,30 +63,15 @@ class _LoginPageState extends State<LoginPage> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: SizedBox(
-              width: isWindows()? 500: null,
+              width: isWindows() ? 500 : null,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  asset == 'Conectado'
-                      ? nada
-                      : ListTile(
-                          tileColor: Colors.blueGrey,
-                          leading: const Icon(
-                            Icons.wifi_off,
-                            color: Colors.white70,
-                          ),
-                          title: Text(
-                            asset.toString(),
-                            style: const TextStyle(color: claro),
-                          )),
+                  asset == 'Conectado' ? nada : wifiOff(mensagem: asset),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
-                    child: Image.asset(
-                      'images/codelink_alt.png',
-                      height: 96,
-                      color: verde,
-                    ),
+                    child: imagemLogo(),
                   ),
                   Text("Codelink",
                       textAlign: TextAlign.center,
@@ -104,7 +90,8 @@ class _LoginPageState extends State<LoginPage> {
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: myDecorationLogin(texto: "Email", icone: const Icon(Icons.email)),
+                        decoration: myDecorationLogin(
+                            texto: "Email", icone: const Icon(Icons.email)),
                       ),
                     ),
                   ),
@@ -118,7 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextFormField(
                         controller: passwordController,
                         obscureText: true,
-                        decoration: myDecorationLogin(texto: "Senha", icone: const Icon(Icons.lock)),
+                        decoration: myDecorationLogin(
+                            texto: "Senha", icone: const Icon(Icons.lock)),
                       ),
                     ),
                   ),

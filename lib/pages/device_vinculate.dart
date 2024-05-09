@@ -200,16 +200,21 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
   Future<void> _cadastrar(
       {required String dispositivoID, required String pessoaID}) async {
     try {
-      await supabase.from('dispositivo_pessoa').insert({
-        'dispositivo_id': dispositivoID,
-        'pessoa_id': pessoaID,
-      }).select();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Cadastro realizado com sucesso!')),
-      );
-      _carregaDados();
-      setState(() {});
+      await supabase
+          .from('dispositivo_pessoa')
+          .insert({
+            'dispositivo_id': dispositivoID,
+            'pessoa_id': pessoaID,
+          })
+          .select()
+          .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Cadastro realizado com sucesso!')),
+              ))
+          .then((value) => setState(() {
+                listVinculos.clear();
+                _carregaDados();
+              }));
     } on Error catch (e) {
       debugPrint(e as String?);
       ScaffoldMessenger.of(context).showSnackBar(

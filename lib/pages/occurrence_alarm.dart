@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/extensions.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
-import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
 

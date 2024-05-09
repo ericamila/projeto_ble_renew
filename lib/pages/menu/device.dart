@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/pages/device_vinculate.dart';
 import 'package:projeto_ble_renew/pages/forms/device.dart';
 import '../../components/my_filled_button.dart';
+import '../device_unvinculate.dart';
 import '../list/list_device.dart';
 
 
@@ -52,6 +53,14 @@ class _MenuDispositivoState extends State<MenuDispositivo> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const VincularDispositivos()));
+                  }),
+              MyFlilledButton(
+                  text: "Desvincular",
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DesvincularDispositivos()));
                   }),
             ],
           ),

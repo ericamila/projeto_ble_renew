@@ -54,7 +54,8 @@ ClipRRect imageLeading(String? foto) {
       borderRadius: BorderRadius.circular(50.0),
       child: foto != null
           ? Image.network(height: 58, width: 58, foto, fit: BoxFit.cover)
-          : Container(color: Colors.grey, child: Image.asset(imagemPadraoAsset)));
+          : Container(
+              color: Colors.grey, child: Image.asset(imagemPadraoAsset)));
 }
 
 InputDecoration myDecoration(String texto, {Icon? icone}) {
@@ -131,4 +132,26 @@ ClipRRect imagemClipRRect(String? imageUrl, {double? size = 250.0}) {
 
 bool isWindows() {
   return (Platform.operatingSystem == 'windows');
+}
+
+ListTile wifiOff({required String mensagem}) {
+  return ListTile(
+    tileColor: Colors.blueGrey,
+    leading: const Icon(
+      Icons.wifi_off,
+      color: Colors.white70,
+    ),
+    title: Text(
+      mensagem.toString(),
+      style: const TextStyle(color: claro),
+    ),
+  );
+}
+
+Image imagemLogo() {
+  return Image.asset(
+    'images/codelink_alt.png',
+    height: 96,
+    color: verde,
+  );
 }
