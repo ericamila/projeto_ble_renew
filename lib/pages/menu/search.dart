@@ -54,7 +54,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
     setState(() {});
   }
 
-  bool isUser(){
+  bool isUser() {
     return isSwitched[0];
   }
 
@@ -91,20 +91,20 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                   space,
                   (isUser())
                       ? Expanded(
-                        child: TextField(
-                          controller: cpfController,
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            setState(() {
-                              pesquisa = value;
-                              nameController.text = '';
-                            });
-                          },
-                          decoration: myDecoration('CPF',
-                              icone: const Icon(Icons.search)),
-                          inputFormatters: [cpfFormatter],
-                        ),
-                      )
+                          child: TextField(
+                            controller: cpfController,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                pesquisa = value;
+                                nameController.text = '';
+                              });
+                            },
+                            decoration: myDecoration('CPF',
+                                icone: const Icon(Icons.search)),
+                            inputFormatters: [cpfFormatter],
+                          ),
+                        )
                       : Expanded(
                           child: TextField(
                               controller: tagController,
@@ -180,92 +180,102 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
           ),
         ),
       ),
-      body: Hero(
-        tag: 'ListTile-Pesquisa',
-        child: Material(
-          child: (isUser())
-              ? ListView.builder(
-                  itemCount: listPersons.length,
-                  itemBuilder: (context, index) {
-                    if (pesquisa.isEmpty ||
-                        listPersons[index].cpf.contains(pesquisa) ||
-                        listPersons[index].nome.contains(pesquisa)) {
-                      return MyListTile(
-                          text: listPersons[index].nome,
-                          icon: Icons.account_circle,
-                          subText: listPersons[index].cpf,
-                          tileCor: _getCor(index),
-                          onTap: () async {
-                            await _carregaDadosPessoa(listPersons[index]);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<Widget>(
-                                  builder: (BuildContext context) {
-                                return SearchDetails(
-                                    selecionado: selecionado,
-                                    paciente: pacienteTemp);
-                              }),
-                            );
-                          });
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                )
-              : ListView.builder(
-                  itemCount: listDevices.length,
-                  itemBuilder: (context, index) {
-                    if (pesquisa.isEmpty ||
-                        listDevices[index].tag!.contains(pesquisa) ||
-                        listDevices[index].mac!.contains(pesquisa)) {
-                      return MyListTile(
-                          text: listDevices[index].tag!,
-                          icon: Icons.bluetooth,
-                          subText: listDevices[index].mac!,
-                          tileCor: _getCor(index),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<Widget>(
-                                  builder: (BuildContext context) {
-                                return Scaffold(
-                                  appBar: AppBar(
-                                      title: const Text(
-                                          'Dispositivo Selecionado')),
-                                  body: Hero(
-                                    tag: 'ListTile-Pesquisa',
-                                    child: Material(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          MyListTile(
-                                              text:
-                                                  '${listDevices[index].tag!} ${listDevices[index].nome!}',
-                                              subText:
-                                                  '${listDevices[index].tipo!}\n${listDevices[index].mac!}\n${listDevices[index].status!}',
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              }),
-                                          MyListTile(
-                                            text: 'Exibr usuario ',
-                                            onTap: () {},
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            );
-                          });
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-        ),
-      ),
+      body: (listDevices.isEmpty && listPersons.isEmpty)
+          ? carregando
+          : Hero(
+              tag: 'ListTile-Pesquisa',
+              child: Material(
+                child: (isUser())
+                    ? ListView.builder(
+                        itemCount: listPersons.length,
+                        itemBuilder: (context, index) {
+                          if (pesquisa.isEmpty ||
+                              listPersons[index].cpf.contains(pesquisa) ||
+                              listPersons[index].nome.contains(pesquisa)) {
+                            return MyListTile(
+                                text: listPersons[index].nome,
+                                icon: Icons.account_circle,
+                                subText: listPersons[index].cpf,
+                                tileCor: _getCor(index),
+                                onTap: () async {
+                                  await _carregaDadosPessoa(listPersons[index]);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<Widget>(
+                                        builder: (BuildContext context) {
+                                      return SearchDetails(
+                                          selecionado: selecionado,
+                                          paciente: pacienteTemp);
+                                    }),
+                                  );
+                                });
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      )
+                    : ListView.builder(
+                        itemCount: listDevices.length,
+                        itemBuilder: (context, index) {
+                          if (pesquisa.isEmpty ||
+                              listDevices[index].tag!.contains(pesquisa) ||
+                              listDevices[index].mac!.contains(pesquisa)) {
+                            return MyListTile(
+                                text: listDevices[index].tag!,
+                                icon: Icons.bluetooth,
+                                subText: listDevices[index].mac!,
+                                tileCor: _getCor(index),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<Widget>(
+                                        builder: (BuildContext context) {
+                                      return Scaffold(
+                                        appBar: AppBar(
+                                            title: const Text(
+                                                'Dispositivo Selecionado')),
+                                        body: Hero(
+                                          tag: 'ListTile-Pesquisa',
+                                          child: Material(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                MyListTile(
+                                                    text:
+                                                        '${listDevices[index].tag!} ${listDevices[index].nome!}',
+                                                    subText:
+                                                        '${listDevices[index].tipo!}\n${listDevices[index].mac!}\n${listDevices[index].status!}',
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    }),
+                                                TextButton(
+                                                    onPressed:
+                                                        (listDevices[index].status!)
+                                                            ? () =>
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) => SearchDetails(
+                                                                          selecionado: _getUsuario())))
+                                                            : null,
+                                                    child: const Text(
+                                                        'Exibir Usuário'))
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  );
+                                });
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
+              ),
+            ),
     );
   }
 
@@ -290,18 +300,23 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
       }
     }
   }
+
+  _getUsuario() {
+pegar idpessoa
+fazer carrega pesspa
+
+  }
 }
 
 class SearchDetails extends StatefulWidget {
   Externo? paciente;
   var selecionado;
+
   SearchDetails({
     super.key,
     required this.selecionado,
     this.paciente,
   });
-
-
 
   @override
   State<SearchDetails> createState() => _SearchDetailsState();

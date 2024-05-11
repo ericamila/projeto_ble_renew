@@ -99,13 +99,13 @@ class _DesvincularDispositivosState extends State<DesvincularDispositivos> {
           })
           .eq('id', id)
           .then((value) =>
-              showSnackBar(context, "Registro atualizado com sucesso.", true))
+              showSnackBarDefault(context, message:  "Registro atualizado com sucesso.", sucess: true))
           .then((value) => setState(() {
                 listVinculos.clear();
                 _carregaDados();
               }));
     } catch (error) {
-      showSnackBar(context, "Houve uma falha ao registar.", false);
+      showSnackBarDefault(context, message: "Houve uma falha ao registar.", sucess: false);
     }
   }
 }

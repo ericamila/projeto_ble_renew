@@ -17,8 +17,8 @@
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
-- ``Flutter 3.19.1``
-- ``Dart 3.3.0``
+- ``Flutter 3.19.6``
+- ``Dart 3.3.4``
 - ``Android Studio/Visual Studio Code``
 - ``Supabase(Postgres)``
 <p align="center">
@@ -45,11 +45,12 @@
 - [X] Atualizar documentação
 - [ ] View para os alarmes (falta ação do banco)
 - [ ] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
-- [ ] Apagar coluna area_id de pessoa_fisica
-- [ ] corrigir busca do externo no pesquisa.dart
-- [ ] Atualizar funcionário/equipamento após inserir
-- [ ] Mensagem de falha ao inserir paciente
+- [ ] Verificar coluna area_id de pessoa_fisica
+- [ ] corrigir busca do externo no pesquisa.dart ??? Não lembro :(
+- [x] Atualizar funcionário/equipamento após inserir
+- [x] Mensagem de falha ao inserir paciente
 - [ ] No listar dispositivo, incluir opção de editar
+- [x] Ajustar padrão do ScaffoldMessenger
 
 
 

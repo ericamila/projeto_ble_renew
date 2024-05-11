@@ -10,7 +10,8 @@ class ListaCadastroFuncionario extends StatefulWidget {
   const ListaCadastroFuncionario({super.key, required this.tipoCadastro});
 
   @override
-  State<ListaCadastroFuncionario> createState() => _ListaCadastroFuncionarioState();
+  State<ListaCadastroFuncionario> createState() =>
+      _ListaCadastroFuncionarioState();
 }
 
 class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
@@ -31,7 +32,7 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
         child: FutureBuilder<List<Funcionario>>(
-            future: refresh(),
+            future: _refresh(),
             builder: (context, snapshot) {
               List<Funcionario>? items = snapshot.data;
               switch (snapshot.connectionState) {
@@ -58,7 +59,8 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) => FormCadastroFuncionario(
+                                        builder: (contextNew) =>
+                                            FormCadastroFuncionario(
                                           funcionarioContext: context,
                                           funcionarioEdit: funcionario,
                                           tipoCadastro: widget.tipoCadastro,
@@ -136,23 +138,13 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
                   tipoCadastro: widget.tipoCadastro),
             ),
           ).then((value) {
-            refresh();
-            if (value == true) {
-              showSnackBar(context, "Registro salvo com sucesso.", true);
-             /* ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Registro salvo com sucesso."),
-                  duration: Duration(seconds: 3),
-                ),
-              );*/
-            } else {
-              showSnackBar(context, "Houve uma falha ao registar.", false);
-              /*ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Houve uma falha ao registar."),
-                  duration: Duration(seconds: 3),
-                ),
-              );*/
+            if (value != null) {
+              (value == true)
+                  ? showSnackBarDefault(context)
+                  : showSnackBarDefault(context,
+                      message: "Houve uma falha ao registar.");
+              setState(() {});
+              _refresh();
             }
           });
         },
@@ -165,7 +157,7 @@ class _ListaCadastroFuncionarioState extends State<ListaCadastroFuncionario> {
     );
   }
 
-  Future<List<Funcionario>> refresh() async {
+  Future<List<Funcionario>> _refresh() async {
     setState(() {});
     return FuncionarioDao().findAll();
   }

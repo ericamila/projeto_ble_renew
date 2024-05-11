@@ -101,11 +101,11 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     }
   }
 
-  void _carregaPacienteArea(Externo paciente) async{
+  void _carregaPacienteArea(Externo paciente) async {
     if (paciente.id != null) {
       pacienteTemp = await ExternoDao().findID(paciente.id!);
     }
-    setState(()  {
+    setState(() {
       pacienteController.text = paciente.toString();
       areaDestino = Area.getNomeById(paciente.area!);
     });
@@ -245,7 +245,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                                       MaterialPageRoute(
                                           builder: (context) => const Pesquisa(
                                               param: 'externo'))).then(
-                                      (paciente){
+                                      (paciente) {
                                     _carregaPacienteArea(paciente);
                                     setState(() {});
                                   });
@@ -310,8 +310,15 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                     }),
                 space,
                 FilledButton(
-                  onPressed: () async {
+                  /*onPressed: () async {
                     _salvar(context);
+                  },*/
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _register().then((value) {
+                        Navigator.pop(context, value);
+                      });
+                    }
                   },
                   child: const Text('Salvar'),
                 ),
@@ -324,23 +331,24 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
     );
   }
 
-  void _salvar(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      ExternoDao()
-          .save(Externo(
-        nome: nomeController.text,
-        cpf: cpfController.text,
-        tipoExterno: _tipoExterno(),
-        tipoPaciente: dropTipoPacienteValue.value,
-        paciente: pacienteTemp?.id,
-        area: (dropAreaValue.value == '')
-            ? pacienteTemp!.area!
-            : int.parse(dropAreaValue.value),
-        foto: (_imageUrl != '') ? _imageUrl : '',
-      ))
-          .then((value) {
-        Navigator.pop(context, value);
-      });
+  Future<bool> _register() async {
+    try {
+      ExternoDao().save(
+        Externo(
+          nome: nomeController.text,
+          cpf: cpfController.text,
+          tipoExterno: _tipoExterno(),
+          tipoPaciente: dropTipoPacienteValue.value,
+          paciente: pacienteTemp?.id,
+          area: (dropAreaValue.value == '')
+              ? pacienteTemp!.area!
+              : int.parse(dropAreaValue.value),
+          foto: (_imageUrl != '') ? _imageUrl : '',
+        ),
+      );
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 }

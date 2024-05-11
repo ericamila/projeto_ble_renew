@@ -49,4 +49,9 @@ class _ListarDispositivosState extends State<ListarDispositivos> {
       ),
     );
   }
+
+  Future<List<Dispositivo>> refresh() async {
+    setState(() {});
+    return DispositivoDao().findAll();
+  }
 }

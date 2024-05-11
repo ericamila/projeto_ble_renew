@@ -42,7 +42,7 @@ class _PesquisaState extends State<Pesquisa> {
       for (var item in listaTemp) {
         _lista.add(Pessoa.fromMap(item));
       }
-    } else if (widget.param == 'externo') {//corrigir
+    } else if (widget.param == 'externo') {//alterar ???
       for (var item in listaTemp) {
         if (item['tipo_externo'] == 'Paciente') {
           _lista.add(ExternoDao().fromMap(item));

@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 import '../../model/enum_tipo_equipamento.dart';
 import '../../model/equipamento.dart';
 
-
 class FormCadastroEquipamento extends StatefulWidget {
   final BuildContext equipamentoContext;
   final Equipamento? equipamentoEdit;
@@ -141,32 +140,22 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
                     },
                   ),
                 ),
-              Foto(
-                  uUID: (isEditar) ? widget.equipamentoEdit?.id : uuid.v1(),
-                  imageUrl: _imageUrl,
-                  onUpload: (imageUrl) async {
-                    if (!mounted) return;
-                    setState(() {
-                      _imageUrl = imageUrl;
-                    });
-                  }),
+                Foto(
+                    uUID: (isEditar) ? widget.equipamentoEdit?.id : uuid.v1(),
+                    imageUrl: _imageUrl,
+                    onUpload: (imageUrl) async {
+                      if (!mounted) return;
+                      setState(() {
+                        _imageUrl = imageUrl;
+                      });
+                    }),
                 space,
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      EquipamentoDao().save(Equipamento(
-                        descricao: descricaoController.text,
-                        tipo: dropTipoValue.value,
-                        codigo: codigoController.text,
-                        foto: (_imageUrl != '') ? _imageUrl : '',
-                      ));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Salvando registro!'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-                      Navigator.pop(context);
+                      _register().then((value) {
+                        Navigator.pop(context, value);
+                      });
                     }
                   },
                   child: const Text('Salvar'),
@@ -177,5 +166,19 @@ class _FormCadastroEquipamentoState extends State<FormCadastroEquipamento> {
         ),
       ),
     );
+  }
+
+  Future<bool> _register() async {
+    try {
+      EquipamentoDao().save(Equipamento(
+        descricao: descricaoController.text,
+        tipo: dropTipoValue.value,
+        codigo: codigoController.text,
+        foto: (_imageUrl != '') ? _imageUrl : '',
+      ));
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

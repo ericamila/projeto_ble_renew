@@ -64,7 +64,7 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
     return false;
   }
 
-  Future<bool> register() async {
+  Future<bool> _register() async {
     try {
       FuncionarioDao().save(Funcionario(
         nome: nomeController.text,
@@ -168,7 +168,7 @@ class _FormCadastroFuncionarioState extends State<FormCadastroFuncionario> {
                 FilledButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      register().then((value) {
+                      _register().then((value) {
                         Navigator.pop(context, value);
                       });
                     }
