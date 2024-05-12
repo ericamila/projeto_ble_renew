@@ -51,6 +51,7 @@
 - [x] Mensagem de falha ao inserir paciente
 - [ ] No listar dispositivo, incluir opção de editar
 - [x] Ajustar padrão do ScaffoldMessenger
+- QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
 
 
 
@@ -231,7 +232,9 @@ SELECT UPPER(pessoa_fisica.nome) AS nome,
     dispositivo.mac,
     dispositivo.tipo,
     dispositivo.tag,
-    dispositivo_pessoa.id
+    dispositivo_pessoa.id,
+    pessoa_fisica.id as pessoa_id, 
+    pessoa_fisica.tipo_externo
 FROM dispositivo_pessoa
 JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
 JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id
