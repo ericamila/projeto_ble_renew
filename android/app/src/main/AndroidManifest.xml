@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
 
     <application
-        android:label="Codelink v1.3"
+        android:label="Codelink"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

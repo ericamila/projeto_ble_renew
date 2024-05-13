@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../components/alarme_list_tile.dart';
 import '../../util/banco.dart';
+import '../../util/constants.dart';
 
 class MenuAlarme extends StatefulWidget {
   const MenuAlarme({super.key});
@@ -17,7 +18,7 @@ class _MenuAlarmeState extends State<MenuAlarme> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child: Container(//colocar backgoorund
         constraints: const BoxConstraints(
           maxWidth: 600.0,
         ),
@@ -26,9 +27,12 @@ class _MenuAlarmeState extends State<MenuAlarme> {
           future: _instanceDB(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
+              return const CircularProgressIndicator();
             }
             final alarmes = snapshot.data!;
+            if (alarmes.isEmpty) {
+              return noData();
+            }
             return ListView.builder(
               itemCount: alarmes.length,
               itemBuilder: ((context, index) {

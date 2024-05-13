@@ -17,8 +17,8 @@
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
-- ``Flutter 3.19.1``
-- ``Dart 3.3.0``
+- ``Flutter 3.19.6``
+- ``Dart 3.3.4``
 - ``Android Studio/Visual Studio Code``
 - ``Supabase(Postgres)``
 <p align="center">
@@ -42,11 +42,16 @@
 - [ ] Quando paciente for dependente vincular externo
 - [x] Cadastro de usuario no auth 
 - [ ] trigger para update em pessoa_fisica e delete
-- [ ] Atualizar documentação
+- [X] Atualizar documentação
 - [ ] View para os alarmes (falta ação do banco)
 - [ ] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
-- [ ] Apagar coluna area_id de pessoa_fisica
-- [ ] corrigir busca do externo no pesquisa.dart
+- [ ] Verificar coluna area_id de pessoa_fisica
+- [ ] corrigir busca do externo no pesquisa.dart ??? Não lembro :(
+- [x] Atualizar funcionário/equipamento após inserir
+- [x] Mensagem de falha ao inserir paciente
+- [ ] No listar dispositivo, incluir opção de editar
+- [x] Ajustar padrão do ScaffoldMessenger
+- QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
 
 
 
@@ -227,7 +232,9 @@ SELECT UPPER(pessoa_fisica.nome) AS nome,
     dispositivo.mac,
     dispositivo.tipo,
     dispositivo.tag,
-    dispositivo_pessoa.id
+    dispositivo_pessoa.id,
+    pessoa_fisica.id as pessoa_id, 
+    pessoa_fisica.tipo_externo
 FROM dispositivo_pessoa
 JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
 JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id
@@ -258,6 +265,13 @@ WHERE dispositivo.id NOT IN
 (SELECT dispositivo_pessoa.dispositivo_id FROM dispositivo_pessoa WHERE vinculado = 'true');
 ````
 
+#### Visão vw_pessoas_livres
+````sql
+CREATE OR REPLACE VIEW vw_pessoas_livres AS
+SELECT * FROM pessoa_fisica
+WHERE pessoa_fisica.id NOT IN
+(SELECT dispositivo_pessoa.pessoa_id FROM dispositivo_pessoa WHERE vinculado = 'true');
+````
 
 #### Triggers
 ````sql
@@ -280,30 +294,26 @@ END;
 $$;
 ````
 
-create or replace function update_dispositivo()
-returns trigger
-language plpgsql
-as $$
-begin
-update dispositivo set status = new.vinculado
-where dispositivo.id = new.dispositivo_id;
-return new;
-end;
+#### Triggers
+````sql
+CREATE OR REPLACE TRIGGER update_dispositivo_pessoas
+AFTER INSERT OR UPDATE ON dispositivo_pessoa
+FOR EACH ROW
+EXECUTE FUNCTION update_dispositivos();
+````
+#### Functions
+````sql
+CREATE OR REPLACE FUNCTION update_dispositivos()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+UPDATE dispositivo set status = new.vinculado
+WHERE dispositivo.id = new.dispositivo_id;
+RETURN NEW;
+END;
 $$;
-
-create trigger update_dispositivo_pessoa
-after update on dispositivo_pessoa
-for each row
-execute function update_dispositivo();
-
-CREATE OR REPLACE VIEW vw_pessoas_livres AS
-SELECT * FROM pessoa_fisica
-WHERE pessoa_fisica.id NOT IN
-(SELECT dispositivo_pessoa.pessoa_id FROM dispositivo_pessoa WHERE vinculado = 'true');
-
-
-
-
+````
 
 
 Schema in 25/04/2024

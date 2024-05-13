@@ -90,11 +90,12 @@ InputDecoration myDecorationLogin({required String texto, Icon? icone}) {
       fillColor: Colors.white70);
 }
 
-void showSnackBar(BuildContext context, String message, bool sucess) {
+void showSnackBarDefault(BuildContext context,
+    {String message = "Registro salvo com sucesso.", bool sucess = true}) {
   final snackBar = SnackBar(
-    content: Text(message),
-    backgroundColor: (sucess) ? Colors.teal : Colors.orangeAccent,
-    behavior: SnackBarBehavior.floating,
+    content: Text(message), //Descomentar abaixo para personaliar
+    // backgroundColor: (sucess) ? Colors.teal : Colors.orangeAccent,
+    // behavior: SnackBarBehavior.floating,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
@@ -153,5 +154,24 @@ Image imagemLogo() {
     'images/codelink_alt.png',
     height: 96,
     color: verde,
+  );
+}
+
+Center noData({String msg = 'Dados não encontrados!'}) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.data_object_outlined,
+          size: 96,
+          weight: 0.5,
+          color: Colors.grey[700],
+        ),
+        Text(msg),
+      ],
+    ),
   );
 }

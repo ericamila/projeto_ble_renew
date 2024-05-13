@@ -5,6 +5,7 @@ import 'package:projeto_ble_renew/model/area.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/model/pessoa.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
+import 'package:projeto_ble_renew/util/banco.dart';
 
 import '../../components/my_list_tile.dart';
 import '../../model/cargo.dart';
@@ -54,11 +55,12 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
     setState(() {});
   }
 
-  bool isUser(){
+  bool isUser() {
     return isSwitched[0];
   }
 
   String pesquisa = '';
+  Map<String, dynamic> dataUser = {};
 
   @override
   Widget build(BuildContext context) {
@@ -91,20 +93,20 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                   space,
                   (isUser())
                       ? Expanded(
-                        child: TextField(
-                          controller: cpfController,
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            setState(() {
-                              pesquisa = value;
-                              nameController.text = '';
-                            });
-                          },
-                          decoration: myDecoration('CPF',
-                              icone: const Icon(Icons.search)),
-                          inputFormatters: [cpfFormatter],
-                        ),
-                      )
+                          child: TextField(
+                            controller: cpfController,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                pesquisa = value;
+                                nameController.text = '';
+                              });
+                            },
+                            decoration: myDecoration('CPF',
+                                icone: const Icon(Icons.search)),
+                            inputFormatters: [cpfFormatter],
+                          ),
+                        )
                       : Expanded(
                           child: TextField(
                               controller: tagController,
@@ -180,93 +182,128 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
           ),
         ),
       ),
-      body: Hero(
-        tag: 'ListTile-Pesquisa',
-        child: Material(
-          child: (isUser())
-              ? ListView.builder(
-                  itemCount: listPersons.length,
-                  itemBuilder: (context, index) {
-                    if (pesquisa.isEmpty ||
-                        listPersons[index].cpf.contains(pesquisa) ||
-                        listPersons[index].nome.contains(pesquisa)) {
-                      return MyListTile(
-                          text: listPersons[index].nome,
-                          icon: Icons.account_circle,
-                          subText: listPersons[index].cpf,
-                          tileCor: _getCor(index),
-                          onTap: () async {
-                            await _carregaDadosPessoa(listPersons[index]);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<Widget>(
-                                  builder: (BuildContext context) {
-                                return SearchDetails(
-                                    selecionado: selecionado,
-                                    paciente: pacienteTemp);
-                              }),
-                            );
-                          });
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                )
-              : ListView.builder(
-                  itemCount: listDevices.length,
-                  itemBuilder: (context, index) {
-                    if (pesquisa.isEmpty ||
-                        listDevices[index].tag!.contains(pesquisa) ||
-                        listDevices[index].mac!.contains(pesquisa)) {
-                      return MyListTile(
-                          text: listDevices[index].tag!,
-                          icon: Icons.bluetooth,
-                          subText: listDevices[index].mac!,
-                          tileCor: _getCor(index),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<Widget>(
-                                  builder: (BuildContext context) {
-                                return Scaffold(
-                                  appBar: AppBar(
-                                      title: const Text(
-                                          'Dispositivo Selecionado')),
-                                  body: Hero(
-                                    tag: 'ListTile-Pesquisa',
-                                    child: Material(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          MyListTile(
-                                              text:
-                                                  '${listDevices[index].tag!} ${listDevices[index].nome!}',
-                                              subText:
-                                                  '${listDevices[index].tipo!}\n${listDevices[index].mac!}\n${listDevices[index].status!}',
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              }),
-                                          MyListTile(
-                                            text: 'Exibr usuario ',
-                                            onTap: () {},
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            );
-                          });
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-        ),
-      ),
+      body: (listDevices.isEmpty && listPersons.isEmpty)
+          ? carregando
+          : Hero(
+              tag: 'ListTile-Pesquisa',
+              child: Material(
+                child: (isUser())
+                    ? ListView.builder(
+                        itemCount: listPersons.length,
+                        itemBuilder: (context, index) {
+                          if (pesquisa.isEmpty ||
+                              listPersons[index].cpf.contains(pesquisa) ||
+                              listPersons[index].nome.contains(pesquisa)) {
+                            return MyListTile(
+                                text: listPersons[index].nome,
+                                icon: Icons.account_circle,
+                                subText: listPersons[index].cpf,
+                                tileCor: _getCor(index),
+                                onTap: () async {
+                                  await _carregaDadosPessoa(tipo: listPersons[index].tipoExterno.toString(), idPessoa: listPersons[index].id.toString());
+                                  _exibeUsuario(context);
+                                });
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      )
+                    : ListView.builder(
+                        itemCount: listDevices.length,
+                        itemBuilder: (context, index) {
+                          if (pesquisa.isEmpty ||
+                              listDevices[index].tag!.contains(pesquisa) ||
+                              listDevices[index].mac!.contains(pesquisa)) {
+                            return MyListTile(
+                                text: listDevices[index].tag!,
+                                icon: Icons.bluetooth,
+                                subText: listDevices[index].mac!,
+                                tileCor: _getCor(index),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<Widget>(
+                                        builder: (BuildContext context) {
+                                      return Scaffold(
+                                        appBar: AppBar(
+                                            title: const Text(
+                                                'Dispositivo Selecionado')),
+                                        body: Center(
+                                          child: Hero(
+                                            tag: 'ListTile-Pesquisa',
+                                            child: Material(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Card(
+                                                  color: Colors.grey[100],
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(30),
+                                                    width: 310,
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Center(child: Image.asset('images/${_pegaImagem(listDevices[index].tipo.toString())}', height: 150, color: verdeBotao,)),
+                                                        space,
+                                                        (listDevices[index].nome != '')
+                                                            ? Column(
+                                                              children: [
+                                                                textoFormatado('Nome', listDevices[index].nome.toString(), alinhamento: TextAlign.start),
+                                                                space,
+                                                              ],
+                                                            )
+                                                            : nada,
+                                                        textoFormatado('TAG', listDevices[index].tag!, alinhamento: TextAlign.start),
+                                                        space,
+                                                        textoFormatado('Tipo', listDevices[index].tipo!, alinhamento: TextAlign.start),
+                                                        space,
+                                                        textoFormatado('MAC', listDevices[index].mac!, alinhamento: TextAlign.start),
+                                                        space,
+                                                        textoFormatado('Status', (listDevices[index].status!)?'Conectado':'Desconectado', alinhamento: TextAlign.start),
+                                                        space,
+                                                        (listDevices[index].status!)? _getDataVinculation(): nada,
+                                                        Center(
+                                                          child: OutlinedButton(
+                                                              onPressed:(listDevices[index].status!)
+                                                                      ? () async {
+                                                                          await _getUsuario(listDevices[index].mac!);
+                                                                          _exibeUsuario(context);
+                                                                        }
+                                                                      : null,
+                                                              style: TextButton.styleFrom(),
+                                                              child: const Text('Exibir Usuário')),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  );
+                                });
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
+              ),
+            ),
     );
+  }
+
+  void _exibeUsuario(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SearchDetails(
+                selecionado: selecionado,
+                paciente: pacienteTemp)));
   }
 
   Color? _getCor(int index) {
@@ -280,28 +317,61 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
     }
   }
 
-  Future<void> _carregaDadosPessoa(Pessoa pessoa) async {
-    if (pessoa.tipoExterno == "Funcionário") {
-      selecionado = await FuncionarioDao().findID(pessoa.id!);
+  Future<void> _carregaDadosPessoa({required String tipo, required String idPessoa}) async {
+    if (tipo == "Funcionário") {
+      selecionado = await FuncionarioDao().findID(idPessoa);
     } else {
-      selecionado = await ExternoDao().findID(pessoa.id!);
+      selecionado = await ExternoDao().findID(idPessoa);
       if (selecionado.paciente != null) {
         pacienteTemp = await ExternoDao().findID(selecionado.paciente);
       }
     }
+  }
+
+  _getUsuario(String macDevice) async {
+    dataUser = await supabase
+        .from('vw_dispositivos_usuarios')
+        .select()
+        .eq('mac', macDevice)
+        .single();
+
+      _carregaDadosPessoa(tipo: dataUser['tipo_externo'], idPessoa: dataUser['pessoa_id']);
+    }
+
+  String _pegaImagem(String tipo) {
+    if (tipo == 'Crachá'){
+      return 'cracha.png';
+    } else if (tipo == 'Pulseira'){
+      return 'pulseira.png';
+    }else {
+      return 'etiqueta.png';
+    }
+  }
+
+  Future<Column> _getDataVinculation() async {
+    Map<String, dynamic> dataVinc = await supabase
+        .from('dispositivo_pessoa')
+        .select()
+        .eq('', dataUser[])
+        .single();
+    return Column(
+      children: [
+        textoFormatado('Início', listDevices[index].tag!, alinhamento: TextAlign.start),
+        textoFormatado('Fim', listDevices[index].tag!, alinhamento: TextAlign.start),
+      ],
+    );
   }
 }
 
 class SearchDetails extends StatefulWidget {
   Externo? paciente;
   var selecionado;
+
   SearchDetails({
     super.key,
     required this.selecionado,
     this.paciente,
   });
-
-
 
   @override
   State<SearchDetails> createState() => _SearchDetailsState();
@@ -318,7 +388,8 @@ class _SearchDetailsState extends State<SearchDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Pessoa Selecionada')),
-      body: Center(
+      body:
+      Center(
         child: Hero(
           tag: 'ListTile-Pesquisa',
           child: Material(

@@ -3,14 +3,14 @@ import 'package:projeto_ble_renew/model/equipamento.dart';
 import '../../util/constants.dart';
 import '../forms/equipment.dart';
 
-
 class ListaCadastroEquipamento extends StatefulWidget {
   final String tipoCadastro;
 
   const ListaCadastroEquipamento({super.key, required this.tipoCadastro});
 
   @override
-  State<ListaCadastroEquipamento> createState() => _ListaCadastroEquipamentoState();
+  State<ListaCadastroEquipamento> createState() =>
+      _ListaCadastroEquipamentoState();
 }
 
 class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
@@ -48,10 +48,9 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                           final Equipamento equipamento = items[index];
                           return ListTile(
                               title: Text(equipamento.descricao),
-                              subtitle:
-                                  Text(equipamento.codigo),
-                              leading:
-                                  const Icon(Icons.devices_other_outlined, size: 56),
+                              subtitle: Text(equipamento.codigo),
+                              leading: const Icon(Icons.devices_other_outlined,
+                                  size: 56),
                               onTap: () {},
                               trailing: PopupMenuButton<bool>(
                                 onSelected: (value) async {
@@ -59,7 +58,8 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (contextNew) => FormCadastroEquipamento(
+                                        builder: (contextNew) =>
+                                            FormCadastroEquipamento(
                                           equipamentoContext: context,
                                           equipamentoEdit: equipamento,
                                           tipoCadastro: widget.tipoCadastro,
@@ -120,21 +120,7 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                         },
                       );
                     }
-                    return const Center(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 96,
-                        ),
-                        Text(
-                          'Não há nenhum dado.',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ],
-                    ));
+                    return noData();
                   }
                   return const Text('Erro ao carregar dados');
               }
@@ -150,7 +136,16 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
                   equipamentoContext: context,
                   tipoCadastro: widget.tipoCadastro),
             ),
-          ).then((value) => setState(() {}));
+          ).then((value) {
+            if (value != null) {
+              (value == true)
+                  ? showSnackBarDefault(context)
+                  : showSnackBarDefault(context,
+                      message: "Houve uma falha ao registar.");
+              setState(() {});
+              _refresh();
+            }
+          });
         },
         label: const Text(
           'ADICIONAR',
@@ -159,5 +154,10 @@ class _ListaCadastroEquipamentoState extends State<ListaCadastroEquipamento> {
         icon: const Icon(Icons.person_add),
       ),
     );
+  }
+
+  Future<List<Equipamento>> _refresh() async {
+    setState(() {});
+    return EquipamentoDao().findAll();
   }
 }
