@@ -11,10 +11,16 @@ class MenuAlarme extends StatefulWidget {
 }
 
 class _MenuAlarmeState extends State<MenuAlarme> {
+
+  final _stream = supabase.from('vw_registro_alarmes').stream(primaryKey: ['id']);
+  final _stream2 = supabase.from('registro_movimentacao').stream(primaryKey: ['id']);
+
+
   @override
   Widget build(BuildContext context) {
     var stream = StreamBuilder(
-        stream: supabase.from('vw_registro_alarmes').select().asStream(),
+        //stream: supabase.from('vw_registro_alarmes').select().asStream(),
+        stream: _stream2,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -40,8 +46,10 @@ class _MenuAlarmeState extends State<MenuAlarme> {
                       }
 
                       var item = alarmes[index];
+                      print(item['id'].toString());
+                      print(item['data_hora'].toString());
                       return AlarmeListTile(alarme: item);
-                      //return Text(item['codigo']);/
+                      //return Text(item['id'].toString());//fazer triggrs
                     },
                   ),
                 );
