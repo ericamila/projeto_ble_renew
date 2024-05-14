@@ -11,36 +11,68 @@ class MenuAlarme extends StatefulWidget {
 }
 
 class _MenuAlarmeState extends State<MenuAlarme> {
-  Future<List<Map<String, dynamic>>> _instanceDB() async {
-    return await supabase.from('vw_registro_alarmes').select();
-  }
+
+  final _stream = supabase.from('vw_registro_alarmes').stream(primaryKey: ['id']);
+  final _stream2 = supabase.from('registro_movimentacao').stream(primaryKey: ['id']);
+
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(//colocar backgoorund
-        constraints: const BoxConstraints(
-          maxWidth: 600.0,
-        ),
-        padding: const EdgeInsets.only(top: 20),
-        child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: _instanceDB(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
-            }
-            final alarmes = snapshot.data!;
-            if (alarmes.isEmpty) {
-              return noData();
-            }
-            return ListView.builder(
-              itemCount: alarmes.length,
-              itemBuilder: ((context, index) {
-                final alarme = alarmes[index];
-                return AlarmeListTile(alarme: alarme);
-              }),
-            );
-          },
+    var stream = StreamBuilder(
+        //stream: supabase.from('vw_registro_alarmes').select().asStream(),
+        stream: _stream2,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return const Expanded(child: Center(child: CircularProgressIndicator()));
+            case ConnectionState.active:
+            case ConnectionState.done:
+              var querySnapshot = snapshot.data;
+
+              if (snapshot.hasError) {
+                return const Expanded(child: Text("Erro ao carregar dados!"));
+              } else {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: querySnapshot?.length,
+                    itemBuilder: (context, index) {
+
+                      List<Map<String, dynamic>> alarmes =
+                          querySnapshot!.toList();
+
+                      if (alarmes.isEmpty) {
+                        return noData();
+                      }
+
+                      var item = alarmes[index];
+                      print(item['id'].toString());
+                      print(item['data_hora'].toString());
+                      return AlarmeListTile(alarme: item);
+                      //return Text(item['id'].toString());//fazer triggrs
+                    },
+                  ),
+                );
+              }
+          }
+        });
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('images/web_hi_res_512.png'),
+            fit: BoxFit.cover,
+            opacity: 0.2),
+      ),
+      child: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              stream,
+            ],
+          ),
         ),
       ),
     );

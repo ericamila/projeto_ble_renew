@@ -234,11 +234,28 @@ SELECT UPPER(pessoa_fisica.nome) AS nome,
     dispositivo.tag,
     dispositivo_pessoa.id,
     pessoa_fisica.id as pessoa_id, 
-    pessoa_fisica.tipo_externo
+    pessoa_fisica.tipo_externo,
+    dispositivo_pessoa.data_time_inicio
 FROM dispositivo_pessoa
 JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
 JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id
 WHERE dispositivo_pessoa.vinculado = 'TRUE';
+````
+
+#### Visão vw_dispositivos_usuarios_all
+````sql
+CREATE VIEW public.vw_dispositivos_usuarios_all AS
+SELECT UPPER(pessoa_fisica.nome) AS nome,
+    dispositivo.mac,
+    dispositivo.tipo,
+    dispositivo.tag,
+    dispositivo_pessoa.id,
+    pessoa_fisica.id as pessoa_id, 
+    pessoa_fisica.tipo_externo,
+    dispositivo_pessoa.data_time_inicio
+FROM dispositivo_pessoa
+JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
+JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id;
 ````
 
 #### Visão vw_registro_alarmes
@@ -255,7 +272,8 @@ FROM registro_movimentacao
     LEFT JOIN dispositivo_pessoa ON dispositivo_pessoa.dispositivo_id = dispositivo.id
     LEFT JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
 WHERE data_hora BETWEEN  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim
-    OR data_hora >=  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim IS NULL;
+    OR data_hora >=  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim IS NULL
+    AND codigo != 'null';
 ````
 #### Visão vw_dispositivos_livres
 ````sql
