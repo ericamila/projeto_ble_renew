@@ -12,15 +12,14 @@ class MenuAlarme extends StatefulWidget {
 
 class _MenuAlarmeState extends State<MenuAlarme> {
 
-  final _stream = supabase.from('vw_registro_alarmes').stream(primaryKey: ['id']);
+  final _stream = supabase.from('tb_registro_alarmes_new').stream(primaryKey: ['id']).eq('closed', 'false');
   final _stream2 = supabase.from('registro_movimentacao').stream(primaryKey: ['id']);
 
 
   @override
   Widget build(BuildContext context) {
     var stream = StreamBuilder(
-        //stream: supabase.from('vw_registro_alarmes').select().asStream(),
-        stream: _stream2,
+        stream: _stream,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:

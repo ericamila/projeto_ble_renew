@@ -27,14 +27,17 @@
 
 ## TO DO
 
+- [ ] MAPA ou equivalente
+- [ ] Tratamento dos alarmes
+- [ ] Notificações dos alarmes
 - [x] Terminar hero da pesquisa exibir usuario se vinculado   
 - [x] View para os heros
-- [ ] Exibir informações do ble no hero (tag, data/hora entrada e saída)
+- [x] Exibir informações do ble no hero (tag, data/hora entrada e saída)
 - [ ] Verificar rotas ao voltar (Scan Blue)   
 - [ ] Trigger para dispositivo ficar true ao vincular
 - [ ] Dispositivos ativos não devem aparecer na lista de vincular
 - [ ] Criar opção de DESVINCULAR dispositivo  
-- [ ] Regras de negócio para usuário e dispositivo único  
+- [x] Regras de negócio para usuário e dispositivo único  
 - [ ] Mapa com RFID ou lista   
 - [x] Ajustar layout para desktop +/-
 - [ ] Verificar as deleções   
@@ -44,14 +47,14 @@
 - [ ] trigger para update em pessoa_fisica e delete
 - [X] Atualizar documentação
 - [ ] View para os alarmes (falta ação do banco)
-- [ ] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
+- [x] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
 - [ ] Verificar coluna area_id de pessoa_fisica
 - [ ] corrigir busca do externo no pesquisa.dart ??? Não lembro :(
 - [x] Atualizar funcionário/equipamento após inserir
 - [x] Mensagem de falha ao inserir paciente
 - [ ] No listar dispositivo, incluir opção de editar
 - [x] Ajustar padrão do ScaffoldMessenger
-- QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
+- [ ] QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
 
 
 
@@ -261,6 +264,24 @@ JOIN dispositivo ON dispositivo_pessoa.dispositivo_id = dispositivo.id;
 #### Visão vw_registro_alarmes
 ````sql
 CREATE OR REPLACE VIEW vw_registro_alarmes AS
+SELECT  registro_movimentacao.id, data_hora, codigo, alarmes.descricao AS alarme,
+    tag, tipo, dispositivo.status,dispositivo.mac, area.descricao AS area,
+    pessoa_fisica.nome, pessoa_fisica.tipo_externo, pessoa_fisica.id as id_pessoa
+FROM registro_movimentacao
+    LEFT JOIN alarmes ON alarmes.id = registro_movimentacao.alarme_id
+    LEFT JOIN raspberry ON raspberry.id = registro_movimentacao.raspberry_id
+    LEFT JOIN area ON area.id = raspberry.area_id
+    LEFT JOIN dispositivo ON dispositivo.id = registro_movimentacao.dispositivo_id
+    LEFT JOIN dispositivo_pessoa ON dispositivo_pessoa.dispositivo_id = dispositivo.id
+    LEFT JOIN pessoa_fisica ON dispositivo_pessoa.pessoa_id = pessoa_fisica.id
+WHERE data_hora BETWEEN  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim
+    OR data_hora >=  dispositivo_pessoa.data_time_inicio AND dispositivo_pessoa.data_time_fim IS NULL
+    AND codigo != 'null';
+````
+
+#### Visão vw_registro_alarmes xxxxxx
+````sql
+CREATE MATERIALIZED VIEW vw_registro_alarmes_table AS
 SELECT  registro_movimentacao.id, data_hora, codigo, alarmes.descricao AS alarme,
     tag, tipo, dispositivo.status,dispositivo.mac, area.descricao AS area,
     pessoa_fisica.nome, pessoa_fisica.tipo_externo, pessoa_fisica.id as id_pessoa
