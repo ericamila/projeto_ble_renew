@@ -157,8 +157,8 @@ Image imagemLogo() {
   );
 }
 
-Center noData({String msg = 'Dados não encontrados!'}) {
-  return Center(
+Expanded noData({String msg = 'Dados não encontrados!'}) {
+  return Expanded(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,

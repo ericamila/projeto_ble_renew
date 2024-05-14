@@ -13,8 +13,6 @@ class MenuAlarme extends StatefulWidget {
 class _MenuAlarmeState extends State<MenuAlarme> {
 
   final _stream = supabase.from('tb_registro_alarmes_new').stream(primaryKey: ['id']).eq('closed', 'false');
-  final _stream2 = supabase.from('registro_movimentacao').stream(primaryKey: ['id']);
-
 
   @override
   Widget build(BuildContext context) {
@@ -24,29 +22,32 @@ class _MenuAlarmeState extends State<MenuAlarme> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return const Expanded(child: Center(child: CircularProgressIndicator()));
+              return const Expanded(child: Center(child: carregando));
             case ConnectionState.active:
             case ConnectionState.done:
               var querySnapshot = snapshot.data;
+
+              if (querySnapshot!.isEmpty){
+                return noData();
+              }
 
               if (snapshot.hasError) {
                 return const Expanded(child: Text("Erro ao carregar dados!"));
               } else {
                 return Expanded(
                   child: ListView.builder(
-                    itemCount: querySnapshot?.length,
+                    itemCount: querySnapshot.length,
                     itemBuilder: (context, index) {
 
                       List<Map<String, dynamic>> alarmes =
-                          querySnapshot!.toList();
+                          querySnapshot.toList();
 
                       if (alarmes.isEmpty) {
                         return noData();
                       }
 
                       var item = alarmes[index];
-                      print(item['id'].toString());
-                      print(item['data_hora'].toString());
+
                       return AlarmeListTile(alarme: item);
                       //return Text(item['id'].toString());//fazer triggrs
                     },
@@ -62,7 +63,7 @@ class _MenuAlarmeState extends State<MenuAlarme> {
         image: DecorationImage(
             image: AssetImage('images/web_hi_res_512.png'),
             fit: BoxFit.cover,
-            opacity: 0.2),
+            opacity: 0.10),
       ),
       child: SafeArea(
         child: Container(

@@ -4,7 +4,7 @@ import 'package:projeto_ble_renew/pages/occurrence_alarm.dart';
 
 import '../util/constants.dart';
 
-class AlarmeListTile extends StatelessWidget {
+class AlarmeListTile extends StatefulWidget {
   final Map<String, dynamic> alarme;
 
   const AlarmeListTile({
@@ -12,6 +12,11 @@ class AlarmeListTile extends StatelessWidget {
     required this.alarme,
   });
 
+  @override
+  State<AlarmeListTile> createState() => _AlarmeListTileState();
+}
+
+class _AlarmeListTileState extends State<AlarmeListTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,17 +27,18 @@ class AlarmeListTile extends StatelessWidget {
           leading: const Icon(Icons.notifications_active),
           trailing: const Icon(Icons.arrow_forward_ios_outlined),
           title: Text(
-            '${DateTime.parse(alarme['data_hora']).formatBrazilianDate} - '
-            '${DateTime.parse(alarme['data_hora']).formatBrazilianTime}',
+            '${DateTime.parse(widget.alarme['data_hora']).formatBrazilianDate} - '
+            '${DateTime.parse(widget.alarme['data_hora']).formatBrazilianTime}',
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           subtitle: RichText(
             text: TextSpan(
-              text: '${alarme['codigo']} - ${alarme['alarme']} ',
+              text: '${widget.alarme['codigo']} - ${widget.alarme['alarme']} ',
               style: DefaultTextStyle.of(context).style,
               children: <TextSpan>[
-                TextSpan(text: '\n${alarme['area']}', style: respostaPerfil),
-                TextSpan(text: '\n${alarme['nome']}'),
+                TextSpan(
+                    text: '\n${widget.alarme['area']}', style: respostaPerfil),
+                TextSpan(text: '\n${widget.alarme['nome']}'),
               ],
             ),
           ),
@@ -40,7 +46,9 @@ class AlarmeListTile extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => OcurrenceAlarme(alarme: alarme,)));
+                    builder: (context) => OcurrenceAlarme(
+                          alarme: widget.alarme,
+                        )));
           }, //terminar
         ),
       ),
