@@ -104,27 +104,36 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _recuperarDadosUsuario() async {
-    id = LoggedUser.userLogado!.id;
-    nome = LoggedUser.usuarioLogado!.nome;
-    email = LoggedUser.userLogado!.email!;
-    status = (LoggedUser.userLogado!.aud == 'authenticated'? 'Autenticado': 'Não Autenticado');
-    cargo = (await LoggedUser.pegaCargo())!;
-    acess = DateTime.parse(LoggedUser.userLogado!.lastSignInAt.toString());
+    debugPrint('${LoggedUser.userLogado?.id}');
+    debugPrint(LoggedUser.usuarioLogado?.id);
 
+    if (LoggedUser.usuarioLogado?.id == null) {
+      await supabase.auth.signOut();
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/login');
 
-    if (LoggedUser.usuarioLogado?.foto != null) {
-      setState(() {
-        _urlImagemRecuperada = LoggedUser.usuarioLogado?.foto;
-      });
+    } else {
+      id = LoggedUser.usuarioLogado!.id!;
+      nome = LoggedUser.usuarioLogado!.nome;
+      email = LoggedUser.userLogado!.email!;
+      status = (LoggedUser.userLogado!.aud == 'authenticated'
+          ? 'Autenticado'
+          : 'Não Autenticado');
+      cargo = (await LoggedUser.pegaCargo())!;
+      acess = DateTime.parse(LoggedUser.userLogado!.lastSignInAt.toString());
+
+      if (LoggedUser.usuarioLogado?.foto != null) {
+        setState(() {
+          _urlImagemRecuperada = LoggedUser.usuarioLogado?.foto;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Perfil")
-      ),
+      appBar: AppBar(title: const Text("Perfil")),
       body: (cargo == '')
           ? carregando
           : SingleChildScrollView(
@@ -149,7 +158,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     backgroundImage: (_urlImagemRecuperada !=
                                             null)
                                         ? NetworkImage(_urlImagemRecuperada!)
-                                        : const NetworkImage(imagemPadraoNetwork),
+                                        : const NetworkImage(
+                                            imagemPadraoNetwork),
                                   ),
                                 ),
                                 Positioned(
@@ -201,7 +211,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const TextSpan(
                                     text: '\n\nÚltimo acesso: ',
                                     style: textoPerfil),
-                                TextSpan(text: acess.formatBrazilianDate, style: respostaPerfil),
+                                TextSpan(
+                                    text: acess.formatBrazilianDate,
+                                    style: respostaPerfil),
                                 const TextSpan(
                                     text: '\n\nCargo: ', style: textoPerfil),
                                 TextSpan(text: cargo, style: respostaPerfil),

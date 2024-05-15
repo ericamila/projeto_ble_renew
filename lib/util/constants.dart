@@ -175,3 +175,7 @@ Expanded noData({String msg = 'Dados não encontrados!'}) {
     ),
   );
 }
+
+String statusTranslate({required bool status}){
+    return (status)?'Conectado':'Desconectado';
+}

@@ -193,7 +193,6 @@ class _FormUsuarioState extends State<FormUsuario> {
                       Funcionario funcionario = await FuncionarioDao()
                           .findID(dropNomeFuncionarioValue.value);
                       String? uid = await signUp();
-                      debugPrint('no botao $uid');
                       try {
                         _salvar(funcionario, uid);
                         ScaffoldMessenger.of(context).showSnackBar(

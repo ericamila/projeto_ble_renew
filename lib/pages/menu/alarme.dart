@@ -49,7 +49,6 @@ class _MenuAlarmeState extends State<MenuAlarme> {
                       var item = alarmes[index];
 
                       return AlarmeListTile(alarme: item);
-                      //return Text(item['id'].toString());//fazer triggrs
                     },
                   ),
                 );
@@ -63,7 +62,7 @@ class _MenuAlarmeState extends State<MenuAlarme> {
         image: DecorationImage(
             image: AssetImage('images/web_hi_res_512.png'),
             fit: BoxFit.cover,
-            opacity: 0.10),
+            opacity: 0.06),
       ),
       child: SafeArea(
         child: Container(

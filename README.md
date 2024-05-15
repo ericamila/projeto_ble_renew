@@ -28,6 +28,9 @@
 ## TO DO
 
 - [ ] MAPA ou equivalente
+- [ ] Coleta foto e dados de irregularidade e os envia para SWCentral
+- [ ] Mapa de localização de um TAG específico
+- [ ] Mapa de localização os TAGs no hospital (com recurso de zoom in/out)
 - [x] Tratamento dos alarmes
 - [ ] Notificações dos alarmes(PUSH)
 - [x] Terminar hero da pesquisa exibir usuario se vinculado   
@@ -46,15 +49,16 @@
 - [x] Cadastro de usuario no auth 
 - [ ] trigger para update em pessoa_fisica e delete
 - [X] Atualizar documentação
-- [ ] View para os alarmes (falta ação do banco)
+- [x] View para os alarmes 
 - [x] Vincular dispositivo: Não exibir pessoa/dispositivo vinculado na busca
-- [ ] Verificar coluna area_id de pessoa_fisica
+- [x] Verificar coluna area_id de pessoa_fisica (excluir)
 - [ ] corrigir busca do externo no pesquisa.dart ??? Não lembro :(
 - [x] Atualizar funcionário/equipamento após inserir
 - [x] Mensagem de falha ao inserir paciente
 - [ ] No listar dispositivo, incluir opção de editar
 - [x] Ajustar padrão do ScaffoldMessenger
 - [ ] QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
+- [ ] Dispose no menu Pesquisa
 
 
 

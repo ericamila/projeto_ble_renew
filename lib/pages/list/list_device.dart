@@ -40,7 +40,7 @@ class _ListarDispositivosState extends State<ListarDispositivos> {
                       ? Icons.bluetooth
                       : Icons.bluetooth_disabled,
                   text: 'TAG: ${dispositivo.tag} - Tipo: ${dispositivo.tipo}'
-                      '\nMAC: ${dispositivo.mac} \nStatus: ${dispositivo.status}',
+                      '\nMAC: ${dispositivo.mac} \nStatus: ${statusTranslate(status: dispositivo.status!)}',
                 );
               }),
             );
