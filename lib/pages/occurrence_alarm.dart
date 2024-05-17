@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/extensions.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
@@ -116,7 +115,7 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                         }));
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: Colors.blueGrey.shade100,
                     ),
@@ -143,8 +142,9 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                             : showSnackBarDefault(context,
                                 message: "Houve uma falha ao registar.");
                         //verificar se retorna para home
-                        if (value == true)
+                        if (value == true) {
                           Navigator.pushReplacementNamed(context, '/home');
+                        }
                       });
                     }
                   },

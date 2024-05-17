@@ -93,7 +93,7 @@ class _FotoAlarmeState extends State<FotoAlarme> {
           itemBuilder: (BuildContext context, int index) {
             final String? mime = lookupMimeType(_mediaFileList![index].path);
             print(_mediaFileList![index].path);
-            Salvar e pop
+           // Salvar e pop
             // Why network for web?
             // See https://pub.dev/packages/image_picker_for_web#limitations-on-the-web-platform
             return Semantics(
