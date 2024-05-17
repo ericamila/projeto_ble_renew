@@ -81,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _atualizarUrlImagemFirestore(String url) async {
     try {
-      await supabase.from('usuario').update({'foto': url}).match({'uid': id});
+      await supabase.from('usuario').update({'foto': url}).match({'id': id});
     } on StorageException catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -115,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       id = LoggedUser.usuarioLogado!.id!;
       nome = LoggedUser.usuarioLogado!.nome;
-      email = LoggedUser.userLogado!.email!;
+      email = LoggedUser.usuarioLogado!.email;
       status = (LoggedUser.userLogado!.aud == 'authenticated'
           ? 'Autenticado'
           : 'Não Autenticado');

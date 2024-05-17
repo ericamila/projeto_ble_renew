@@ -38,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
       LoggedUser.usuarioLogado = await UsuarioDao().findUUID(
           LoggedUser.currentUserID!.user!.userMetadata!['sub'].toString());
 
+      LoggedUser.userLogado = supabase.auth.currentUser;
+
       Navigator.pushReplacementNamed(context, '/home');
     } on AuthException catch (e) {
       debugPrint(e.message);

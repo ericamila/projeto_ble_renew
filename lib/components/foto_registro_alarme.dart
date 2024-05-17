@@ -79,18 +79,21 @@ class _FotoAlarmeState extends State<FotoAlarme> {
   }
 
   Widget _previewImages() {
+    print('_previewImages');
     final Text? retrieveError = _getRetrieveErrorWidget();
     if (retrieveError != null) {
       return retrieveError;
     }
     if (_mediaFileList != null) {
+
       return Semantics(
         label: 'image_picker_example_picked_images',
         child: ListView.builder(
           key: UniqueKey(),
           itemBuilder: (BuildContext context, int index) {
             final String? mime = lookupMimeType(_mediaFileList![index].path);
-
+            print(_mediaFileList![index].path);
+            Salvar e pop
             // Why network for web?
             // See https://pub.dev/packages/image_picker_for_web#limitations-on-the-web-platform
             return Semantics(

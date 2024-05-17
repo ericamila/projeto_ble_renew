@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/components/extensions.dart';
 import 'package:projeto_ble_renew/model/funcionario.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
 
+import '../components/foto_registro_alarme.dart';
 import '../model/externo.dart';
 import '../util/banco.dart';
 
@@ -21,6 +23,8 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
   String _image = imagemPadraoNetwork;
   final TextEditingController _detailsController = TextEditingController();
   final _formKeyT = GlobalKey<FormState>();
+  String foto = '';
+  Color corFoto = Colors.black87;
 
   final MaterialStateProperty<Icon?> thumbIcon =
       MaterialStateProperty.resolveWith<Icon?>(
@@ -39,15 +43,14 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
     super.initState();
   }
 
-  void _updateDetails (){
-    if(widget.alarme['descricao'] != null){
+  void _updateDetails() {
+    if (widget.alarme['descricao'] != null) {
       _detailsController.text = widget.alarme['descricao'];
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    //_updateImage();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ocorrência'),
@@ -101,6 +104,36 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                     ),
                   ),
                 ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FotoAlarme(),
+                        )).then((value) => setState(() {
+                          foto = 'foto.png';
+                          corFoto = Colors.blueAccent;
+                        }));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey.shade100,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Anexar foto: (opcional)'),
+                        Text(foto),
+                        Icon(
+                          Icons.attach_file,
+                          color: corFoto,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                space,
                 FilledButton(
                   onPressed: () {
                     if (_formKeyT.currentState!.validate()) {
@@ -110,7 +143,8 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                             : showSnackBarDefault(context,
                                 message: "Houve uma falha ao registar.");
                         //verificar se retorna para home
-                        if (value == true) Navigator.pushReplacementNamed(context, '/home');
+                        if (value == true)
+                          Navigator.pushReplacementNamed(context, '/home');
                       });
                     }
                   },
