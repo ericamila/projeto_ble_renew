@@ -10,6 +10,8 @@ const String imagemPadraoNetwork =
     'https://cavikcnsdlhepwnlucge.supabase.co/storage/v1/object/public/profile/nophoto.png';
 final Image imagemPadrao = Image.asset(imagemPadraoAsset, height: 250);
 
+const String mapa = 'images/planta_baixa_zero.jpg';
+
 const space = Padding(padding: EdgeInsets.all(8));
 const spaceMenor = Padding(padding: EdgeInsets.all(4));
 const nada = Padding(padding: EdgeInsets.all(0));
@@ -33,10 +35,12 @@ const TextStyle textoPerfil = TextStyle(
     color: Colors.black54,
     fontSize: 16,
     height: 1.3);
+
 const TextStyle respostaPerfil =
     TextStyle(fontWeight: FontWeight.bold, color: verdeBotao, fontSize: 18);
 
 const sizeFontToggleButtons = 15.0;
+const TextStyle styleToggleButtons = TextStyle(fontSize: 15);
 
 const carregando = Center(
   child: Column(
