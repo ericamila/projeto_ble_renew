@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
-
+import 'dart:math' as math;
 import '../../model/device_person.dart';
 import '../../model/dispositivo.dart';
 import '../../model/pessoa.dart';
@@ -104,7 +104,7 @@ class _MenuMapaState extends State<MenuMapa> {
                                         size: 24,
                                       ),
                                       Text(listVinculos[index].tag),
-                                      Text('Destino: '),
+                                      const Text('Destino: '),
                                     ],
                                   ),
                                 ));
@@ -146,23 +146,30 @@ class _MenuMapaState extends State<MenuMapa> {
                         Center(
                           child: Image.asset(mapa),
                         ),
-                        const Positioned(
-                          left: 180,
-                          top: 320,
-                          child: Icon(Icons.person_pin_circle,
+                        //ListenableBuilder(listenable: listenable, builder: builder),
+                        Positioned(
+                          left: 0,
+                          top: h * .37,
+                          child: const Icon(Icons.person_pin_circle,
                               color: Colors.red, size: 24),
                         ),
                         const Positioned(
-                          left: 140,
-                          top: 220,
+                          left: 0,
+                          top: 0,
                           child: Icon(Icons.person_pin_circle,
                               color: Colors.amber, size: 24),
                         ),
-                        const Positioned(
-                          left: 150,
-                          top: 320,
-                          child: Icon(Icons.person_pin_circle,
+                        Positioned(
+                          left: w * .93,
+                          top: h * .37,
+                          child: const Icon(Icons.person_pin_circle,
                               color: Colors.blueAccent, size: 24),
+                        ),
+                        Positioned(
+                          left: w * .93,
+                          top: 0,
+                          child: const Icon(Icons.person_pin_circle,
+                              color: Colors.green, size: 24),
                         ),
                       ],
                     ),
@@ -204,9 +211,11 @@ class _MenuMapaState extends State<MenuMapa> {
   Color _getColor(String param) {
     switch (param) {
       case 'Pulseira':
-        return Colors.red;
+        return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+            .withOpacity(1.0);
       case 'Crachá':
-        return Colors.blueAccent;
+        return Color((math.Random().nextDouble() * 0xff72d89c).toInt())
+            .withOpacity(1.0);
       case 'Etiqueta':
         return Colors.amber;
       default:
