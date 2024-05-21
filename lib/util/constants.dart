@@ -1,8 +1,9 @@
-import 'dart:io';
-
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'app_cores.dart';
+
+
 
 final ImagePicker picker = ImagePicker();
 const String imagemPadraoAsset = 'images/nophoto.png';
@@ -182,4 +183,9 @@ Expanded noData({String msg = 'Dados não encontrados!'}) {
 
 String statusTranslate({required bool status}){
     return (status)?'Conectado':'Desconectado';
+}
+
+bool isDesktop(){
+  debugPrint(Platform.operatingSystem);
+  return (Platform.isWindows)? true: false;
 }

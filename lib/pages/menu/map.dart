@@ -139,41 +139,71 @@ class _MenuMapaState extends State<MenuMapa> {
                       ),
                     ),
                   )
-                : Center(
-                    //LOCALIZAÇÃO
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: Image.asset(mapa),
+                : (isDesktop())
+                    ? Center(
+                        //LOCALIZAÇÃO
+                        child: Container(
+                          constraints: BoxConstraints.expand(height: h * .65),
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(image: AssetImage(mapa))),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: w * .4,
+                                top: h * .37,
+                                child: const Icon(Icons.person_pin_circle,
+                                    color: Colors.red, size: 24),
+                              ),
+                            ],
+                          ),
                         ),
-                        //ListenableBuilder(listenable: listenable, builder: builder),
-                        Positioned(
-                          left: 0,
-                          top: h * .37,
-                          child: const Icon(Icons.person_pin_circle,
-                              color: Colors.red, size: 24),
+                      )
+                    : Center(//LOCALIZAÇÃO
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Image.asset(mapa),
+                            ),
+                            //ListenableBuilder(listenable: listenable, builder: builder),
+                            Positioned(
+                              left: 0,
+                              top: h * .37,
+                              child: const Icon(Icons.person_pin_circle,
+                                  color: Colors.red, size: 24),
+                            ),
+                            const Positioned(
+                              left: 0,
+                              top: 0,
+                              child: Icon(Icons.person_pin_circle,
+                                  color: Colors.amber, size: 24),
+                            ),
+                            Positioned(
+                              left: w,
+                              top: 0,
+                              child: const Icon(Icons.person_pin_circle,
+                                  color: Colors.amber, size: 24),
+                            ),
+                            Positioned(
+                              left: w * .93,
+                              top: h * .37,
+                              child: const Icon(Icons.person_pin_circle,
+                                  color: Colors.blueAccent, size: 24),
+                            ),
+                            Positioned(
+                              left: w * .93,
+                              top: 0,
+                              child: const Icon(Icons.person_pin_circle,
+                                  color: Colors.green, size: 24),
+                            ),
+                            Positioned(
+                              left: w,
+                              top: 5,
+                              child: const Icon(Icons.person_pin_circle,
+                                  color: Colors.amber, size: 24),
+                            ),
+                          ],
                         ),
-                        const Positioned(
-                          left: 0,
-                          top: 0,
-                          child: Icon(Icons.person_pin_circle,
-                              color: Colors.amber, size: 24),
-                        ),
-                        Positioned(
-                          left: w * .93,
-                          top: h * .37,
-                          child: const Icon(Icons.person_pin_circle,
-                              color: Colors.blueAccent, size: 24),
-                        ),
-                        Positioned(
-                          left: w * .93,
-                          top: 0,
-                          child: const Icon(Icons.person_pin_circle,
-                              color: Colors.green, size: 24),
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
             if (isSwitched[1]) //EXPLORATÓRIO
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

@@ -27,7 +27,7 @@
 
 ## TO DO
 
-- [ ] MAPA ou equivalente
+- [ ] MAPA ou equivalente DEIXAR JANELA MAXIMIZADA
 - [ ] Coleta foto e dados de irregularidade e os envia para SWCentral
 - [ ] Mapa de localização de um TAG específico
 - [ ] Mapa de localização os TAGs no hospital (com recurso de zoom in/out)
