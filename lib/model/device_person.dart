@@ -4,6 +4,7 @@ class DispUser {
   String tipo;
   String tag;
   int id;
+  int? area;
 
   DispUser({
     required this.nome,
@@ -11,6 +12,7 @@ class DispUser {
     required this.tipo,
     required this.tag,
     required this.id,
+    this.area
   });
 
   //receber do banco
@@ -19,7 +21,8 @@ class DispUser {
         mac = map["mac"],
         tipo = map["tipo"],
         tag = map["tag"],
-        id = map["id"];
+        id = map["id"],
+        area = map["area_id"];
 
   //MAPA PARA LISTA
   List<DispUser> toList(List<Map<String, dynamic>> mapa) {
@@ -31,6 +34,7 @@ class DispUser {
         tipo: linha[tipo],
         tag: linha[tag],
         id: linha[id.toString()],
+        area: linha[area.toString()],
       );
 
       vinculos.add(vinculo);

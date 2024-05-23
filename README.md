@@ -17,8 +17,8 @@
 
 ## ✔️ Técnicas e tecnologias utilizadas
 
-- ``Flutter 3.19.6``
-- ``Dart 3.3.4``
+- ``Flutter 3.22.0``
+- ``Dart 3.4.0``
 - ``Android Studio/Visual Studio Code``
 - ``Supabase(Postgres)``
 <p align="center">

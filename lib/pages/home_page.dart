@@ -5,7 +5,7 @@ import '../util/constants.dart';
 import 'drawer/drawer_list_user.dart';
 import 'drawer/drawer_profile.dart';
 import 'menu/device.dart';
-import 'menu/map.dart';
+import 'menu/mapx.dart';
 import 'menu/register.dart';
 import 'menu/search.dart';
 import '../components/drawer.dart';

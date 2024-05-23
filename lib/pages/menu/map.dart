@@ -141,7 +141,7 @@ class _MenuMapaState extends State<MenuMapa> {
                   )
                 : (isDesktop())
                     ? Center(
-                        //LOCALIZAÇÃO
+                        //LOCALIZAÇÃO DESKTOP
                         child: Container(
                           constraints: BoxConstraints.expand(height: h * .65),
                           decoration: const BoxDecoration(
@@ -158,7 +158,7 @@ class _MenuMapaState extends State<MenuMapa> {
                           ),
                         ),
                       )
-                    : Center(//LOCALIZAÇÃO
+                    : Center(//LOCALIZAÇÃO MOBILE
                         child: Stack(
                           children: [
                             Center(
@@ -167,9 +167,9 @@ class _MenuMapaState extends State<MenuMapa> {
                             //ListenableBuilder(listenable: listenable, builder: builder),
                             Positioned(
                               left: 0,
-                              top: h * .37,
+                              top: h * .38,
                               child: const Icon(Icons.person_pin_circle,
-                                  color: Colors.red, size: 24),
+                                  color: Colors.amber, size: 24),
                             ),
                             const Positioned(
                               left: 0,
@@ -178,8 +178,14 @@ class _MenuMapaState extends State<MenuMapa> {
                                   color: Colors.amber, size: 24),
                             ),
                             Positioned(
-                              left: w,
+                              left: w * .92,
                               top: 0,
+                              child: const Icon(Icons.person_pin_circle,
+                                  color: Colors.amber, size: 24),
+                            ),
+                            Positioned(
+                              left: w * .92,
+                              top: h* .38,
                               child: const Icon(Icons.person_pin_circle,
                                   color: Colors.amber, size: 24),
                             ),
