@@ -35,7 +35,7 @@ class _MapExplorerState extends State<MapExplorer> {
             child: Container(
               padding: const EdgeInsets.all(10.0),
               child: PhotoView(
-                imageProvider: const AssetImage(mapa),
+                imageProvider: const AssetImage(mapaExplorer),
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2.0,
                 backgroundDecoration: const BoxDecoration(

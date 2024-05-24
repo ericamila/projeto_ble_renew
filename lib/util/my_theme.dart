@@ -34,12 +34,12 @@ FilledButton
  */
   filledButtonTheme: FilledButtonThemeData(
     style: ButtonStyle(
-      minimumSize: MaterialStateProperty.all(const Size(300, 45)),
-      maximumSize: MaterialStateProperty.all(const Size(500, 60)),
-      padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-      textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 20)),
+      minimumSize: WidgetStateProperty.all(const Size(300, 45)),
+      maximumSize: WidgetStateProperty.all(const Size(500, 60)),
+      padding: WidgetStateProperty.all(const EdgeInsets.all(15)),
+      textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 20)),
       shape:
-          MaterialStateProperty.all<RoundedRectangleBorder>(borderRadiusPadrao),
+          WidgetStateProperty.all<RoundedRectangleBorder>(borderRadiusPadrao),
     ),
   ),
 /*

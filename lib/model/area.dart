@@ -1,19 +1,20 @@
+//1-8 e 14,15
 enum Area {
   recepcao(1, 'Recepção'),
   pediatria(2, 'Pediatria'),
   quarto1(3, 'Quarto 1'),
   quarto2(4, 'Quarto 2'),
   quarto3(5, 'Quarto 3'),
-  uti1(6, 'UTI 1'),
-  laboratorio01(7, 'Laboratório 01'),
-  laboratorio02(8, 'Laboratório 02'),
-  salaraiox(9, 'Sala de Raio-X'),
+  quarto4(6, 'Quarto 4'),
+  salaraiox(7, 'Sala de Raio-X'),
+  ortopedia(8, 'Ortopedia'),
+  laboratorio01(9, 'Laboratório 01'),
   emergencia(10, 'Emergência'),
   neurologia(11, 'Neurologia'),
   cardiologia(12, 'Cardiologia'),
-  ortopedia(13, 'Ortopedia'),
+  laboratorio02(13, 'Laboratório 02'),
   corredorprincipal(14, 'Corredor Principal'),
-  alainfantil(15, 'Ala Infantil');
+  banheiros(15, 'Banheiros');
 
   const Area(this.codigo, this.descricao);
   final int codigo;

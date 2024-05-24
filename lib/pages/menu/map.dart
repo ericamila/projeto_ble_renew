@@ -4,7 +4,6 @@ import 'package:projeto_ble_renew/util/constants.dart';
 import 'dart:math' as math;
 import '../../model/device_person.dart';
 import '../../model/dispositivo.dart';
-import '../../model/pessoa.dart';
 import '../../util/app_cores.dart';
 import '../../util/banco.dart';
 

@@ -59,6 +59,7 @@
 - [x] Ajustar padrão do ScaffoldMessenger
 - [ ] QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
 - [ ] Dispose no menu Pesquisa
+- Finalizar foto_registro_alarme.dart
 
 
 

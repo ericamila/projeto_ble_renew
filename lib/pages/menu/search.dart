@@ -441,7 +441,7 @@ class _SearchDetailsState extends State<SearchDetails> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        imagemClipRRect(widget.selecionado.foto ?? imagemPadraoNetwork),
+                        imagemClipRRect(widget.selecionado.foto ?? imagemPadraoNetwork),//ALTERAR
                         space,
                         textoFormatado('Nome', widget.selecionado!.nome),
                         space,

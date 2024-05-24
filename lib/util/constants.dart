@@ -4,15 +4,14 @@ import 'package:image_picker/image_picker.dart';
 import 'app_cores.dart';
 
 
-
-final ImagePicker picker = ImagePicker();
 const String imagemPadraoAsset = 'images/nophoto.png';
+const String mapa = 'images/planta_baixa_zero.jpg';
+const String mapaExplorer = 'images/planta_baixa.jpg';
 const String imagemPadraoNetwork =
     'https://cavikcnsdlhepwnlucge.supabase.co/storage/v1/object/public/profile/nophoto.png';
 final Image imagemPadrao = Image.asset(imagemPadraoAsset, height: 250);
 
-const String mapa = 'images/planta_baixa_zero.jpg';
-
+final ImagePicker picker = ImagePicker();
 const space = Padding(padding: EdgeInsets.all(8));
 const spaceMenor = Padding(padding: EdgeInsets.all(4));
 const nada = Padding(padding: EdgeInsets.all(0));

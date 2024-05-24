@@ -1,8 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import '../model/area.dart';
 import '../model/device_person.dart';
-import '../model/dispositivo.dart';
 import '../util/banco.dart';
 import '../util/constants.dart';
 
@@ -14,86 +14,160 @@ class MapLocale extends StatefulWidget {
 }
 
 class _MapLocaleState extends State<MapLocale> {
-
   late List<DispUser> listVinculos = [];
   List<Map<String, dynamic>> devLoc = [];
   final GlobalKey _imageKey = GlobalKey();
+  late Size _imageSize;
+  double min = 0;
+  double max = 0;
 
   @override
   void initState() {
     _carregaDados();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(_getImageSize);
+  }
+
+  void _getImageSize(Duration timeStamp) {
+    final RenderBox? renderBox = _imageKey.currentContext!.findRenderObject() as RenderBox?;
+    setState(() {
+      _imageSize = renderBox!.size;
+    });
+    print(_imageSize);
   }
 
   //Não estou considerando os funcionários
   void _carregaDados() async {
     List vinculosTemp = [];
     List dataDU = await supabase.from('vw_dispositivos_usuarios2').select();
+    vinculosTemp.addAll(dataDU);
     setState(() {
-      vinculosTemp.addAll(dataDU);
+
     });
     for (var i in vinculosTemp) {
       listVinculos.add(DispUser.fromMap(i));
       devLoc.add({
-        'cor': Colors.primaries[listVinculos.length % Colors.primaries.length],
+        'cor': Colors
+            .primaries[(listVinculos.length - 1) % Colors.primaries.length],
         'tag': listVinculos.last.tag,
         'destino': Area.getNomeById(listVinculos.last.area!),
-        'h': _heightDestination(listVinculos.last.area!),
-        'w': _widthDestination(listVinculos.last.area!),
+        'h': _heightDestination(listVinculos.last.area!),//trocar por localização
+        'w': _widthDestination(listVinculos.last.area!),//trocar por localização
       });
     }
-    print(devLoc);
+    //print(devLoc);
+  }
+
+  double _gerarCoordenada(double min, double max) {
+    //print('v a l o r ${min + Random().nextDouble() * (max + 1 - min)}');
+    return (min + Random().nextDouble() * (max + 1 - min));
   }
 
   _widthDestination(int destino) {
     switch (destino) {
-      case 1:
-        return 110.0;
-      case 2:
-        return 200.0;
-      case 3:
-        return 30.0;
-      case 4:
-        return 40.0;
-      case 5:
-        return 0.0;
-      case 6:
-        return 70.5;
-      case 7:
-        return 124.6;
-      case 8:
-        return 40.7;
-      case 9:
-        return 100.2;
+      case 1: //RECEPÇÃO
+        //MIN 200 MAX 330
+        min = 200.0;
+        max = 330.0;
+        return _gerarCoordenada(min, max);
+      case 2: //PEDIATRIA
+        //MIN 119 MAX 180
+        min = 119.0;
+        max = 180.0;
+        return _gerarCoordenada(min, max);
+      case 3: //QUARTO 1
+      case 4: //QUARTO 2
+      case 5: //QUARTO 3
+      case 6: //QUARTO 4
+        //MIN 0 MAX 68
+        min = 0.0;
+        max = 68.0;
+        return _gerarCoordenada(min, max);
+      case 7: //SALA DE RAIO-X
+        //MIN 110 MAX 210
+        min = 110.0;
+        max = 210.0;
+        return _gerarCoordenada(min, max);
+      case 8: //ORTOPEDIA
+        //MIN 253 MAX 330
+        min = 253.0;
+        max = 330.0;
+        return _gerarCoordenada(min, max);
+      case 14: //CORREDOR
+        //MIN 80 MAX 243
+        min = 80.0;
+        max = 243.0;
+        return _gerarCoordenada(min, max);
+      case 15: //BANHEIROS
+        //MIN 253 MAX 330
+        min = 253.0;
+        max = 330.0;
+        return _gerarCoordenada(min, max);
       default:
-        return 95.6;
+        //MIN 80 MAX 243
+        min = 80.0;
+        max = 243.0;
+        return _gerarCoordenada(min, max);
     }
   }
 
   _heightDestination(int destino) {
-//verificar com switch e gerar valor ran^dimico
-// gerar valor aleatorio com o limite de largura amx e min
     switch (destino) {
-      case 1:
-        return 110.0;
-      case 2:
-        return 120.0;
-      case 3:
-        return 230.0;
-      case 4:
-        return 140.0;
-      case 5:
-        return 0.0;
-      case 6:
-        return 170.5;
-      case 7:
-        return 124.6;
-      case 8:
-        return 340.7;
-      case 9:
-        return 100.2;
+      case 1: //RECEPÇÃO
+        //MIN 238 MAX 360
+        min = 238.0;
+        max = 360.0;
+        return _gerarCoordenada(min, max);
+      case 2: //PEDIATRIA
+        //MIN 280 MAX 360
+        min = 280.0;
+        max = 360.0;
+        return _gerarCoordenada(min, max);
+      case 3: //QUARTO 1
+        //MIN 95 MAX 148
+        min = 95.0;
+        max = 145.0;
+        return _gerarCoordenada(min, max);
+      case 4: //QUARTO 2
+        //MIN 165 MAX 221
+        min = 165.0;
+        max = 221.0;
+        return _gerarCoordenada(min, max);
+      case 5: //QUARTO 3
+        //MIN 240 MAX 293
+        min = 240.0;
+        max = 293.0;
+        return _gerarCoordenada(min, max);
+      case 6: //QUARTO 4
+        //MIN 312 MAX 360
+        min = 312.0;
+        max = 360.0;
+        return _gerarCoordenada(min, max);
+      case 7: //SALA DE RAIO-X
+        //MIN 177 MAX 226
+        min = 177.0;
+        max = 226.0;
+        return _gerarCoordenada(min, max);
+      case 8: //ORTOPEDIA
+        //MIN 95 MAX 171
+        min = 95.0;
+        max = 171.0;
+        return _gerarCoordenada(min, max);
+      case 14: //CORREDOR
+        //MIN 95 MAX 150
+        min = 95.0;
+        max = 150.0;
+        return _gerarCoordenada(min, max);
+      case 15: //BANHEIROS
+        //MIN 188 MAX 226
+        min = 188.0;
+        max = 226.0;
+        return _gerarCoordenada(min, max);
       default:
-        return 95.6;
+        //MIN 95 MAX 150
+        min = 95.0;
+        max = 150.0;
+        return _gerarCoordenada(min, max);
     }
   }
 
@@ -122,12 +196,17 @@ class _MapLocaleState extends State<MapLocale> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Icon(
-                                      Icons.person_pin_circle,
-                                      color: devLoc[index]['cor'] as Color,
-                                      size: 24,
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.person_pin_circle,
+                                          color: devLoc[index]['cor'] as Color,
+                                          size: 24,
+                                        ),
+                                        Text(devLoc[index]['tag']),
+                                      ],
                                     ),
-                                    Text(devLoc[index]['tag']),
                                     Text(
                                         'Destino: ${devLoc[index]['destino']}'),
                                   ],
@@ -142,14 +221,18 @@ class _MapLocaleState extends State<MapLocale> {
             key: _imageKey,
             child: Image.asset(mapa),
           ),
+          posicao(h: 480, w:350, color: Colors.red, locale: 'locale'),
           Stack(
             children: List.generate(devLoc.length, (index) {
               return Positioned(
                 left: devLoc[index]['w'],
                 top: devLoc[index]['h'],
-                child: Icon(Icons.person_pin_circle,
-                    color: Colors.primaries[index % Colors.primaries.length],
-                    size: 24),
+                child: InkWell(
+                  onTap: () =>  print(MediaQuery.of(context).size.height),
+                  child: Icon(Icons.person_pin_circle,
+                      color: Colors.primaries[index % Colors.primaries.length],
+                      size: 24),
+                ),
               );
             }),
           ),
