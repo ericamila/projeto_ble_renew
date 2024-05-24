@@ -178,8 +178,27 @@ class _MapLocaleState extends State<MapLocale> {
     return Scaffold(
       body: Stack(
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: h * .04),
+
+          Image.asset(mapa, key: _imageKey),
+          posicao(h: 303.0, w:340, color: Colors.red, locale: 'locale'),
+          posicao(h: 70, w:340, color: Colors.red, locale: 'locale'),
+          Stack(
+            children: List.generate(devLoc.length, (index) {
+              return Positioned(
+                left: devLoc[index]['w'],
+                top: devLoc[index]['h'],
+                child: InkWell(
+                  onTap: () =>  print(MediaQuery.of(context).size.height),
+                  child: Icon(Icons.person_pin_circle,
+                      color: Colors.primaries[index % Colors.primaries.length],
+                      size: 24),
+                ),
+              );
+            }),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 50),
+            alignment: Alignment.bottomCenter,
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               ElevatedButton(
                   onPressed: () {
@@ -190,11 +209,11 @@ class _MapLocaleState extends State<MapLocale> {
                               height: 200,
                               child: ListView.builder(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
+                                const EdgeInsets.symmetric(horizontal: 12),
                                 itemCount: devLoc.length,
                                 itemBuilder: (context, index) => Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -216,25 +235,6 @@ class _MapLocaleState extends State<MapLocale> {
                   },
                   child: const Text('Legenda')),
             ]),
-          ),
-          Center(
-            key: _imageKey,
-            child: Image.asset(mapa),
-          ),
-          posicao(h: 480, w:350, color: Colors.red, locale: 'locale'),
-          Stack(
-            children: List.generate(devLoc.length, (index) {
-              return Positioned(
-                left: devLoc[index]['w'],
-                top: devLoc[index]['h'],
-                child: InkWell(
-                  onTap: () =>  print(MediaQuery.of(context).size.height),
-                  child: Icon(Icons.person_pin_circle,
-                      color: Colors.primaries[index % Colors.primaries.length],
-                      size: 24),
-                ),
-              );
-            }),
           ),
         ],
       ),
