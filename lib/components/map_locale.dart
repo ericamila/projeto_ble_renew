@@ -115,58 +115,58 @@ class _MapLocaleState extends State<MapLocale> {
     switch (destino) {
       case 1: //RECEPÇÃO
         //MIN 238 MAX 360
-        min = 238.0;
-        max = 360.0;
+        min = 148.0;
+        max = 270.0;
         return _gerarCoordenada(min, max);
       case 2: //PEDIATRIA
         //MIN 280 MAX 360
-        min = 280.0;
-        max = 360.0;
+        min = 190.0;
+        max = 270.0;
         return _gerarCoordenada(min, max);
       case 3: //QUARTO 1
-        //MIN 95 MAX 148
-        min = 95.0;
-        max = 145.0;
+        //MIN 95 MAX 145
+        min = 05.0;
+        max = 055.0;
         return _gerarCoordenada(min, max);
       case 4: //QUARTO 2
         //MIN 165 MAX 221
-        min = 165.0;
-        max = 221.0;
+        min = 075.0;
+        max = 131.0;
         return _gerarCoordenada(min, max);
       case 5: //QUARTO 3
         //MIN 240 MAX 293
-        min = 240.0;
-        max = 293.0;
+        min = 150.0;
+        max = 203.0;
         return _gerarCoordenada(min, max);
       case 6: //QUARTO 4
         //MIN 312 MAX 360
-        min = 312.0;
-        max = 360.0;
+        min = 222.0;
+        max = 270.0;
         return _gerarCoordenada(min, max);
       case 7: //SALA DE RAIO-X
         //MIN 177 MAX 226
-        min = 177.0;
-        max = 226.0;
+        min = 087.0;
+        max = 136.0;
         return _gerarCoordenada(min, max);
       case 8: //ORTOPEDIA
         //MIN 95 MAX 171
-        min = 95.0;
-        max = 171.0;
+        min = 05.0;
+        max = 081.0;
         return _gerarCoordenada(min, max);
       case 14: //CORREDOR
         //MIN 95 MAX 150
-        min = 95.0;
-        max = 150.0;
+        min = 05.0;
+        max = 060.0;
         return _gerarCoordenada(min, max);
       case 15: //BANHEIROS
         //MIN 188 MAX 226
-        min = 188.0;
-        max = 226.0;
+        min = 098.0;
+        max = 136.0;
         return _gerarCoordenada(min, max);
-      default:
+      default://subtrai 90
         //MIN 95 MAX 150
-        min = 95.0;
-        max = 150.0;
+        min = 5.0;
+        max = 60.0;
         return _gerarCoordenada(min, max);
     }
   }
@@ -180,8 +180,8 @@ class _MapLocaleState extends State<MapLocale> {
         children: [
 
           Image.asset(mapa, key: _imageKey),
-          posicao(h: 303.0, w:340, color: Colors.red, locale: 'locale'),
-          posicao(h: 70, w:340, color: Colors.red, locale: 'locale'),
+          /*posicao(h: 303.0, w:340, color: Colors.red, locale: 'locale'),
+          posicao(h: 70, w:340, color: Colors.red, locale: 'locale'),*/
           Stack(
             children: List.generate(devLoc.length, (index) {
               return Positioned(
