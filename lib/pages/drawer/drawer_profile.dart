@@ -144,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 20),
-                        color: verde,
+                        color: AppColors.verde,
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

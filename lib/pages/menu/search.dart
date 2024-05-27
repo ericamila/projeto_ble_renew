@@ -67,8 +67,8 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pesquisa', style: TextStyle(color: escuro)),
-        backgroundColor: claro,
+        title: const Text('Pesquisa', style: TextStyle(color: AppColors.escuro)),
+        backgroundColor: AppColors.claro,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(215.0),
           child: Column(
@@ -262,7 +262,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                                                       listDevices[index].tipo
                                                           .toString())}',
                                                   height: 150,
-                                                  color: verdeBotao,)),
+                                                  color: AppColors.verdeBotao,)),
                                                 space,
                                                 (listDevices[index].nome != '')
                                                     ? Column(
@@ -348,7 +348,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
       case 0:
         return Colors.blueGrey[100];
       case 1:
-        return claro;
+        return AppColors.claro;
       default:
         return Colors.blueGrey[100 * (index + 1)];
     }

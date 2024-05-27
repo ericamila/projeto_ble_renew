@@ -21,8 +21,8 @@ const paddingPadraoFormulario = EdgeInsets.all(12.0);
 
 ButtonStyle estiloSearchButton = ElevatedButton.styleFrom(
     minimumSize: const Size(140, 43),
-    backgroundColor: verde,
-    foregroundColor: claro);
+    backgroundColor: AppColors.verde,
+    foregroundColor: AppColors.claro);
 
 ButtonStyle buttonPesquisa = ElevatedButton.styleFrom(
     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -37,7 +37,7 @@ const TextStyle textoPerfil = TextStyle(
     height: 1.3);
 
 const TextStyle respostaPerfil =
-    TextStyle(fontWeight: FontWeight.bold, color: verdeBotao, fontSize: 18);
+    TextStyle(fontWeight: FontWeight.bold, color: AppColors.verdeBotao, fontSize: 18);
 
 const sizeFontToggleButtons = 15.0;
 const TextStyle styleToggleButtons = TextStyle(fontSize: 15);
@@ -148,7 +148,7 @@ ListTile wifiOff({required String mensagem}) {
     ),
     title: Text(
       mensagem.toString(),
-      style: const TextStyle(color: claro),
+      style: const TextStyle(color: AppColors.claro),
     ),
   );
 }
@@ -157,7 +157,7 @@ Image imagemLogo() {
   return Image.asset(
     'images/codelink_alt.png',
     height: 96,
-    color: verde,
+    color: AppColors.verde,
   );
 }
 

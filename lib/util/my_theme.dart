@@ -4,10 +4,10 @@ import 'app_cores.dart';
 import 'constants.dart';
 
 const TextStyle estiloLabelCurvedBarItem =
-    TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: verde);
+    TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: AppColors.verde);
 
 const TextStyle estiloLabelRail =
-TextStyle(fontWeight: FontWeight.normal, fontSize: 15, color: claro);
+TextStyle(fontWeight: FontWeight.normal, fontSize: 15, color: AppColors.claro);
 
 final theme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
@@ -16,17 +16,17 @@ final theme = ThemeData(
 AppBar
  */
   appBarTheme: const AppBarTheme(
-      color: escuro,
+      color: AppColors.escuro,
       centerTitle: true,
-      foregroundColor: verde,
-      titleTextStyle: TextStyle(color: claro, fontSize: 22)),
+      foregroundColor: AppColors.verde,
+      titleTextStyle: TextStyle(color: AppColors.claro, fontSize: 22)),
 /*
 ElevatedButton
  */
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-        backgroundColor: verdeBotao,
-        foregroundColor: claro,
+        backgroundColor: AppColors.verdeBotao,
+        foregroundColor: AppColors.claro,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
   ),
 /*
@@ -46,11 +46,11 @@ FilledButton
 FloatingActionButton
  */
   floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: verdeBotao,
-      foregroundColor: claro,
+      backgroundColor: AppColors.verdeBotao,
+      foregroundColor: AppColors.claro,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
 /*
 Scaffold
  */
-  scaffoldBackgroundColor: claro,
+  scaffoldBackgroundColor: AppColors.claro,
 );

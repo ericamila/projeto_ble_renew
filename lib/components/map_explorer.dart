@@ -39,7 +39,7 @@ class _MapExplorerState extends State<MapExplorer> {
                 minScale: PhotoViewComputedScale.contained,
                 maxScale: PhotoViewComputedScale.covered * 2.0,
                 backgroundDecoration: const BoxDecoration(
-                  color: claro,
+                  color: AppColors.claro,
                 ),
                 loadingBuilder: (context, event) {
                   if (event == null) return const SizedBox();

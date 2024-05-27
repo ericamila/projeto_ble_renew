@@ -54,7 +54,7 @@ class Foto extends StatelessWidget {
               image: AssetImage(imagemPadraoAsset),
               fit: BoxFit.cover,
             ),
-            border: Border.all(width: 2.0, color: verdeBotao),
+            border: Border.all(width: 2.0, color: AppColors.verdeBotao),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: ClipRRect(

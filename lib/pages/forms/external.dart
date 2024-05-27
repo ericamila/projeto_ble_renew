@@ -295,7 +295,7 @@ class _FormCadastroExternoState extends State<FormCadastroExterno> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: verdeBotao,
+                            color: AppColors.verdeBotao,
                             fontSize: 18),
                       )
                     : nada,

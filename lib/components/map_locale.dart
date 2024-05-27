@@ -33,7 +33,7 @@ class _MapLocaleState extends State<MapLocale> {
     setState(() {
       _imageSize = renderBox!.size;
     });
-    print(_imageSize);
+    //print('_getImageSize $_imageSize');
   }
 
   //Não estou considerando os funcionários
@@ -41,9 +41,7 @@ class _MapLocaleState extends State<MapLocale> {
     List vinculosTemp = [];
     List dataDU = await supabase.from('vw_dispositivos_usuarios2').select();
     vinculosTemp.addAll(dataDU);
-    setState(() {
-
-    });
+    setState(() {});
     for (var i in vinculosTemp) {
       listVinculos.add(DispUser.fromMap(i));
       devLoc.add({
@@ -112,61 +110,66 @@ class _MapLocaleState extends State<MapLocale> {
   }
 
   _heightDestination(int destino) {
+    bool isMobile = (_imageSize.height < 400);
+    double add = isMobile ? 55.0 : 70.0;
+    double fator = _imageSize.height * (isMobile ? 1.07: 1.01);
     switch (destino) {
       case 1: //RECEPÇÃO
         //MIN 238 MAX 360
-        min = 148.0 + 50;
-        max = 270.0 + 50;
+        min = fator * 0.65;
+        max = fator;
         return _gerarCoordenada(min, max);
       case 2: //PEDIATRIA
         //MIN 280 MAX 360
-        min = 190.0 + 50;
-        max = 270.0 + 50;
+        min = 190.0 + add;
+        max = fator;
         return _gerarCoordenada(min, max);
       case 3: //QUARTO 1
         //MIN 95 MAX 145
-        min = 05.0 + 50;
-        max = 055.0 + 50;
+        min = fator - (fator-add);
+        max = fator* 0.3;
         return _gerarCoordenada(min, max);
       case 4: //QUARTO 2
         //MIN 165 MAX 221
-        min = 075.0 + 50;
-        max = 131.0 + 50;
+        min = isMobile ? fator* 0.4 : fator* 0.35;
+        max = fator* 0.53;
         return _gerarCoordenada(min, max);
       case 5: //QUARTO 3
         //MIN 240 MAX 293
-        min = 150.0 + 50;
-        max = 203.0 + 50;
+        min = isMobile ? fator* 0.62 : fator* 0.58;
+        max = fator* 0.77;
         return _gerarCoordenada(min, max);
       case 6: //QUARTO 4
         //MIN 312 MAX 360
-        min = 222.0 + 50;
-        max = 270.0 + 50;
+        min = fator* 0.83;
+        max = fator;
         return _gerarCoordenada(min, max);
       case 7: //SALA DE RAIO-X
         //MIN 177 MAX 226
-        min = 087.0 + 50;
-        max = 136.0 + 50;
+        min = 087.0 + add;
+        max = 136.0 + add;
         return _gerarCoordenada(min, max);
       case 8: //ORTOPEDIA
         //MIN 95 MAX 171
-        min = 05.0 + 50;
-        max = 081.0 + 50;
+        min = 05.0 + add;
+        max = 081.0 + add;
         return _gerarCoordenada(min, max);
       case 14: //CORREDOR
         //MIN 95 MAX 150
-        min = 05.0 + 50;
-        max = 060.0 + 50;
-        return _gerarCoordenada(min, max);
+        min = 05.0 + add;
+        max = 60.0 + add;
+        //return _gerarCoordenada(min, max);
+       // print('_imageSize.height ${(_imageSize.height*fator) - (_imageSize.height*fator-add)}');
+        return fator - (fator-add);
       case 15: //BANHEIROS
         //MIN 188 MAX 226
-        min = 098.0 + 50;
-        max = 136.0 + 50;
+        min = 098.0 + add;
+        max = 136.0 + add;
         return _gerarCoordenada(min, max);
       default://subtrai 90
         //MIN 95 MAX 150
-        min = 5.0 + 50;
-        max = 60.0 + 50;
+        min = 5.0 + add;
+        max = 60.0 + add;
         return _gerarCoordenada(min, max);
     }
   }
@@ -174,24 +177,35 @@ class _MapLocaleState extends State<MapLocale> {
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height * .38;
-    final w = MediaQuery.of(context).size.width * .92;
+    //print('h ${(MediaQuery.of(context).size.height).toString()} x $h');
+    final w = MediaQuery.of(context).size.width * .93;
     return Scaffold(
       body: Stack(
         children: [
 
-          Padding(
+          Container(
             padding: const EdgeInsets.only(top: 50.0),
+            constraints: BoxConstraints(
+              maxHeight: 750
+            ),
             child: Image.asset(mapa, key: _imageKey),
           ),
-          /*posicao(h: 303.0, w:340, color: Colors.red, locale: 'locale'),
-          posicao(h: 70, w:340, color: Colors.red, locale: 'locale'),*/
+          // //smartphone
+          // posicao(h: 330.0, w:335, color: Colors.red, locale: 'locale'),
+          // posicao(h: 55, w:335, color: Colors.red, locale: 'locale'),
+          // //tablet
+          // posicao(h: 692.0, w:760, color: Colors.blue, locale: 'locale'),
+          // posicao(h: 70.0, w:760, color: Colors.blue, locale: 'locale'),
+          // //desktop
+          // posicao(h: 743.0, w:820, color: Colors.amber, locale: 'locale'),
+          // posicao(h: 70.0, w:820, color: Colors.amber, locale: 'locale'),
           Stack(
             children: List.generate(devLoc.length, (index) {
               return Positioned(
                 left: devLoc[index]['w'],
                 top: devLoc[index]['h'],
                 child: InkWell(
-                  onTap: () =>  print(MediaQuery.of(context).size.height),
+                  onTap: () =>  print('pw ${devLoc[index]['w']} ph ${devLoc[index]['h']}'),
                   child: Icon(Icons.person_pin_circle,
                       color: Colors.primaries[index % Colors.primaries.length],
                       size: 24),

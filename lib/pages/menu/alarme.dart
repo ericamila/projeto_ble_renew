@@ -60,7 +60,7 @@ class _MenuAlarmeState extends State<MenuAlarme> {
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('images/web_hi_res_512.png'),
+            image: AssetImage('images/app_icon.ico'),
             fit: BoxFit.cover,
             opacity: 0.06),
       ),

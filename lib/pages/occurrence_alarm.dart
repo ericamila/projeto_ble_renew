@@ -68,7 +68,7 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                       'Ocorrência ${(!light) ? 'pendente!' : 'encerrada!'}',
                       style: TextStyle(
                           fontSize: 18,
-                          color: (!light) ? Colors.red[800] : verdeBotao),
+                          color: (!light) ? Colors.red[800] : AppColors.verdeBotao),
                     ),
                     space,
                     Switch(

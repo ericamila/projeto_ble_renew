@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SafeArea(
                   child: NavigationRail(
-                    backgroundColor: escuro,
+                    backgroundColor: AppColors.escuro,
                     extended: true,
                     selectedIndex: _page,
                     minExtendedWidth: 210,
@@ -110,35 +110,35 @@ class _HomePageState extends State<HomePage> {
                       NavigationRailDestination(
                         icon: Icon(
                           Icons.home_outlined,
-                          color: verdeBotao,
+                          color: AppColors.verdeBotao,
                         ),
                         label: Text('Início', style: estiloLabelRail),
                       ),
                       NavigationRailDestination(
                         icon: Icon(
                           Icons.bluetooth,
-                          color: verdeBotao,
+                          color: AppColors.verdeBotao,
                         ),
                         label: Text('Dispositivos', style: estiloLabelRail),
                       ),
                       NavigationRailDestination(
                         icon: Icon(
                           Icons.search,
-                          color: verdeBotao,
+                          color: AppColors.verdeBotao,
                         ),
                         label: Text('Busca', style: estiloLabelRail),
                       ),
                       NavigationRailDestination(
                         icon: Icon(
                           Icons.map_outlined,
-                          color: verdeBotao,
+                          color: AppColors.verdeBotao,
                         ),
                         label: Text('Mapa', style: estiloLabelRail),
                       ),
                       NavigationRailDestination(
                         icon: Icon(
                           Icons.create_new_folder_outlined,
-                          color: verdeBotao,
+                          color: AppColors.verdeBotao,
                         ),
                         label: Text('Cadastros', style: estiloLabelRail),
                       ),
@@ -154,9 +154,9 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: isWindows()
           ? null
           : CurvedNavigationBar(
-              backgroundColor: claro,
-              color: escuro,
-              buttonBackgroundColor: verde,
+              backgroundColor: AppColors.claro,
+              color: AppColors.escuro,
+              buttonBackgroundColor: AppColors.verde,
               onTap: (index) {
                 setState(() {
                   _page = index;
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                 CurvedNavigationBarItem(
                   child: Icon(
                     Icons.home_outlined,
-                    color: claro,
+                    color: AppColors.claro,
                   ),
                   label: 'Início',
                   labelStyle: estiloLabelCurvedBarItem,
@@ -174,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                 CurvedNavigationBarItem(
                   child: Icon(
                     Icons.bluetooth,
-                    color: claro,
+                    color: AppColors.claro,
                   ),
                   label: 'Dispositivos',
                   labelStyle: estiloLabelCurvedBarItem,
@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                 CurvedNavigationBarItem(
                   child: Icon(
                     Icons.search,
-                    color: claro,
+                    color: AppColors.claro,
                   ),
                   label: 'Busca',
                   labelStyle: estiloLabelCurvedBarItem,
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                 CurvedNavigationBarItem(
                   child: Icon(
                     Icons.map_outlined,
-                    color: claro,
+                    color: AppColors.claro,
                   ),
                   label: 'Mapa',
                   labelStyle: estiloLabelCurvedBarItem,
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                 CurvedNavigationBarItem(
                   child: Icon(
                     Icons.create_new_folder_outlined,
-                    color: claro,
+                    color: AppColors.claro,
                   ),
                   label: 'Cadastros',
                   labelStyle: estiloLabelCurvedBarItem,
