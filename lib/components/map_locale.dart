@@ -121,7 +121,7 @@ class _MapLocaleState extends State<MapLocale> {
         return _gerarCoordenada(min, max);
       case 2: //PEDIATRIA
         //MIN 280 MAX 360
-        min = 190.0 + add;
+        min = 190.0 + add;//falta
         max = fator;
         return _gerarCoordenada(min, max);
       case 3: //QUARTO 1
@@ -146,29 +146,29 @@ class _MapLocaleState extends State<MapLocale> {
         return _gerarCoordenada(min, max);
       case 7: //SALA DE RAIO-X
         //MIN 177 MAX 226
-        min = 087.0 + add;
+        min = 087.0 + add;//falta
         max = 136.0 + add;
         return _gerarCoordenada(min, max);
       case 8: //ORTOPEDIA
         //MIN 95 MAX 171
-        min = 05.0 + add;
-        max = 081.0 + add;
+        min = fator - (fator-add);
+        max = fator* 0.36;
         return _gerarCoordenada(min, max);
       case 14: //CORREDOR
         //MIN 95 MAX 150
-        min = 05.0 + add;
+        min = 05.0 + add;//falta
         max = 60.0 + add;
         //return _gerarCoordenada(min, max);
        // print('_imageSize.height ${(_imageSize.height*fator) - (_imageSize.height*fator-add)}');
         return fator - (fator-add);
       case 15: //BANHEIROS
         //MIN 188 MAX 226
-        min = 098.0 + add;
+        min = 098.0 + add;//falta
         max = 136.0 + add;
         return _gerarCoordenada(min, max);
       default://subtrai 90
         //MIN 95 MAX 150
-        min = 5.0 + add;
+        min = 5.0 + add;//falta
         max = 60.0 + add;
         return _gerarCoordenada(min, max);
     }
