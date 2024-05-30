@@ -31,7 +31,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(url: supabaseUrl, anonKey: anonKey);
 
-  if (!isWindows()) {
+  if (!isDesktop()) {
     FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
   }
 

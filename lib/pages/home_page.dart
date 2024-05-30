@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: isWindows()
+        title: isDesktop()
             ? const Padding(
                 padding: EdgeInsets.only(left: 210),
                 child: Text("Codelink"),
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         onAboutTap: goToAboutPage,
         onSignOut: signOut,
       ),
-      body: isWindows()
+      body: isDesktop()
           ? Row(
               children: [
                 SafeArea(
@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
               ],
             )
           : _pages[_page],
-      bottomNavigationBar: isWindows()
+      bottomNavigationBar: isDesktop()
           ? null
           : CurvedNavigationBar(
               backgroundColor: AppColors.claro,

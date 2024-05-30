@@ -135,10 +135,6 @@ ClipRRect imagemClipRRect(String? imageUrl, {double? size = 250.0}) {
   );
 }
 
-bool isWindows() {
-  return (Platform.operatingSystem == 'windows');
-}
-
 ListTile wifiOff({required String mensagem}) {
   return ListTile(
     tileColor: Colors.blueGrey,

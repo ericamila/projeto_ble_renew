@@ -23,8 +23,8 @@ class _MapLocaleState extends State<MapLocale> {
 
   @override
   void initState() {
-    _carregaDados();
     super.initState();
+    _carregaDados();
     WidgetsBinding.instance.addPostFrameCallback(_getImageSize);
   }
 
@@ -205,12 +205,11 @@ class _MapLocaleState extends State<MapLocale> {
           //BOTÃO
           Container(
             margin: const EdgeInsets.only(bottom: 50),
-            alignment:
-                isWindows() ? Alignment.center : Alignment.bottomCenter,
+            alignment: isDesktop() ? Alignment.center : Alignment.bottomCenter,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Spacer(flex: 2),
+                if (isDesktop()) Spacer(flex: 2),
                 ElevatedButton(
                     onPressed: () {
                       showModalBottomSheet(
@@ -246,21 +245,13 @@ class _MapLocaleState extends State<MapLocale> {
                       );
                     },
                     child: const Text('Legenda')),
-                Spacer(flex: 1)
+                if (isDesktop()) Spacer(flex: 1),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  List<Widget> _getPositioned() {
-    List<Widget> list = [];
-    for (var i in listVinculos) {
-      list.add(posicao(h: 300, w: 300, color: Colors.black, locale: 'locale'));
-    }
-    return list;
   }
 }
 

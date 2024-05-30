@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: SizedBox(
-              width: isWindows() ? 500 : null,
+              width: isDesktop() ? 500 : null,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -46,3 +46,9 @@ flutter:
 
   assets:
     - images/
+
+windows:
+  flutterApplication: true
+  windowing:
+    windowPosition: center
+    windowMaxSize: {x: 1024, y: 768}

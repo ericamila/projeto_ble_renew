@@ -29,8 +29,9 @@
 
 - [ ] MAPA ou equivalente DEIXAR JANELA MAXIMIZADA
 - [ ] Coleta foto e dados de irregularidade e os envia para SWCentral
-- [ ] Mapa de localização de um TAG específico
-- [ ] Mapa de localização os TAGs no hospital (com recurso de zoom in/out)
+- [ ] Finalizar foto_registro_alarme.dart
+- [x] Mapa de localização de um TAG específico
+- [x] Mapa de localização os TAGs no hospital (com recurso de zoom in/out)
 - [x] Tratamento dos alarmes
 - [ ] Notificações dos alarmes(PUSH)
 - [x] Terminar hero da pesquisa exibir usuario se vinculado   
@@ -41,7 +42,7 @@
 - [x] Dispositivos ativos não devem aparecer na lista de vincular
 - [x] Criar opção de DESVINCULAR dispositivo  
 - [x] Regras de negócio para usuário e dispositivo único  
-- [ ] Mapa com RFID ou lista   
+- [x] Mapa com RFID ou lista   
 - [x] Ajustar layout para desktop +/-
 - [ ] Verificar as deleções   
 - [ ] Vincular equipamento area   
@@ -58,8 +59,8 @@
 - [ ] No listar dispositivo, incluir opção de editar
 - [x] Ajustar padrão do ScaffoldMessenger
 - [ ] QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
-- [ ] Dispose no menu Pesquisa
-- Finalizar foto_registro_alarme.dart
+- [x] Dispose no menu Pesquisa
+
 
 
 
