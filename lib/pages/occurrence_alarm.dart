@@ -23,6 +23,7 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
   final TextEditingController _detailsController = TextEditingController();
   final _formKeyT = GlobalKey<FormState>();
   String foto = '';
+  String fotoOcorrencia = '';
   Color corFoto = Colors.black87;
 
   final WidgetStateProperty<Icon?> thumbIcon =
@@ -68,7 +69,9 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                       'Ocorrência ${(!light) ? 'pendente!' : 'encerrada!'}',
                       style: TextStyle(
                           fontSize: 18,
-                          color: (!light) ? Colors.red[800] : AppColors.verdeBotao),
+                          color: (!light)
+                              ? Colors.red[800]
+                              : AppColors.verdeBotao),
                     ),
                     space,
                     Switch(
@@ -108,11 +111,16 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const FotoAlarme(),
-                        )).then((value) => setState(() {
-                          foto = 'foto.png';
-                          corFoto = Colors.blueAccent;
-                        }));
+                          builder: (context) =>
+                              FotoAlarme(id: widget.alarme['id'].toString()),
+                        )).then((value) {
+                      setState(() {
+                        fotoOcorrencia = value ?? '';
+                        print('fotoocorrencia $fotoOcorrencia');
+                        foto = 'foto.png';
+                        corFoto = Colors.blueAccent;
+                      });
+                    });
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
@@ -219,7 +227,7 @@ class _OcurrenceAlarmeState extends State<OcurrenceAlarme> {
     try {
       await supabase
           .from('tb_registro_alarmes_new')
-          .update({'closed': light, 'descricao': _detailsController.text}).eq(
+          .update({'closed': light, 'descricao': _detailsController.text, 'foto': fotoOcorrencia}).eq(
               'id', widget.alarme['id']);
       return true;
     } catch (error) {

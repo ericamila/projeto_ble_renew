@@ -136,6 +136,6 @@ class Dispositivo {
 
   @override
   String toString() {
-    return '$nome $tag $tipo $status $mac $id';
+    return 'TAG: $tag Tipo: $tipo ${(status!)? 'Vinculado' : 'Desvinculado'} $mac';
   }
 }

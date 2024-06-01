@@ -2,17 +2,14 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import '../util/constants.dart';
-import 'drawer/drawer_list_user.dart';
-import 'drawer/drawer_profile.dart';
 import 'menu/device.dart';
-import 'menu/mapx.dart';
+import 'menu/map.dart';
 import 'menu/register.dart';
 import 'menu/search.dart';
 import '../components/drawer.dart';
 import '../util/app_cores.dart';
 import '../util/banco.dart';
 import '../util/my_theme.dart';
-import 'drawer/drawer_about.dart';
 import 'menu/alarme.dart';
 
 class HomePage extends StatefulWidget {
@@ -43,28 +40,19 @@ class _HomePageState extends State<HomePage> {
   //navigate to Profile page
   void goToProfilePage() {
     Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ProfilePage(),
-        ));
+    Navigator.pushNamed(context, '/profile');
   }
 
   //navigate to User page
   void goToUserPage() {
     Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Usuarios(),
-        ));
+    Navigator.pushNamed(context, '/list_users');
   }
 
   //navigate to User page
   void goToAboutPage() {
     Navigator.pop(context);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const Sobre()));
+    Navigator.pushNamed(context, '/about');
   }
 
   @override

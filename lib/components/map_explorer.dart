@@ -43,8 +43,8 @@ class _MapExplorerState extends State<MapExplorer> {
                 ),
                 loadingBuilder: (context, event) {
                   if (event == null) return const SizedBox();
-                  final progress = event.cumulativeBytesLoaded /
-                      event.expectedTotalBytes!;
+                  final progress =
+                      event.cumulativeBytesLoaded / event.expectedTotalBytes!;
                   return Center(
                     child: CircularProgressIndicator(
                       value: progress,
@@ -63,10 +63,12 @@ class _MapExplorerState extends State<MapExplorer> {
               IconButton(
                 icon: const Icon(Icons.zoom_out),
                 onPressed: _zoomOut,
+                style: iconeZoom(),
               ),
               IconButton(
                 icon: const Icon(Icons.zoom_in),
                 onPressed: _zoomIn,
+                style: iconeZoom(),
               ),
             ],
           ),

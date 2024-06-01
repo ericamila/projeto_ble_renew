@@ -4,6 +4,7 @@ import '../model/dispositivo.dart';
 import '../model/externo.dart';
 import '../model/pessoa.dart';
 import '../util/banco.dart';
+import '../util/constants.dart';
 
 class Pesquisa extends StatefulWidget {
   final String param;
@@ -42,7 +43,8 @@ class _PesquisaState extends State<Pesquisa> {
       for (var item in listaTemp) {
         _lista.add(Pessoa.fromMap(item));
       }
-    } else if (widget.param == 'externo') {//alterar ???
+    } else if (widget.param == 'externo') {
+      //alterar ???
       for (var item in listaTemp) {
         if (item['tipo_externo'] == 'Paciente') {
           _lista.add(ExternoDao().fromMap(item));
@@ -98,7 +100,7 @@ class _PesquisaState extends State<Pesquisa> {
                           text: _lista[index].toString(),
                           tileCor: Colors.blueGrey[100 * (index % 2)],
                           icon: (widget.param == 'dispositivo')
-                              ? Icons.devices_other_outlined
+                              ? iconDevice(_lista[index].toString())
                               : Icons.account_circle,
                           onTap: () {
                             seleciona(index);
@@ -119,4 +121,5 @@ class _PesquisaState extends State<Pesquisa> {
       Navigator.pop(context, _lista[index]);
     }
   }
+
 }

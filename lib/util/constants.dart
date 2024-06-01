@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'app_cores.dart';
 
-
 const String imagemPadraoAsset = 'images/nophoto.png';
 const String mapa = 'images/planta_baixa_zero.jpg';
 const String mapaExplorer = 'images/planta_baixa.jpg';
@@ -36,8 +35,8 @@ const TextStyle textoPerfil = TextStyle(
     fontSize: 16,
     height: 1.3);
 
-const TextStyle respostaPerfil =
-    TextStyle(fontWeight: FontWeight.bold, color: AppColors.verdeBotao, fontSize: 18);
+const TextStyle respostaPerfil = TextStyle(
+    fontWeight: FontWeight.bold, color: AppColors.verdeBotao, fontSize: 18);
 
 const sizeFontToggleButtons = 15.0;
 const TextStyle styleToggleButtons = TextStyle(fontSize: 15);
@@ -140,12 +139,13 @@ ListTile wifiOff({required String mensagem}) {
     tileColor: Colors.blueGrey,
     leading: const Icon(
       Icons.wifi_off,
-      color: Colors.white70,
+      color: AppColors.claro,
     ),
     title: Text(
       mensagem.toString(),
       style: const TextStyle(color: AppColors.claro),
     ),
+    titleAlignment: ListTileTitleAlignment.center,
   );
 }
 
@@ -176,11 +176,24 @@ Expanded noData({String msg = 'Dados não encontrados!'}) {
   );
 }
 
-String statusTranslate({required bool status}){
-    return (status)?'Conectado':'Desconectado';
+String statusTranslate({required bool status}) {
+  return (status) ? 'Conectado' : 'Desconectado';
 }
 
-bool isDesktop(){
-  debugPrint(Platform.operatingSystem);
-  return (Platform.isWindows)? true: false;
+bool isDesktop() {
+  //debugPrint(Platform.operatingSystem);
+  return (Platform.isWindows) ? true : false;
+}
+
+ButtonStyle iconeZoom(){
+  return ButtonStyle(
+    foregroundColor: WidgetStateProperty.all(AppColors.claro),
+    backgroundColor: WidgetStateProperty.all(AppColors.verde),
+  );
+}
+
+IconData iconDevice(String tipo) {
+  if (tipo.contains('Pulseira')) return Icons.watch_outlined;
+  if (tipo.contains('Crachá')) return Icons.badge_outlined;
+  return Icons.sell_outlined;
 }

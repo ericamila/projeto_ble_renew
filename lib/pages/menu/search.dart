@@ -222,7 +222,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                   listDevices[index].mac!.contains(pesquisa)) {
                 return MyListTile(
                     text: listDevices[index].tag!,
-                    icon: Icons.bluetooth,
+                    icon: iconDevice(listDevices[index].tipo!),
                     subText: listDevices[index].mac!,
                     tileCor: _getCor(index),
                     onTap: () {
@@ -400,6 +400,7 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
   }
 }
 
+// ignore: must_be_immutable
 class SearchDetails extends StatefulWidget {
   Externo? paciente;
   final selecionado;

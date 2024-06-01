@@ -5,10 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:projeto_ble_renew/pages/device_vinculate.dart';
+import 'package:projeto_ble_renew/pages/drawer/drawer_list_user.dart';
 import 'package:projeto_ble_renew/pages/forms/device.dart';
 import 'package:projeto_ble_renew/pages/login_page.dart';
 import 'package:projeto_ble_renew/util/constants.dart';
 import 'bluetooth/flutter_blue_app.dart';
+import 'pages/drawer/drawer_about.dart';
+import 'pages/drawer/drawer_profile.dart';
 import 'pages/home_page.dart';
 import 'util/banco.dart';
 import 'util/my_theme.dart';
@@ -90,6 +93,9 @@ class _AppState extends State<App> {
         '/bluetooth': (context) => const FlutterBlueApp(),
         '/form_device': (context) => const FormCadastroDispositivo(),
         '/vinculate_device': (context) => const VincularDispositivos(),
+        '/list_users': (context) => const Usuarios(),
+        '/profile': (context) => const ProfilePage(),
+        '/about': (context) => const Sobre(),
       },
     );
   }

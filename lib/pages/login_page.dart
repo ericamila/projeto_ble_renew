@@ -16,10 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController =
-      TextEditingController(text: "erica@email.com"); //apagar em produção
-  TextEditingController passwordController =
-      TextEditingController(text: "eeeeee"); //apagar em produção
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -91,11 +89,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextFormField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
-                        autovalidateMode:
-                            AutovalidateMode.onUserInteraction,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: myDecorationLogin(
-                            texto: "Email",
-                            icone: const Icon(Icons.email)),
+                            texto: "Email", icone: const Icon(Icons.email)),
                       ),
                     ),
                   ),
@@ -110,8 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                         controller: passwordController,
                         obscureText: true,
                         decoration: myDecorationLogin(
-                            texto: "Senha",
-                            icone: const Icon(Icons.lock)),
+                            texto: "Senha", icone: const Icon(Icons.lock)),
                       ),
                     ),
                   ),

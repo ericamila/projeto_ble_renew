@@ -21,10 +21,10 @@ class Sobre extends StatelessWidget {
           flexibleSpace: Center(
             child: Image.asset(
               'images/codelink_alt.png',
-              height: 65,
+              height: 60,
             ),
           ),
-          expandedHeight: 100,
+          expandedHeight: 75,
         ),
         SliverToBoxAdapter(
           child: Column(

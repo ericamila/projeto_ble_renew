@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'app_cores.dart';
 import 'constants.dart';
 
-const TextStyle estiloLabelCurvedBarItem =
-    TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: AppColors.verde);
+const TextStyle estiloLabelCurvedBarItem = TextStyle(
+    fontWeight: FontWeight.normal, fontSize: 12, color: AppColors.verde);
 
-const TextStyle estiloLabelRail =
-TextStyle(fontWeight: FontWeight.normal, fontSize: 15, color: AppColors.claro);
+const TextStyle estiloLabelRail = TextStyle(
+    fontWeight: FontWeight.normal, fontSize: 15, color: AppColors.claro);
 
 final theme = ThemeData(
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
@@ -46,9 +46,10 @@ FilledButton
 FloatingActionButton
  */
   floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: AppColors.verdeBotao,
-      foregroundColor: AppColors.claro,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+    backgroundColor: AppColors.verdeBotao,
+    foregroundColor: AppColors.claro,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  ),
 /*
 Scaffold
  */

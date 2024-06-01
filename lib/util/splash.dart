@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
 import '../model/usuario.dart';
+import 'app_cores.dart';
 import 'banco.dart';
 import 'constants.dart';
 
@@ -41,21 +42,50 @@ class _SplashScreenState extends State<SplashScreen> {
     final asset =
         hasConnection ? 'Conectado' : 'Verifique sua conexão com a Internet';
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: imagemLogo()),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.escuro,
+              AppColors.claro,
+              AppColors.claro,
+
+            ],
           ),
-          Center(
-            child: asset == 'Conectado'
-                ? const Text("Carregando...")
-                : wifiOff(mensagem: asset),
-          ),
-        ],
+        ),
+        padding: EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            imagemLogo(),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 24),
+              child: Text(
+                'CODELINK',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.carvao,
+                  fontSize: 24,
+                  letterSpacing: 2.5,
+                ),
+              ),
+            ),
+            asset == 'Conectado'
+                ? Container(
+                    constraints: BoxConstraints(maxWidth: 400),
+                    margin: EdgeInsets.only(top: 8),
+                    child: const LinearProgressIndicator(
+                        color: AppColors.verde, minHeight: 7),
+                  )
+                : Container(
+                    color: AppColors.verde,
+                    child: wifiOff(mensagem: asset),
+                  ),
+          ],
+        ),
       ),
     );
   }

@@ -26,24 +26,20 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
   @override
   void initState() {
     super.initState();
-    _verifica();
   }
 
   @override
   void dispose() {
     tagController.dispose();
     macController.dispose();
-    deviceMACBLE = '';
     deviceNomeBLE = '';
     super.dispose();
   }
 
   //Habilita o TextFormField da TAG
   void _verifica() {
-    if (widget.atualiza == 'up') {
-      isEnable = true;
-      setState(() {});
-    }
+    isEnable = true;
+    setState(() {});
   }
 
   @override
@@ -86,8 +82,14 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
                         const Text('Escanear Dispositivo'),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/bluetooth');
+                            Navigator.pushNamed(context, '/bluetooth').then(
+                              (value) {
+                                if (value != null) {
+                                  macController.text = value.toString();
+                                  _verifica();
+                                }
+                              },
+                            );
                           },
                           child: const Text('Escanear'),
                         ),
@@ -105,13 +107,12 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
                       inputFormatters: [macFormatter],
                       textCapitalization: TextCapitalization.characters),
               space,
-              Text(deviceMACBLE),
-              Text(deviceNomeBLE),
+              if (isSwitched[0]) Text(macController.text),
               space,
               TextFormField(
                   key: const ValueKey('tag'),
                   controller: tagController,
-                  enabled: isEnable,
+                  enabled: (isSwitched[1]) ? true : isEnable,
                   validator: (value) {
                     return (value == null || value.isEmpty)
                         ? 'Preencha este campo'
@@ -171,17 +172,13 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
                           tag: tagController.text,
                           tipo: _tipo!.descricao,
                           status: _status,
-                          mac: (deviceMACBLE != '')
-                              ? deviceMACBLE
-                              : macController.text,
+                          mac: macController.text,
                         ));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text('Cadastro realizado com sucesso!')),
                         );
                         //Limpa tudo e retorna
-                        deviceMACBLE = '';
-                        deviceNomeBLE = '';
                         Navigator.pushReplacementNamed(context, '/form_device');
                       } on Error catch (e) {
                         debugPrint(e as String?);
@@ -203,5 +200,4 @@ class _FormCadastroDispositivoState extends State<FormCadastroDispositivo> {
   }
 }
 
-var deviceMACBLE = '';
 var deviceNomeBLE = '';

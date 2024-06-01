@@ -27,17 +27,19 @@
 
 ## TO DO
 
-- [ ] MAPA ou equivalente DEIXAR JANELA MAXIMIZADA
-- [ ] Coleta foto e dados de irregularidade e os envia para SWCentral
-- [ ] Finalizar foto_registro_alarme.dart
+https://supabase.com/docs/reference/dart/stream 
+
+- [x] MAPA ou equivalente
+- [x] Coleta foto e dados de irregularidade e os envia para SWCentral
+- [x] Finalizar foto_registro_alarme.dart
 - [x] Mapa de localização de um TAG específico
 - [x] Mapa de localização os TAGs no hospital (com recurso de zoom in/out)
 - [x] Tratamento dos alarmes
-- [ ] Notificações dos alarmes(PUSH)
+- [ ] Notificações dos alarmes(PUSH) (FireBase)
 - [x] Terminar hero da pesquisa exibir usuario se vinculado   
 - [x] View para os heros
 - [x] Exibir informações do ble no hero (tag, data/hora entrada e saída)
-- [ ] Verificar rotas ao voltar (Scan Blue)   
+- [x] Verificar rotas ao voltar (Scan Blue)   
 - [ ] Trigger para dispositivo ficar true ao vincular
 - [x] Dispositivos ativos não devem aparecer na lista de vincular
 - [x] Criar opção de DESVINCULAR dispositivo  
@@ -60,8 +62,6 @@
 - [x] Ajustar padrão do ScaffoldMessenger
 - [ ] QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
 - [x] Dispose no menu Pesquisa
-
-
 
 
 ## 📁 Acesso ao projeto

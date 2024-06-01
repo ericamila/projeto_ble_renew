@@ -1,15 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:mime/mime.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:async';
 import 'dart:io';
 
+import '../util/banco.dart';
 import '../util/constants.dart';
 
 class FotoAlarme extends StatefulWidget {
-  const FotoAlarme({super.key});
+  final String id;
+
+  const FotoAlarme({super.key, required this.id});
 
   @override
   State<FotoAlarme> createState() => _FotoAlarmeState();
@@ -27,11 +32,10 @@ class _FotoAlarmeState extends State<FotoAlarme> {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> _onImageButtonPressed(
-      ImageSource source, {
-        required BuildContext context,
-        bool isMedia = false,
-      }) async {
+  Future<void> _onImageButtonPressed(ImageSource source, {
+    required BuildContext context,
+    bool isMedia = false,
+  }) async {
     if (context.mounted) {
       if (isMedia) {
         await _displayPickImageDialog(context,
@@ -79,23 +83,24 @@ class _FotoAlarmeState extends State<FotoAlarme> {
   }
 
   Widget _previewImages() {
-    print('_previewImages');
     final Text? retrieveError = _getRetrieveErrorWidget();
     if (retrieveError != null) {
       return retrieveError;
     }
     if (_mediaFileList != null) {
-
       return Semantics(
         label: 'image_picker_example_picked_images',
         child: ListView.builder(
           key: UniqueKey(),
           itemBuilder: (BuildContext context, int index) {
             final String? mime = lookupMimeType(_mediaFileList![index].path);
-            print(_mediaFileList![index].path);
-           // Salvar e pop
+            // Salvar e pop
             // Why network for web?
             // See https://pub.dev/packages/image_picker_for_web#limitations-on-the-web-platform
+            if (mime != null) {
+              _recuperaFoto(_mediaFileList![index]);
+            }
+
             return Semantics(
               label: 'image_picker_example_picked_image',
               child: kIsWeb
@@ -228,9 +233,30 @@ class _FotoAlarmeState extends State<FotoAlarme> {
     return null;
   }
 
-  Future<void> _displayPickImageDialog(
-      BuildContext context, OnPickImageCallback onPick) async {
+  Future<void> _displayPickImageDialog(BuildContext context,
+      OnPickImageCallback onPick) async {
     onPick(null, null, null);
+  }
+
+  void _recuperaFoto(XFile? image) async {
+    final imageExtension = image?.path
+        .split('.')
+        .last
+        .toLowerCase();
+    final imageBytes = await image?.readAsBytes();
+    final imagePath = '/${widget.id}/profile';
+    await supabase.storage.from('registro_fotos').uploadBinary(
+      imagePath,
+      imageBytes!,
+      fileOptions: FileOptions(
+        upsert: true,
+        contentType: 'image/$imageExtension',
+      ),
+    );
+
+    String imageUrl = await supabase.storage.from('registro_fotos').getPublicUrl(imagePath);
+
+    Navigator.pop(context, imageUrl);
   }
 }
 

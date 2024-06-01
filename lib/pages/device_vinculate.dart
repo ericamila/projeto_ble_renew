@@ -162,6 +162,7 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => MyListTile(
+                        icon: iconDevice(listVinculos[index].tipo),
                           text: listVinculos[index].nome,
                           subText:
                               '${listVinculos[index].mac} - ${listVinculos[index].tipo}',

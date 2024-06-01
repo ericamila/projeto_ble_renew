@@ -23,11 +23,11 @@ class MyDrawer extends StatelessWidget {
         children: [
           Column(
             children: [
-              const DrawerHeader(
-                child: Icon(
-                  Icons.person,
+              DrawerHeader(
+                child: Image.asset(
+                  'images/codelink_alt.png',
                   color: Color(0xFFF9FDFE),
-                  size: 64,
+                  height: 64,
                 ),
               ),
               //home list tile
