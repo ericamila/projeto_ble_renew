@@ -88,7 +88,7 @@ class _AppState extends State<App> {
       initialRoute: '/splash',
       routes: {
         '/splash': (context) => const SplashScreen(),
-        '/home': (context) => const HomePage(),
+        '/home': (context) =>  HomePage(),
         '/login': (context) => const LoginPage(),
         '/bluetooth': (context) => const FlutterBlueApp(),
         '/form_device': (context) => const FormCadastroDispositivo(),

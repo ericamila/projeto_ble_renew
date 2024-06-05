@@ -36,16 +36,14 @@ class MyListTile extends StatelessWidget {
           text,
           style: TextStyle(color: cor, fontWeight: FontWeight.bold),
         ),
-        subtitle: (subText == null)
-            ? null
-            : Text(subText!),
+        subtitle: (subText == null) ? null : Text(subText!),
         trailing: (trailing == null)
             ? null
             : Icon(
-          trailing,
-          size: 30,
-          color: cor,
-        ),
+                trailing,
+                size: 30,
+                color: cor,
+              ),
       ),
     );
   }

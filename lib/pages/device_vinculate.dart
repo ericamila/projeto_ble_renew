@@ -31,7 +31,7 @@ class _VincularDispositivosState extends State<VincularDispositivos> {
 
   void _carregaDados() async {
     List vinculosTemp = [];
-    List dataDU = await supabase.from('vw_dispositivos_usuarios').select();
+    List dataDU = await supabase.from('vw_dispositivos_usuarios').select().order('nome', ascending: true);
     setState(() {
       vinculosTemp.addAll(dataDU);
     });

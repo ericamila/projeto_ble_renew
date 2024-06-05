@@ -13,7 +13,9 @@ import '../util/my_theme.dart';
 import 'menu/alarme.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  int? page;
+
+  HomePage({this.page, super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -57,6 +59,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.page == 3) _page = 3;
+    widget.page = null;
     return Scaffold(
       appBar: AppBar(
         title: isDesktop()

@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:projeto_ble_renew/pages/home_page.dart';
+import 'package:projeto_ble_renew/util/app_cores.dart';
 import '../model/area.dart';
 import '../model/device_person.dart';
 import '../util/banco.dart';
@@ -20,6 +22,7 @@ class _MapLocaleState extends State<MapLocale> {
   late Size _imageSize;
   double min = 0;
   double max = 0;
+  Color? cor;
 
   @override
   void initState() {
@@ -250,6 +253,24 @@ class _MapLocaleState extends State<MapLocale> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(
+          Icons.refresh,
+          color: cor,
+        ),
+        onPressed: () {
+          setState(() {
+            cor = AppColors.claro;
+          });
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(
+                  page: 3,
+                ),
+              ));
+        },
       ),
     );
   }

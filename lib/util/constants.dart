@@ -189,6 +189,7 @@ ButtonStyle iconeZoom(){
   return ButtonStyle(
     foregroundColor: WidgetStateProperty.all(AppColors.claro),
     backgroundColor: WidgetStateProperty.all(AppColors.verde),
+    shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
   );
 }
 

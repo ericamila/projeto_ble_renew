@@ -41,7 +41,7 @@ class DispositivoDao {
 
   Future<List<Dispositivo>> findAll() async {
     final List<Map<String, dynamic>> result =
-        await supabase.from(_tablename).select().order(_nome, ascending: true);
+        await supabase.from(_tablename).select().order(_tag, ascending: true);
     return toList(result);
   }
 

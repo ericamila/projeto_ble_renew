@@ -180,44 +180,51 @@ class _ProfilePageState extends State<ProfilePage> {
                             ]),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                      text: 'Usuário\n',
-                                      style: textoPerfil,
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: nome, style: respostaPerfil),
-                                      ])),
-                            ]),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    RichText(
+                                        textAlign: TextAlign.center,
+                                        text: TextSpan(
+                                            text: 'Usuário\n',
+                                            style: textoPerfil,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                  text: nome, style: respostaPerfil),
+                                            ])),
+                                  ]),
+                            ),
+                            RichText(
+                                textAlign: TextAlign.left,
+                                text: TextSpan(
+                                    text: '\nEmail: ',
+                                    style: textoPerfil,
+                                    children: <TextSpan>[
+                                      TextSpan(text: email, style: respostaPerfil),
+                                      const TextSpan(
+                                          text: '\n\nStatus: ', style: textoPerfil),
+                                      TextSpan(text: status, style: respostaPerfil),
+                                      const TextSpan(
+                                          text: '\n\nID: ', style: textoPerfil),
+                                      TextSpan(text: id, style: respostaPerfil),
+                                      const TextSpan(
+                                          text: '\n\nÚltimo acesso: ',
+                                          style: textoPerfil),
+                                      TextSpan(
+                                          text: acess.formatBrazilianDate,
+                                          style: respostaPerfil),
+                                      const TextSpan(
+                                          text: '\n\nCargo: ', style: textoPerfil),
+                                      TextSpan(text: cargo, style: respostaPerfil),
+                                    ])),
+                          ],
+                        ),
                       ),
-                      RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                              text: '\nEmail: ',
-                              style: textoPerfil,
-                              children: <TextSpan>[
-                                TextSpan(text: email, style: respostaPerfil),
-                                const TextSpan(
-                                    text: '\n\nStatus: ', style: textoPerfil),
-                                TextSpan(text: status, style: respostaPerfil),
-                                const TextSpan(
-                                    text: '\n\nID: ', style: textoPerfil),
-                                TextSpan(text: id, style: respostaPerfil),
-                                const TextSpan(
-                                    text: '\n\nÚltimo acesso: ',
-                                    style: textoPerfil),
-                                TextSpan(
-                                    text: acess.formatBrazilianDate,
-                                    style: respostaPerfil),
-                                const TextSpan(
-                                    text: '\n\nCargo: ', style: textoPerfil),
-                                TextSpan(text: cargo, style: respostaPerfil),
-                              ])),
                     ]),
               ),
             ),

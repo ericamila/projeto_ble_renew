@@ -40,7 +40,7 @@ https://supabase.com/docs/reference/dart/stream
 - [x] View para os heros
 - [x] Exibir informações do ble no hero (tag, data/hora entrada e saída)
 - [x] Verificar rotas ao voltar (Scan Blue)   
-- [ ] Trigger para dispositivo ficar true ao vincular
+- [x] Trigger para dispositivo ficar true ao vincular
 - [x] Dispositivos ativos não devem aparecer na lista de vincular
 - [x] Criar opção de DESVINCULAR dispositivo  
 - [x] Regras de negócio para usuário e dispositivo único  
@@ -62,6 +62,7 @@ https://supabase.com/docs/reference/dart/stream
 - [x] Ajustar padrão do ScaffoldMessenger
 - [ ] QUANDO DESVINCULAR FAZER OUTRO INSERT PARA VINCULAR NÃO É UPDATE
 - [x] Dispose no menu Pesquisa
+- [ ] Banco de dados em cache
 
 
 ## 📁 Acesso ao projeto

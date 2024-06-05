@@ -60,15 +60,20 @@ class _MapExplorerState extends State<MapExplorer> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              IconButton(
-                icon: const Icon(Icons.zoom_out),
-                onPressed: _zoomOut,
-                style: iconeZoom(),
-              ),
-              IconButton(
-                icon: const Icon(Icons.zoom_in),
-                onPressed: _zoomIn,
-                style: iconeZoom(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.zoom_in),
+                    onPressed: _zoomIn,
+                    style: iconeZoom(),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.zoom_out),
+                    onPressed: _zoomOut,
+                    style: iconeZoom(),
+                  ),
+                ],
               ),
             ],
           ),

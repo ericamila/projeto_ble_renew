@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase/src/supabase_stream_builder.dart';
 import '../../components/alarme_list_tile.dart';
 import '../../util/banco.dart';
 import '../../util/constants.dart';
@@ -11,8 +12,9 @@ class MenuAlarme extends StatefulWidget {
 }
 
 class _MenuAlarmeState extends State<MenuAlarme> {
-
-  final _stream = supabase.from('tb_registro_alarmes_new').stream(primaryKey: ['id']).eq('closed', 'false');
+  final _stream = supabase
+      .from('tb_registro_alarmes_new')
+      .stream(primaryKey: ['id']).eq('closed', 'false');
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +27,20 @@ class _MenuAlarmeState extends State<MenuAlarme> {
               return const Expanded(child: Center(child: carregando));
             case ConnectionState.active:
             case ConnectionState.done:
-              var querySnapshot = snapshot.data;
-
-              if (querySnapshot!.isEmpty){
-                return noData();
-              }
+              SupabaseStreamEvent? querySnapshot = snapshot.data;
 
               if (snapshot.hasError) {
                 return const Expanded(child: Text("Erro ao carregar dados!"));
               } else {
+
+                if (querySnapshot!.isEmpty) {
+                  return noData();
+                }
+
                 return Expanded(
                   child: ListView.builder(
                     itemCount: querySnapshot.length,
                     itemBuilder: (context, index) {
-
                       List<Map<String, dynamic>> alarmes =
                           querySnapshot.toList();
 

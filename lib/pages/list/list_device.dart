@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_ble_renew/model/dispositivo.dart';
 
 import '../../components/my_list_tile.dart';
+import '../../util/app_cores.dart';
 import '../../util/constants.dart';
 
 class ListarDispositivos extends StatefulWidget {
@@ -39,6 +40,10 @@ class _ListarDispositivosState extends State<ListarDispositivos> {
                   icon: (dispositivo.status!)
                       ? Icons.bluetooth
                       : Icons.bluetooth_disabled,
+                  cor: (dispositivo.status!)
+                  ? AppColors.azulConectado
+                  : AppColors.vermelhoDesconectado,
+                  tileCor: Colors.blueGrey[100 * (index % 2)],
                   text: 'TAG: ${dispositivo.tag} - Tipo: ${dispositivo.tipo}'
                       '\nMAC: ${dispositivo.mac} \nStatus: ${statusTranslate(status: dispositivo.status!)}',
                 );
