@@ -1,4 +1,4 @@
-package com.brisa.projeto_ble_renew
+package dev.ericamila.projeto_ble_renew
 
 import io.flutter.embedding.android.FlutterActivity
 
