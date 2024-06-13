@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:projeto_ble_renew/pages/home_page.dart';
 import 'package:projeto_ble_renew/util/app_cores.dart';
 import '../model/area.dart';
 import '../model/device_person.dart';
@@ -263,13 +262,13 @@ class _MapLocaleState extends State<MapLocale> {
           setState(() {
             cor = AppColors.claro;
           });
-          Navigator.pushReplacement(
+         /* Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => HomePage(
                   page: 3,
                 ),
-              ));
+              ));*/
         },
       ),
     );

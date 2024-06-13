@@ -198,3 +198,24 @@ IconData iconDevice(String tipo) {
   if (tipo.contains('Crachá')) return Icons.badge_outlined;
   return Icons.sell_outlined;
 }
+
+String pegaImagem(String tipo) {
+  if (tipo == 'Crachá') {
+    return 'cracha.png';
+  } else if (tipo == 'Pulseira') {
+    return 'pulseira.png';
+  } else {
+    return 'etiqueta.png';
+  }
+}
+
+Color? getCor(int index) {
+  switch (index % 2) {
+    case 0:
+      return Colors.blueGrey[100];
+    case 1:
+      return AppColors.claro;
+    default:
+      return Colors.blueGrey[100 * (index + 1)];
+  }
+}
