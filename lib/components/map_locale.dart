@@ -57,6 +57,7 @@ class _MapLocaleState extends State<MapLocale> {
         //trocar por localização
       });
     }
+    setState(() {});
     //print(devLoc);
   }
 
@@ -252,24 +253,6 @@ class _MapLocaleState extends State<MapLocale> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: IconButton(
-        icon: Icon(
-          Icons.refresh,
-          color: cor,
-        ),
-        onPressed: () {
-          setState(() {
-            cor = AppColors.claro;
-          });
-         /* Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePage(
-                  page: 3,
-                ),
-              ));*/
-        },
       ),
     );
   }
