@@ -18,6 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool loading = false;
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //LOGAR USUÁRIO
   Future<void> signIn() async {
+    setState(() => loading = true);
     try {
       LoggedUser.currentUserID = await supabase.auth.signInWithPassword(
         password: passwordController.text.trim(),
@@ -40,11 +42,13 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacementNamed(context, '/home');
     } on AuthException catch (e) {
+      setState(() => loading = false);
       debugPrint(e.message);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Email e/ou senhas inválidos!')),
       );
     } on PostgrestException catch (error) {
+      setState(() => loading = false);
       SnackBar(
         content: Text(error.message),
         backgroundColor: Theme.of(context).colorScheme.error,
@@ -114,7 +118,15 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(top: 15.0, bottom: 10),
                     child: FilledButton(
                       onPressed: signIn,
-                      child: const Text("Entrar"),
+                      child: (loading)
+                          ? SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text("Entrar"),
                     ),
                   ),
                   GestureDetector(
