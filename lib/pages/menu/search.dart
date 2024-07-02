@@ -196,20 +196,22 @@ class _MenuPesquisaState extends State<MenuPesquisa> {
                           if (pesquisa.isEmpty ||
                               listPersons[index].cpf.contains(pesquisa) ||
                               listPersons[index].nome.contains(pesquisa)) {
-                            return MyListTile(
-                                text: listPersons[index].nome,
-                                icon: Icons.account_circle,
-                                subText: listPersons[index].cpf,
-                                tileCor: getCor(index),
-                                onTap: () async {
-                                  await _carregaDadosPessoa(
-                                      tipo: listPersons[index]
-                                          .tipoExterno
-                                          .toString(),
-                                      idPessoa:
-                                          listPersons[index].id.toString());
-                                  _showUser(context);
-                                });
+                            return SingleChildScrollView(
+                              child: MyListTile(
+                                  text: listPersons[index].nome,
+                                  icon: Icons.account_circle,
+                                  subText: listPersons[index].cpf,
+                                  tileCor: getCor(index),
+                                  onTap: () async {
+                                    await _carregaDadosPessoa(
+                                        tipo: listPersons[index]
+                                            .tipoExterno
+                                            .toString(),
+                                        idPessoa:
+                                            listPersons[index].id.toString());
+                                    _showUser(context);
+                                  }),
+                            );
                           } else {
                             return const SizedBox.shrink();
                           }
@@ -412,13 +414,13 @@ class _SearchDetailsState extends State<SearchDetails> {
                       children: [
                         Center(
                           child: imagemClipRRect(
-                              widget.selecionado.foto ?? imagemPadraoNetwork),
+                              widget.selecionado?.foto ?? imagemPadraoNetwork),
                         ),
                         //ALTERAR
                         space,
-                        textoFormatado('Nome', widget.selecionado!.nome),
+                        textoFormatado('Nome', widget.selecionado?.nome ?? ''),
                         space,
-                        textoFormatado('CPF', widget.selecionado!.cpf),
+                        textoFormatado('CPF', widget.selecionado?.cpf ?? ''),
                         space,
                         (widget.selecionado.runtimeType.toString() == 'Externo')
                             ? ifExternal()
