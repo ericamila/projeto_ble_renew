@@ -458,6 +458,26 @@ RETURN NEW;
 END;
 $$;
 ````
+````sql
+INSERT INTO cargo (id, descricao) VALUES
+(1, 'Diretor'),
+(2, 'Médico'),
+(3, 'Enfermeiro'),
+(4, 'Técnico de Enfermagem'),
+(5, 'Fisioterapeuta'),
+(6, 'Nutricionista'),
+(7, 'Psicólogo'),
+(8, 'Assistente Social'),
+(9, 'Recepcionista'),
+(10, 'Auxiliar Administrativo'),
+(11, 'Zelador'),
+(12, 'Jardineiro'),
+(13, 'Cozinheiro'),
+(14, 'Garçom'),
+(15, 'Lavador de Pratos'),
+(16, 'Limpador'),
+(17, 'Segurança');
+````
 
 
 Schema in 16/05/2024

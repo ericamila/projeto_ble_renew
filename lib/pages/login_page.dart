@@ -33,12 +33,16 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text.trim(),
         email: emailController.text.trim(),
       );
+      debugPrint('${LoggedUser.currentUserID?.user} foi');
+      debugPrint('${!mounted} foi 2');
       if (!mounted) return;
 
       LoggedUser.usuarioLogado = await UsuarioDao().findUUID(
           LoggedUser.currentUserID!.user!.userMetadata!['sub'].toString());
+      debugPrint('${LoggedUser.usuarioLogado} LoggedUser.usuarioLogado foi 2');
 
       LoggedUser.userLogado = supabase.auth.currentUser;
+      debugPrint('${LoggedUser.userLogado} LoggedUser.userLogado foi 2');
 
       Navigator.pushReplacementNamed(context, '/home');
     } on AuthException catch (e) {
